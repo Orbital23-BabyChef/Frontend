@@ -18,4 +18,6 @@ app.get('*', (req, res) => {
   res.sendFile(path.resolve(__dirname, '../client/build', 'index.html'));
 });
 
-//test commit2
+app.listen(PORT, () => {
+  console.log(`Server listening on ${PORT}`);
+});
