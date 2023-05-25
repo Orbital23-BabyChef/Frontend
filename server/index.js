@@ -2,6 +2,7 @@ const path = require('path');
 const express = require('express');
 const cors = require('cors');
 const mongoose = require('mongoose');
+const User = require("../models/user.model");
 
 require('dotenv').config();
 
@@ -10,6 +11,7 @@ const PORT = process.env.PORT || 3001;
 
 // Have Node serve the files for our built React app
 app.use(express.json());
+app.use(cors());
 
 //~~~~~~~~~~~~~~~~~~~~~ CONNECTION TO DATABASE ~~~~~~~~~~~~~~~~~~~~~~~
 const uri = process.env.ATLAS_URI;
@@ -34,9 +36,10 @@ app.get("/",cors(),(req,res)=>{
 
 app.post("/",async(req,res)=>{
     const{username,password}=req.body
+    console.log("logging in")
 
     try{
-        const check=await collection.findOne({username:username})
+        const check=await User.findOne({username:username, password:password})
 
         if(check){
             res.json("exist")
@@ -55,7 +58,8 @@ app.post("/",async(req,res)=>{
 
 
 app.post("/signup",async(req,res)=>{
-    const{username,password}=req.body
+    const {username,password} = req.body
+    console.log("signing up")
 
     const data={
         username:username,
@@ -63,14 +67,14 @@ app.post("/signup",async(req,res)=>{
     }
 
     try{
-        const check = await collection.findOne({username:username})
+        const check = await User.findOne({username:username})
 
         if(check){
             res.json("exist")
         }
         else{
             res.json("notexist")
-            await collection.insertMany([data])
+            await User.insertMany([data])
         }
 
     }

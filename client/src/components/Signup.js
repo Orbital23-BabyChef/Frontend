@@ -3,10 +3,10 @@ import axios from "axios"
 import { useNavigate, Link } from "react-router-dom"
 
 
-function Login() {
+function Signup() {
     const history=useNavigate();
 
-    const [username,setEmail]=useState('')
+    const [username,setUsername]=useState('')
     const [password,setPassword]=useState('')
 
     async function submit(e){
@@ -15,18 +15,18 @@ function Login() {
         try{
 
             await axios.post("http://localhost:3001/signup",{
-                username,password
+                username, password
             })
             .then(res=>{
                 if(res.data=="exist"){
-                    alert("User already exists")
+                    alert("User already exists!")
                 }
                 else if(res.data=="notexist"){
                     history("/home",{state:{id:username}})
                 }
             })
             .catch(e=>{
-                alert("wrong details")
+                alert("Error!")
                 console.log(e);
             })
 
@@ -40,7 +40,7 @@ function Login() {
 
 
     return (
-        <div className="login">
+        <div className="signup">
 
             <h1>Signup</h1>
 
@@ -61,4 +61,4 @@ function Login() {
     )
 }
 
-export default Login
+export default Signup

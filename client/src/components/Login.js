@@ -16,18 +16,18 @@ function Login() {
         try{
 
             await axios.post("http://localhost:3001/",{
-                username,password
+                username, password
             })
             .then(res=>{
                 if(res.data=="exist"){
                     history("/home",{state:{id:username}})
                 }
                 else if(res.data=="notexist"){
-                    alert("User have not sign up")
+                    alert("Incorrect Credentials")
                 }
             })
             .catch(e=>{
-                alert("wrong details")
+                alert("Error!")
                 console.log(e);
             })
 
