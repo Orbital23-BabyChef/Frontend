@@ -1,7 +1,6 @@
 const path = require('path');
 const express = require('express');
-//const cors = require('cors');
-const mongoose = require('mongoose');
+const cors = require('cors');
 
 require('dotenv').config();
 
@@ -11,13 +10,14 @@ const PORT = process.env.PORT || 3001;
 // Have Node serve the files for our built React app
 app.use(express.json());
 
-// connection to database
+//~~~~~~~~~~~~~~~~~~~~~ CONNECTION TO DATABASE ~~~~~~~~~~~~~~~~~~~~~~~
+const mongoose = require('mongoose');
 const uri = process.env.ATLAS_URI;
 mongoose.connect(uri, {});
 const connection = mongoose.connection;
 
 connection.once('open', () => {
-  console.log("MongoDB database connection established successfully");
+    console.log("MongoDB database connection established successfully");
 })
 
 const usersRouter = require('../routes/users.js');
@@ -25,17 +25,61 @@ const recipesRouter = require('../routes/recipes.js');
 
 app.use('/users', usersRouter);
 app.use('/recipes', recipesRouter);
+//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-// Handle GET requests to /api route
-app.get("/api", (req, res) => {
-  res.json({ message: "Hello from server!" });
-});
+app.get("/", cors(), (req, res) => {
 
-// All other GET requests not handled before will return our React app
-app.get('*', (req, res) => {
-  res.sendFile(path.resolve(__dirname, '../client/build', 'index.html'));
-});
+})
 
-app.listen(PORT, () => {
-  console.log(`Server listening on ${PORT}`);
-});
+
+app.post("/", async (req, res) => {
+    const { email, password } = req.body
+
+    try {
+        const check = await collection.findOne({ email: email })
+
+        if (check) {
+            res.json("exist")
+        }
+        else {
+            res.json("notexist")
+        }
+
+    }
+    catch (e) {
+        res.json("fail")
+    }
+
+})
+
+
+
+app.post("/signup", async (req, res) => {
+    const { email, password } = req.body
+
+    const data = {
+        email: email,
+        password: password
+    }
+
+    try {
+        const check = await collection.findOne({ email: email })
+
+        if (check) {
+            res.json("exist")
+        }
+        else {
+            res.json("notexist")
+            await collection.insertMany([data])
+        }
+
+    }
+    catch (e) {
+        res.json("fail")
+    }
+
+})
+
+app.listen(8000, () => {
+    console.log("port connected");
+})
