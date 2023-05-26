@@ -8,18 +8,22 @@ function Signup() {
 
     const [username,setUsername]=useState('')
     const [password,setPassword]=useState('')
+    const [confirmPassword,setConfirmPassword]=useState('')
 
     async function submit(e){
         e.preventDefault();
 
         try{
 
-            await axios.post("https://babychef.vercel.app/signup",{
-                username, password
+            await axios.post("http://localhost:3001/signup",{
+                username, password, confirmPassword
             })
             .then(res=>{
                 if(res.data=="exist"){
                     alert("User already exists!")
+                }
+                else if(res.data == "mismatch"){
+                    alert("Passwords do not match!")
                 }
                 else if(res.data=="notexist"){
                     history("/home",{state:{id:username}})
@@ -47,6 +51,7 @@ function Signup() {
             <form action="POST">
                 <input type="username" onChange={(e) => { setUsername(e.target.value) }} placeholder="Username"  />
                 <input type="password" onChange={(e) => { setPassword(e.target.value) }} placeholder="Password" />
+                <input type="password" onChange={(e) => { setConfirmPassword(e.target.value) }} placeholder="Confirm Password" />
                 <input type="submit" onClick={submit} />
 
             </form>

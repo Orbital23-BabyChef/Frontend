@@ -61,20 +61,26 @@ app.post("/",async(req,res)=>{
 
 
 app.post("/signup",async(req,res)=>{
-    const {username,password} = req.body
+    const {username,password,confirmPassword} = req.body
     console.log("signing up")
 
     const data={
         username:username,
-        password:password
+        password:password,
+        confirmPassword:confirmPassword
     }
 
     try{
-        const check = await User.findOne({username:username})
 
+        const check = await User.findOne({username:username})
+        
         if(check){
             res.json("exist")
-        }
+        } 
+        //Checks if password and confirmPassword matches
+        else if(data.password != data.confirmPassword){
+            res.json("mismatch")
+        } 
         else{
             res.json("notexist")
             await User.insertMany([data])
