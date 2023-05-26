@@ -9,7 +9,6 @@
     "build": "cd client && yarn install && yarn run build",
     "nodemon": "nodemon server/index.js"
   },
-  "proxy": "http://localhost:3001",
   "keywords": [],
   "author": "",
   "license": "ISC",
