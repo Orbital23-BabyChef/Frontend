@@ -5,10 +5,10 @@ import { useNavigate, Link } from "react-router-dom"
 
 function Login() {
 
-    const history=useNavigate();
+    const history = useNavigate();
 
-    const [username,setUsername]=useState('')
-    const [password,setPassword]=useState('')
+    const [username, setUsername] = useState('')
+    const [password, setPassword] = useState('')
 
     async function submit(e){
         e.preventDefault();
@@ -18,15 +18,14 @@ function Login() {
             await axios.post("http://localhost:3001/",{
                 username, password
             })
-            .then(res=>{
-                if(res.data=="exist"){
-                    history("/home",{state:{id:username}})
-                }
-                else if(res.data=="notexist"){
+            .then(res => {
+                if (res.data == "exist"){
+                    history("/home", {state: {id: username}})
+                }else if( res.data == "notexist"){
                     alert("Incorrect Credentials")
                 }
             })
-            .catch(e=>{
+            .catch(e => {
                 alert("Error!")
                 console.log(e);
             })

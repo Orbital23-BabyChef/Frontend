@@ -9,9 +9,10 @@ router.route('/').get((req, res) => {
 
 router.route('/add').post((req, res) => {
   const title = req.body.title;
-  const body = req.body.body;
+  const description = req.body.description;
+  const ingredients = req.body.ingredients;
  
-  const newRecipe = new Recipe({title, body});
+  const newRecipe = new Recipe({title, description, ingredients});
 
   newRecipe.save()
     .then(() => res.json('Recipe added!'))

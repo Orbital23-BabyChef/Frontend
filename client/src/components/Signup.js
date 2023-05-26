@@ -4,11 +4,11 @@ import { useNavigate, Link } from "react-router-dom"
 
 
 function Signup() {
-    const history=useNavigate();
+    const history = useNavigate();
 
-    const [username,setUsername]=useState('')
-    const [password,setPassword]=useState('')
-    const [confirmPassword,setConfirmPassword]=useState('')
+    const [username, setUsername] = useState('')
+    const [password, setPassword] = useState('')
+    const [confirmPassword, setConfirmPassword] = useState('')
 
     async function submit(e){
         e.preventDefault();
@@ -18,18 +18,18 @@ function Signup() {
             await axios.post("http://localhost:3001/signup",{
                 username, password, confirmPassword
             })
-            .then(res=>{
-                if(res.data=="exist"){
+            .then(res => {
+                if (res.data == "exist") {
                     alert("User already exists!")
                 }
                 else if(res.data == "mismatch"){
                     alert("Passwords do not match!")
                 }
-                else if(res.data=="notexist"){
-                    history("/home",{state:{id:username}})
+                else if(res.data == "notexist"){
+                    history("/home", {state: {id: username}})
                 }
             })
-            .catch(e=>{
+            .catch(e => {
                 alert("Error!")
                 console.log(e);
             })
