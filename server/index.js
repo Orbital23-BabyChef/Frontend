@@ -28,8 +28,8 @@ connection.once('open', () => {
 //const recipesRouter = require('../routes/recipes.js');
 
 //SOLELY FOR DEBUG, CAN COMMENT OUT/REMOVE FOR FINAL PRODUCT
-app.use('/users', usersRouter);
-const usersRouter = require('../routes/users.js');
+//const usersRouter = require('../routes/users.js');
+//app.use('/users', usersRouter);
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 app.get("/",cors(),(req,res)=>{
