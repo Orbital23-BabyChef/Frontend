@@ -22,11 +22,12 @@ connection.once('open', () => {
   console.log("MongoDB database connection established successfully");
 })
 
-//const usersRouter = require('../routes/users.js');
+//app.use('/recipes', recipesRouter);
 //const recipesRouter = require('../routes/recipes.js');
 
-//app.use('/users', usersRouter);
-//app.use('/recipes', recipesRouter);
+//SOLELY FOR DEBUG, CAN COMMENT OUT/REMOVE FOR FINAL PRODUCT
+app.use('/users', usersRouter);
+const usersRouter = require('../routes/users.js');
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 app.get("/",cors(),(req,res)=>{
