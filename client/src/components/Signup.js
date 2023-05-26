@@ -13,8 +13,8 @@ function Signup() {
         e.preventDefault();
 
         try{
-            await axios.post("localhost:3001/signup",{
-            //await axios.post("https://babychef.vercel.app/signup",{
+
+            await axios.post("https://babychef.vercel.app/signup",{
                 username, password
             })
             .then(res=>{
