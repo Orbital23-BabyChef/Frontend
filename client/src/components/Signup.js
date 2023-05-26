@@ -14,7 +14,7 @@ function Signup() {
 
         try{
 
-            await axios.post("https://babychef.vercel.app/signup",{
+            await axios.post("http://localhost:3001/signup",{
                 username, password
             })
             .then(res=>{
