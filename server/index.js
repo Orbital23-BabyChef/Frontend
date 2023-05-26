@@ -11,7 +11,9 @@ const PORT = process.env.PORT || 3001;
 
 // Have Node serve the files for our built React app
 app.use(express.json());
-app.use(cors());
+app.use(cors({
+    origin: '*'
+}));
 
 //~~~~~~~~~~~~~~~~~~~~~ CONNECTION TO DATABASE ~~~~~~~~~~~~~~~~~~~~~~~
 const uri = process.env.ATLAS_URI;
