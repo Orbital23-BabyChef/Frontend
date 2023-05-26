@@ -1,23 +1,24 @@
 import React from "react"
-import { useLocation, useNavigate, Link } from 'react-router-dom';
-import {  useEffect, useState } from 'react';
-import Axios from "axios"
+import { useLocation, useNavigate, Link } from 'react-router-dom'
+import { useEffect, useState } from 'react'
+import axios from "axios"
 
 function Home (){
-    const location=useLocation()
+    const location = useLocation()
+    const username = location.state.id
 
     const [recipeList, setRecipeList] = useState([])
 
     useEffect(() => {
-        Axios.get("http://localhost:3001/recipes").then( response => {
+        axios.get("http://localhost:3001/recipes").then( response => {
             setRecipeList(response.data);
         })
     })
 
     return (
         <div className="homepage">
-            <h1>Hello {location.state.id}!</h1>
-            <Link to="/create">Create a new Recipe</Link>
+            <h1>Hello {username}!</h1>
+            <Link to="/create" state={{id: username}}>Create a new Recipe</Link>
             {recipeList.map((value, key) => {
                 return <div> 
                     <hr></hr>

@@ -76,8 +76,8 @@ app.post("/signup", async(req, res) => {
         if (check) {
             res.json("exist")
         } else {
-            res.json("notexist")
             await User.insertMany([data])
+            res.json("notexist")
         }
 
     } catch(e) {
@@ -97,6 +97,28 @@ app.get("/recipes", async(req, res) => {
         }
         res.send(result);
     })
+})
+
+app.post("/create", async(req, res) => {
+    const {title, description, ingredients} = req.body
+
+    const data = {
+        title: title,
+        description: description,
+        ingredients: ingredients
+    }
+
+    try {
+        const check = await Recipe.findOne(data)
+        if (check) {
+            res.json("recipeexist")
+        } else {
+            Recipe.insertMany([data])
+            res.json("recipenotexist")
+        }
+    } catch (e) {
+        res.json("recipefail")
+    }
 })
 
 // END OF C.R.U.D. BACKEND ===================================================
