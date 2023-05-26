@@ -2,7 +2,9 @@ const path = require('path');
 const express = require('express');
 const cors = require('cors');
 const mongoose = require('mongoose');
+
 const User = require("../models/user.model");
+const Recipe = require("../models/recipe.model");
 
 require('dotenv').config();
 
@@ -24,20 +26,21 @@ connection.once('open', () => {
   console.log("MongoDB database connection established successfully");
 })
 
-//app.use('/recipes', recipesRouter);
-//const recipesRouter = require('../routes/recipes.js');
-
-//SOLELY FOR DEBUG, CAN COMMENT OUT/REMOVE FOR FINAL PRODUCT
+// SOLELY FOR DEBUG, CAN COMMENT OUT/REMOVE FOR FINAL PRODUCT
 const usersRouter = require('../routes/users.js');
 app.use('/users', usersRouter);
-//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-app.get("/",cors(),(req,res)=>{
+const recipesRouter = require('../routes/recipes.js');
+app.use('/recipes', recipesRouter);
+// END OF DEBUG PORTION ====================================
+
+app.get("/", cors(), (req, res) => {
 
 })
 
+// START OF LOGIN & SIGNUP BACKEND ===========================================
 
-app.post("/",async(req,res)=>{
+app.post("/", async(req, res) => {
     const{username,password}=req.body
     console.log("logging in")
 
@@ -58,13 +61,11 @@ app.post("/",async(req,res)=>{
 
 })
 
-
-
-app.post("/signup",async(req,res)=>{
-    const {username,password} = req.body
+app.post("/signup", async(req, res) => {
+    const {username, password} = req.body
     console.log("signing up")
 
-    const data={
+    const data = {
         username:username,
         password:password
     }
@@ -72,21 +73,34 @@ app.post("/signup",async(req,res)=>{
     try{
         const check = await User.findOne({username:username})
 
-        if(check){
+        if (check) {
             res.json("exist")
-        }
-        else{
+        } else {
             res.json("notexist")
             await User.insertMany([data])
         }
 
-    }
-    catch(e){
+    } catch(e) {
         res.json("fail")
     }
 
 })
 
-app.listen(PORT,()=>{
+// END OF LOGIN & SIGNUP BACKEND =============================================
+
+// START OF C.R.U.D. BACKEND =================================================
+
+app.get("/recipes", async(req, res) => {
+    Recipe.find({}, (err, result) => {
+        if (err) {
+            res.send(err);
+        }
+        res.send(result);
+    })
+})
+
+// END OF C.R.U.D. BACKEND ===================================================
+
+app.listen(PORT, () => {
    console.log("port connected");
 })
