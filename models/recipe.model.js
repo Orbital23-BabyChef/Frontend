@@ -8,10 +8,15 @@ const recipeSchema = new Schema({
         required: true,
         minlength: 3
     },
-    body: {
+    description: {
         type: String,
         required: true,
         minlength: 3
+    },
+    ingredients: {
+        type: String,
+        required: true,
+        minlength:3
     }
 }, {
   timestamps: true,
