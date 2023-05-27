@@ -58,6 +58,7 @@ function Create (){
                     setIngredients(event.target.value)
                 }}
             />
+            <br></br>
             <button onClick={addToList}>Create Recipe!</button>
         </div>
     )
