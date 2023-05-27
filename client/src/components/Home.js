@@ -33,6 +33,7 @@ function Home (){
         <div className="homepage">
             <h1>Hello {username}!</h1>
             <Link to="/create" state={{id: username}}>Create a new Recipe</Link>
+            <br></br>
             <input
                 type="text"
                 placeholder="Search here"
