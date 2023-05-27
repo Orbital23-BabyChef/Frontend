@@ -18,6 +18,11 @@ const recipeSchema = new Schema({
         required: true,
         minlength:3
     },
+    instructions: {
+        type: String,
+        required: true,
+        minlength:3
+    },
     creator: {
         type: String,
         required: true

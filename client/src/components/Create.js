@@ -11,6 +11,7 @@ function Create (){
     const [title, setTitle] = useState("")
     const [description, setDescription] = useState("")
     const [ingredients, setIngredients] = useState("")
+    const [instructions, setInstructions] = useState("")
     
     const history = useNavigate();
 
@@ -19,6 +20,7 @@ function Create (){
             title: title,
             description: description,
             ingredients: ingredients,
+            instructions: instructions,
             creator: username
         })
         .then(res => {
@@ -56,6 +58,14 @@ function Create (){
             <textarea 
                 onChange={(event) => {
                     setIngredients(event.target.value)
+                }}
+            />
+            <br></br>
+            <label>Instructions</label>
+            <br></br>
+            <textarea 
+                onChange={(event) => {
+                    setInstructions(event.target.value)
                 }}
             />
             <br></br>

@@ -24,7 +24,8 @@ function Home (){
                     <hr></hr>
                     <h3>Title: {value.title}</h3>
                     <p>Description: {value.description} <br></br>
-                    Ingredients: {value.ingredients} </p>
+                    Ingredients: {value.ingredients} <br></br>
+                    Instructions: {value.instructions} </p>
                     <p>Creator: {value.creator}</p> 
                 </div>
             })}
