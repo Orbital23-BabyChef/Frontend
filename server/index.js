@@ -143,5 +143,5 @@ app.post("/create", async(req, res) => {
 // END OF C.R.U.D. BACKEND ===================================================
 
 app.listen(PORT, () => {
-   console.log("port connected");
+   console.log(`port ${PORT} connected`);
 })
