@@ -116,6 +116,7 @@ app.post("/search", async(req, res) => {
     }
 })
 
+//Creates new recipe with given inputs
 app.post("/create", async(req, res) => {
     const {title, description, ingredients, instructions, creator} = req.body
 
@@ -138,6 +139,16 @@ app.post("/create", async(req, res) => {
     } catch (e) {
         res.json("recipefail")
     }
+})
+
+//Retrieves unique recipe using input ID
+app.post("/recipe", async(req, res) => {
+    const { id } = req.body
+    const user = await Recipe.findById(id)
+    .catch(e => {
+        console.log(e)
+    })
+    res.json(user)
 })
 
 // END OF C.R.U.D. BACKEND ===================================================

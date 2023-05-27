@@ -6,7 +6,6 @@ import axios from "axios"
 function Home (){
     const location = useLocation()
     const username = location.state.id
-    const searchBar = () => {}
 
     const [recipeList, setRecipeList] = useState([])
     const [searchInput, setSearchInput] = useState("");
@@ -23,7 +22,7 @@ function Home (){
             })
         } else {
             axios.post("http://localhost:3001/search", { searchInput })
-            .then( response => {
+            .then(response => {
                 setRecipeList(response.data);
             })
         }
@@ -40,9 +39,9 @@ function Home (){
                 onChange={handleChange}
                 value={searchInput} />
             {recipeList.map((value, key) => {
-                return <div> 
+                return <div key={value._id}> 
                     <hr></hr>
-                    <h3>{value.title}</h3>
+                    <Link to={`/view/${value._id}`}>{value.title}</Link>
                     <p>{value.description} </p>
                     <p>Creator: {value.creator}</p> 
                 </div>

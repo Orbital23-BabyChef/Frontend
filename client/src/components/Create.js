@@ -36,7 +36,7 @@ function Create (){
     };
 
     return (
-        <div className="homepage">
+        <div className="create">
             <label>Title</label>
             <br></br>
             <input type="text" 
