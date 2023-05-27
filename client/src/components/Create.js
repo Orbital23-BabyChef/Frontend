@@ -18,7 +18,8 @@ function Create (){
         axios.post('http://localhost:3001/create', {
             title: title,
             description: description,
-            ingredients: ingredients
+            ingredients: ingredients,
+            creator: username
         })
         .then(res => {
             if (res.data == "recipeexist") {

@@ -17,7 +17,11 @@ const recipeSchema = new Schema({
         type: String,
         required: true,
         minlength:3
-    }
+    },
+    creator: {
+        type: String,
+        required: true
+    },
 }, {
   timestamps: true,
 });

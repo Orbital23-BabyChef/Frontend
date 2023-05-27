@@ -105,12 +105,13 @@ app.get("/recipes", async(req, res) => {
 })
 
 app.post("/create", async(req, res) => {
-    const {title, description, ingredients} = req.body
+    const {title, description, ingredients, creator} = req.body
 
     const data = {
         title: title,
         description: description,
-        ingredients: ingredients
+        ingredients: ingredients,
+        creator: creator,
     }
 
     try {
