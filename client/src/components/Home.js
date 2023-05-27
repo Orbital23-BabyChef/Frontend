@@ -41,10 +41,8 @@ function Home (){
             {recipeList.map((value, key) => {
                 return <div> 
                     <hr></hr>
-                    <h3>Title: {value.title}</h3>
-                    <p>Description: {value.description} <br></br>
-                    Ingredients: {value.ingredients} <br></br>
-                    Instructions: {value.instructions} </p>
+                    <h3>{value.title}</h3>
+                    <p>{value.description} </p>
                     <p>Creator: {value.creator}</p> 
                 </div>
             })}
