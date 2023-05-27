@@ -95,13 +95,25 @@ app.post("/signup", async(req, res) => {
 
 // START OF C.R.U.D. BACKEND =================================================
 
-app.get("/recipes", async(req, res) => {
-    Recipe.find({}, (err, result) => {
-        if (err) {
-            res.send(err);
-        }
-        res.send(result);
-    })
+//Retrieve list of all recipes
+app.get("/recipes", async (req, res) => {
+    try {
+        const result = await Recipe.find({});
+        res.status(200).send(result);
+    } catch (err) {
+        res.status(500).send(err);
+    }
+})
+
+//Retrieve list of recipes with title matching search keywords
+app.post("/search", async(req, res) => {
+    const keyword = req.body.searchInput
+    try {
+        const result = await Recipe.find({ title:{ $regex: keyword }});
+        res.status(200).send(result);
+    } catch (err) {
+        res.status(500).send(err);
+    }
 })
 
 app.post("/create", async(req, res) => {
