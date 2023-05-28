@@ -72,7 +72,6 @@ app.post("/signup", async(req, res) => {
     }
 
     try{
-
         const check = await User.findOne({username:username})
         
         if (check) {
@@ -80,11 +79,9 @@ app.post("/signup", async(req, res) => {
         } else if (data.password != data.confirmPassword) {
             res.json("mismatch")
         } else {
-            res.json("notexist")
             await User.insertMany([data])
             res.json("notexist")
         }
-
     } catch(e) {
         res.json("fail")
     }
