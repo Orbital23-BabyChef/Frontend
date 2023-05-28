@@ -33,25 +33,24 @@ function Profile (){
     return (
         <div className="profile">
             <h1>{username}'s Profile</h1>
-            <br />
             <Link to="/create" state={{id: username}}>Create a new Recipe</Link>
-            <p></p>
+            <br />
             <br />
             <input
                 type="text"
                 placeholder="Search here"
                 onChange={handleChange}
                 value={searchInput} />
-            {recipeList.map((value, key) => {
-                return <div key={value._id}> 
-                    <hr></hr>
-                    <Link to={`/view/${value._id}`} state={{currUser: username}}>{value.title}</Link>
-                    <hr></hr>
-                    <Link to={`/edit/${value._id}`} state={{currUser: username}}>edit this recipe</Link>
-                    <p>{value.description} </p>
-                    <p>Creator: {value.creator}</p> 
-                </div>
-            })}
+                {recipeList.map((value, key) => {
+                    return <div key={value._id}> 
+                        <hr></hr>
+                        <Link to={`/view/${value._id}`} state={{currUser: username}}>{value.title}</Link>
+                        <hr></hr>
+                        <p>{value.description} </p>
+                        <p>Creator: {value.creator}</p> 
+                        <Link to={`/edit/${value._id}`} state={{currUser: username}}>Edit</Link>
+                    </div>
+                })}
         </div>
     )
 

@@ -32,24 +32,24 @@ function Home (){
         <div className="homepage">
             <h1>Hello {username}!</h1>
             <Link to="/profile" state={{currUser: username}}>My profile</Link>
-            <p></p>
-            <br />
+            <br></br>
+            <br></br>
             <Link to="/create" state={{id: username}}>Create a new Recipe</Link>
-            <p></p>
-            <br />
+            <br></br>
+            <br></br>
             <input
                 type="text"
                 placeholder="Search here"
                 onChange={handleChange}
                 value={searchInput} />
-            {recipeList.map((value, key) => {
-                return <div key={value._id}> 
-                    <hr></hr>
-                    <Link to={`/view/${value._id}`} state={{currUser: username}}>{value.title}</Link>
-                    <p>{value.description} </p>
-                    <p>Creator: {value.creator}</p> 
-                </div>
-            })}
+                {recipeList.map((value, key) => {
+                    return <div key={value._id}> 
+                        <hr></hr>
+                        <Link to={`/view/${value._id}`} state={{currUser: username}}>{value.title}</Link>
+                        <p>{value.description} </p>
+                        <p>Creator: {value.creator}</p> 
+                    </div>
+                })}
         </div>
     )
 }
