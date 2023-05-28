@@ -18,12 +18,12 @@ function Profile (){
       
     useEffect(() => {
         if (searchInput.length == 0) {
-            axios.post("http://localhost:3001/myRecipes", { username })
+            axios.post("/myRecipes", { username })
             .then(response => {
                 setRecipeList(response.data);
             })
         } else {
-            axios.post("http://localhost:3001/searchMyRecipes", { username, searchInput })
+            axios.post("/searchMyRecipes", { username, searchInput })
             .then(response => {
                 setRecipeList(response.data);
             })
