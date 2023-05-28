@@ -4,6 +4,7 @@ import Login from "./components/Login"
 import Signup from "./components/Signup"
 import Create from "./components/Create"
 import View from "./components/View"
+import Profile from "./components/Profile"
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 
 function App() {
@@ -16,6 +17,7 @@ function App() {
           <Route path="/home" element={<Home/>}/>
           <Route path="/create" element={<Create/>}/>
           <Route path="/view/:id" element={<View/>}/>
+          <Route path="/profile" element={<Profile/>}/>
         </Routes>
       </Router>
     </div>

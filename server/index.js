@@ -116,6 +116,31 @@ app.post("/search", async(req, res) => {
     }
 })
 
+//HARDCODED, might want to replace in future with general filtering capabilities
+//Retrieve list of recipes created by a certain user
+app.post("/myRecipes", async(req, res) => {
+    const username = req.body.username
+    try {
+        const result = await Recipe.find({ creator: username });
+        res.status(200).send(result);
+    } catch (err) {
+        res.status(500).send(err);
+    }
+})
+
+//HARDCODED, might want to replace in future with general filtering capabilities
+//Retrieve list of recipes created by a certain user filtered by search
+app.post("/searchMyRecipes", async(req, res) => {
+    const username = req.body.username
+    const keyword = req.body.searchInput
+    try {
+        const result = await Recipe.find({ creator: username, title:{ $regex: keyword }});
+        res.status(200).send(result);
+    } catch (err) {
+        res.status(500).send(err);
+    }
+})
+
 //Creates new recipe with given inputs
 app.post("/create", async(req, res) => {
     const {title, description, ingredients, instructions, creator} = req.body

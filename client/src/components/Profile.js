@@ -3,7 +3,8 @@ import { useLocation, useNavigate, Link } from 'react-router-dom'
 import { useEffect, useState } from 'react'
 import axios from "axios"
 
-function Home (){
+
+function Profile (){
     const location = useLocation()
     const username = location.state.id
 
@@ -17,11 +18,13 @@ function Home (){
       
     useEffect(() => {
         if (searchInput.length == 0) {
-            axios.get("http://localhost:3001/recipes").then( res => {
-                setRecipeList(res.data);
+            console.log(username)
+            axios.post("http://localhost:3001/myRecipes", { username })
+            .then(response => {
+                setRecipeList(response.data);
             })
         } else {
-            axios.post("http://localhost:3001/search", { searchInput })
+            axios.post("http://localhost:3001/searchMyRecipes", { username, searchInput })
             .then(response => {
                 setRecipeList(response.data);
             })
@@ -29,10 +32,8 @@ function Home (){
     })
 
     return (
-        <div className="homepage">
-            <h1>Hello {username}!</h1>
-            <Link to="/profile" state={{id: username}}>My profile</Link>
-            <p></p>
+        <div className="profile">
+            <h1>{username}'s Profile</h1>
             <br />
             <Link to="/create" state={{id: username}}>Create a new Recipe</Link>
             <p></p>
@@ -52,6 +53,7 @@ function Home (){
             })}
         </div>
     )
+
 }
 
-export default Home
+export default Profile
