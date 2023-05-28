@@ -45,7 +45,7 @@ function Profile (){
             {recipeList.map((value, key) => {
                 return <div key={value._id}> 
                     <hr></hr>
-                    <Link to={`/view/${value._id}`}>{value.title}</Link>
+                    <Link to={`/view/${value._id}`} state={{currUser: username}}>{value.title}</Link>
                     <hr></hr>
                     <Link to={`/edit/${value._id}`} state={{currUser: username}}>edit this recipe</Link>
                     <p>{value.description} </p>
