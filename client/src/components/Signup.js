@@ -50,16 +50,17 @@ function Signup() {
 
             <form action="POST">
                 <input type="username" onChange={(e) => { setUsername(e.target.value) }} placeholder="Username"  />
+                <br></br>
                 <input type="password" onChange={(e) => { setPassword(e.target.value) }} placeholder="Password" />
+                <br></br>
                 <input type="password" onChange={(e) => { setConfirmPassword(e.target.value) }} placeholder="Confirm Password" />
+                <br></br>
+                <br></br>
                 <input type="submit" onClick={submit} />
 
             </form>
 
             <br />
-            <p>OR</p>
-            <br />
-
             <Link to="/">Login Page</Link>
 
         </div>
