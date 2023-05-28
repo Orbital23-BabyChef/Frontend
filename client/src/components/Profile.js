@@ -18,7 +18,6 @@ function Profile (){
       
     useEffect(() => {
         if (searchInput.length == 0) {
-            console.log(username)
             axios.post("http://localhost:3001/myRecipes", { username })
             .then(response => {
                 setRecipeList(response.data);
