@@ -5,6 +5,7 @@ import Signup from "./components/Signup"
 import Create from "./components/Create"
 import View from "./components/View"
 import Profile from "./components/Profile"
+import Edit from "./components/Edit"
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 
 function App() {
@@ -18,6 +19,7 @@ function App() {
           <Route path="/create" element={<Create/>}/>
           <Route path="/view/:id" element={<View/>}/>
           <Route path="/profile" element={<Profile/>}/>
+          <Route path="/edit/:id" element={<Edit/>}/>
         </Routes>
       </Router>
     </div>

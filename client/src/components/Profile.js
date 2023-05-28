@@ -46,6 +46,8 @@ function Profile (){
                 return <div key={value._id}> 
                     <hr></hr>
                     <Link to={`/view/${value._id}`}>{value.title}</Link>
+                    <hr></hr>
+                    <Link to={`/edit/${value._id}`} state={{id: username}}>edit this recipe</Link>
                     <p>{value.description} </p>
                     <p>Creator: {value.creator}</p> 
                 </div>

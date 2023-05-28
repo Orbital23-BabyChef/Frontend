@@ -176,6 +176,28 @@ app.post("/recipe", async(req, res) => {
     res.json(user)
 })
 
+//Edits Recipe in DB
+app.post("/edit", async(req, res) => {
+    console.log("/edit called")
+    const {id, title, description, ingredients, instructions, creator} = req.body
+
+    const data = {
+        title: title,
+        description: description,
+        ingredients: ingredients,
+        instructions: instructions,
+        creator: creator,
+    }
+
+    try {
+        console.log(1)
+        Recipe.replaceOne( {_id: ObjectId(id)} , data)
+        res.json("updateSuccess")
+    } catch (e) {
+        res.json("updateFail")
+    }
+})
+
 // END OF C.R.U.D. BACKEND ===================================================
 
 app.listen(PORT, () => {
