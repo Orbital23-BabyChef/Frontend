@@ -6,7 +6,7 @@ import axios from "axios"
 
 function Edit (){
     const location = useLocation()
-    const username = location.state.id
+    const username = location.state.currUser
     const { id } = useParams()
     const [ recipe, setRecipe ] = useState("")
     
@@ -27,10 +27,10 @@ function Edit (){
         }
     })
     
-    const [title, setTitle] = useState("")
-    const [description, setDescription] = useState("")
-    const [ingredients, setIngredients] = useState("")
-    const [instructions, setInstructions] = useState("")
+    const [title, setTitle] = useState(recipe.title)
+    const [description, setDescription] = useState(recipe.description)
+    const [ingredients, setIngredients] = useState(recipe.ingredients)
+    const [instructions, setInstructions] = useState(recipe.instructions)
    
 
     const updateRecipe = () => {

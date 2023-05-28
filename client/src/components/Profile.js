@@ -6,7 +6,7 @@ import axios from "axios"
 
 function Profile (){
     const location = useLocation()
-    const username = location.state.id
+    const username = location.state.currUser
 
     const [recipeList, setRecipeList] = useState([])
     const [searchInput, setSearchInput] = useState("");
@@ -47,7 +47,7 @@ function Profile (){
                     <hr></hr>
                     <Link to={`/view/${value._id}`}>{value.title}</Link>
                     <hr></hr>
-                    <Link to={`/edit/${value._id}`} state={{id: username}}>edit this recipe</Link>
+                    <Link to={`/edit/${value._id}`} state={{currUser: username}}>edit this recipe</Link>
                     <p>{value.description} </p>
                     <p>Creator: {value.creator}</p> 
                 </div>

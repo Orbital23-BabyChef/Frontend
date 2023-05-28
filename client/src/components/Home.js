@@ -31,7 +31,7 @@ function Home (){
     return (
         <div className="homepage">
             <h1>Hello {username}!</h1>
-            <Link to="/profile" state={{id: username}}>My profile</Link>
+            <Link to="/profile" state={{currUser: username}}>My profile</Link>
             <p></p>
             <br />
             <Link to="/create" state={{id: username}}>Create a new Recipe</Link>
@@ -45,7 +45,7 @@ function Home (){
             {recipeList.map((value, key) => {
                 return <div key={value._id}> 
                     <hr></hr>
-                    <Link to={`/view/${value._id}`}>{value.title}</Link>
+                    <Link to={`/view/${value._id}`} state={{currUser: username}}>{value.title}</Link>
                     <p>{value.description} </p>
                     <p>Creator: {value.creator}</p> 
                 </div>

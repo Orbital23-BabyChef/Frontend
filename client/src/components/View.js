@@ -5,14 +5,17 @@ import axios from "axios"
 
 
 function View (){
+    const location = useLocation()
+    const currUser = location.state.currUser
+
     const { id } = useParams()
-    const [ user, setUser ] = useState("")
+    const [ recipe, setRecipe ] = useState("")
 
     useEffect(() => {
         try {
             axios.post("http://localhost:3001/recipe", { id })
             .then(res => {
-                setUser(res.data)
+                setRecipe(res.data)
             })
             .catch(e => {
                 alert("Error!")
@@ -23,22 +26,25 @@ function View (){
         }
     })
 
-    if (user) {
-        return (
-            <div className="view">
-                    <h3>{user.title}</h3>
-                    <p>{user.description} </p>
-                    <p>{user.ingredients} </p>
-                    <p>{user.instructions} </p>
-                    <p>Creator: {user.creator}</p> 
-            </div>
-        )
-    } else {
-        return (
-            <div className="view">
-            </div>
-        )
-    }
+    return (
+        <div className="view">
+            {recipe ? (
+                <>
+                    <h3>{recipe.title}</h3>
+                    <p>{recipe.description}</p>
+                    <p>{recipe.ingredients}</p>
+                    <p>{recipe.instructions}</p>
+                    <p>Creator: {recipe.creator}</p>
+                    {recipe.creator == currUser ? ( 
+                        <Link to={`/edit/${id}`} state={{ id: id, currUser: currUser }}>
+                            Edit
+                        </Link>
+                        // Can add Linkto delete button under here
+                    ) : null}
+                </>
+            ) : null}
+        </div>
+      );
 
 }
 

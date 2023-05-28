@@ -178,7 +178,6 @@ app.post("/recipe", async(req, res) => {
 
 //Edits Recipe in DB
 app.post("/edit", async(req, res) => {
-    console.log("/edit called")
     const {id, title, description, ingredients, instructions, creator} = req.body
 
     const data = {
@@ -186,12 +185,11 @@ app.post("/edit", async(req, res) => {
         description: description,
         ingredients: ingredients,
         instructions: instructions,
-        creator: creator,
+        creator: creator
     }
 
     try {
-        console.log(1)
-        Recipe.replaceOne( {_id: ObjectId(id)} , data)
+        await Recipe.findByIdAndUpdate(id, data, {new: true})
         res.json("updateSuccess")
     } catch (e) {
         res.json("updateFail")
