@@ -196,6 +196,17 @@ app.post("/edit", async(req, res) => {
     }
 })
 
+//Deletes recipe with input id
+app.post("/delete", async(req, res) => {
+    const { id } = req.body
+    try {
+        await Recipe.findByIdAndDelete(id)
+        res.json("deleteSuccess")
+    } catch (e) {
+        res.json("deleteFail")
+    }
+})
+
 // END OF C.R.U.D. BACKEND ===================================================
 
 app.listen(PORT, () => {
