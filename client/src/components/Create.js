@@ -16,7 +16,7 @@ function Create (){
     const history = useNavigate();
 
     const addToList = () => {
-        axios.post('http://localhost:3001/create', {
+        axios.post('https://baby-chef.herokuapp.com/create', {
             title: title,
             description: description,
             ingredients: ingredients,

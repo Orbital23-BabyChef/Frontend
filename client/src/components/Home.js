@@ -17,11 +17,11 @@ function Home (){
       
     useEffect(() => {
         if (searchInput.length == 0) {
-            axios.get("http://localhost:3001/recipes").then( res => {
+            axios.get("https://baby-chef.herokuapp.com/recipes").then( res => {
                 setRecipeList(res.data);
             })
         } else {
-            axios.post("http://localhost:3001/search", { searchInput })
+            axios.post("https://baby-chef.herokuapp.com/search", { searchInput })
             .then(response => {
                 setRecipeList(response.data);
             })

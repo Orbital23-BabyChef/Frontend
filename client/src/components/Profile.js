@@ -18,12 +18,12 @@ function Profile (){
       
     useEffect(() => {
         if (searchInput.length == 0) {
-            axios.post("http://localhost:3001/myRecipes", { username })
+            axios.post("https://baby-chef.herokuapp.com/myRecipes", { username })
             .then(response => {
                 setRecipeList(response.data);
             })
         } else {
-            axios.post("http://localhost:3001/searchMyRecipes", { username, searchInput })
+            axios.post("https://baby-chef.herokuapp.com/searchMyRecipes", { username, searchInput })
             .then(response => {
                 setRecipeList(response.data);
             })
