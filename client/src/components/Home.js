@@ -17,11 +17,11 @@ function Home (){
       
     useEffect(() => {
         if (searchInput.length == 0) {
-            axios.get("/recipes").then( res => {
+            axios.get("http://localhost:3001/recipes").then( res => {
                 setRecipeList(res.data);
             })
         } else {
-            axios.post("/search", { searchInput })
+            axios.post("http://localhost:3001/search", { searchInput })
             .then(response => {
                 setRecipeList(response.data);
             })
