@@ -15,7 +15,7 @@ function Signup() {
 
         try{
 
-            await axios.post("/signup",{
+            await axios.post("http://localhost:3001/signup",{
                 username, password, confirmPassword
             })
             .then(res => {

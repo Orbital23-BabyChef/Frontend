@@ -16,7 +16,7 @@ function Create (){
     const history = useNavigate();
 
     const addToList = () => {
-        axios.post('/create', {
+        axios.post('http://localhost:3001/create', {
             title: title,
             description: description,
             ingredients: ingredients,

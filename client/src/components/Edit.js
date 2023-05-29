@@ -14,7 +14,7 @@ function Edit (){
 
     useEffect(() => {
         try {
-            axios.post("/recipe", { id })
+            axios.post("http://localhost:3001/recipe", { id })
             .then(res => {
                 setRecipe(res.data)
             })
@@ -34,7 +34,7 @@ function Edit (){
    
 
     const updateRecipe = () => {
-        axios.post('/edit', {
+        axios.post('http://localhost:3001/edit', {
             id: id,
             title: title,
             description: description,

@@ -23,7 +23,7 @@ function View (){
                 label: 'OK',
                 onClick: () => {
                     try {
-                        axios.post("/delete/", { id })
+                        axios.post("http://localhost:3001/delete/", { id })
                         .then(res => {
                             if (res.data == "deleteSuccess") {
                                 alert("Record successfully deleted.")
@@ -50,7 +50,7 @@ function View (){
 
     useEffect(() => {
         try {
-            axios.post("/recipe", { id })
+            axios.post("http://localhost:3001/recipe", { id })
             .then(res => {
                 setRecipe(res.data)
             })
