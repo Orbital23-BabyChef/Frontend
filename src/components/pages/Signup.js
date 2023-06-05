@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react"
 import axios from "axios"
 import { useNavigate, Link } from "react-router-dom"
-
+import logo from '../logo.png'
 
 function Signup() {
     const history = useNavigate();
@@ -44,9 +44,12 @@ function Signup() {
 
 
     return (
-        <div className="signup">
+        <div className="centered-div">
+            <div className="logo">
+                <img src={logo} alt="Logo" />
+            </div>
 
-            <h1>Signup</h1>
+            <h1>Create a new account now!</h1>
 
             <form action="POST">
                 <input type="username" onChange={(e) => { setUsername(e.target.value) }} placeholder="Username"  />

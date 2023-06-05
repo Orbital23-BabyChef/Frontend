@@ -42,19 +42,15 @@ function Login() {
 
     return (
         <div 
-            className="login"
-            style={{
-                alignItems: "center",
-                justifyContent: "center",
-                height: "100%",
-                textAlign: "center"
-              }}>
-            <img src={logo} alt="Logo" />
+            className="centered-div">
+                <div className="logo">
+                <img src={logo} alt="Logo" />
+                </div>
+            
             <h1>Login</h1>
 
             <form action="POST">
                 <input type="username" onChange={(e) => { setUsername(e.target.value) }} placeholder="Username"  />
-                <br></br>
                 <input type="password" onChange={(e) => { setPassword(e.target.value) }} placeholder="Password"  />
                 <br></br>
                 <br></br>
@@ -62,7 +58,7 @@ function Login() {
 
             </form>
             <br></br>
-            <Link to="/signup">Signup Page</Link>
+            <Link to="/signup">Create a new account instead</Link>
 
         </div>
     )
