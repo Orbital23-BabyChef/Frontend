@@ -21,7 +21,7 @@ function Login() {
             })
             .then(res => {
                 if (res.data){
-                    history("/home", {state: {userId: res.data._id}})
+                    history("/home", {state: {userId: res.data._id, username: username}})
                 } else {
                     alert("Incorrect Credentials")
                 }

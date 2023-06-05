@@ -8,7 +8,7 @@ import 'react-confirm-alert/src/react-confirm-alert.css';
 
 function Profile (){
     const location = useLocation()
-    const [username, setUsername] = useState("")
+    const [username, setUsername] = useState(location.state.username)
     const userId = location.state.userId
     
     const history = useNavigate()
@@ -34,7 +34,7 @@ function Profile (){
                         .then(res => {
                             if (res.data == "deleteSuccess") {
                                 alert("Record successfully deleted.")
-                                history("/home", {state:{userId: userId}})
+                                history("/home", {state:{userId: userId, username: username}})
                             } else {
                                 alert("Error!")
                             }
@@ -80,7 +80,7 @@ function Profile (){
     return (
         <div className="profile">
             <h1>{username}'s Profile</h1>
-            <Link to="/create" state={{userId: userId}}>Create a new Recipe</Link>
+            <Link to="/create" state={{userId: userId, username: username}}>Create a new Recipe</Link>
             <br />
             <br />
             <input
@@ -91,11 +91,18 @@ function Profile (){
                 {recipeList.map((value, key) => {
                     return <div key={value._id}> 
                         <hr></hr>
-                        <Link to={`/view/${value._id}`} state={{userId: userId}}>{value.title}</Link>
+                        <Link to={`/view/${value._id}`} state={{userId: userId, username: username}}>{value.title}</Link>
                         <hr></hr>
                         <p>{value.description} </p>
                         <p>Creator: {value.creator}</p> 
-                        <Link to={`/edit/${value._id}`} state={{userId: userId}}>Edit</Link>
+                        <Link to={`/edit/${value._id}`} state={{
+                            userId: userId, 
+                            username: username,
+                            title: value.title,
+                            description: value.description,
+                            ingredients: value.ingredients,
+                            instructions: value.instructions
+                        }}>Edit</Link>
                         <br></br>
                         <button onClick={() => submit(value._id)}>Delete</button>
                     </div>

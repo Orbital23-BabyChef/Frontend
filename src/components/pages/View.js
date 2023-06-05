@@ -8,7 +8,8 @@ import axios from "axios"
 function View (){
     const location = useLocation()
     const userId = location.state.userId
-    const [username, setUsername] = useState("")
+    const [username, setUsername] = useState(location.state.username)
+    console.log(username)
 
     const history = useNavigate()
     
@@ -28,7 +29,7 @@ function View (){
                         .then(res => {
                             if (res.data == "deleteSuccess") {
                                 alert("Record successfully deleted.")
-                                history("/home", {state:{userId:userId}})
+                                history("/home", {state:{userId:userId, username:username}})
                             } else {
                                 alert("Error!")
                             }
@@ -58,7 +59,6 @@ function View (){
 
     useEffect(() => {
         try {
-            console.log(recipeId)
             axios.post("https://baby-chef.herokuapp.com/recipe", {id: recipeId})
             .then(res => {
                 setRecipe(res.data)
@@ -84,7 +84,14 @@ function View (){
                     <p>Creator: {recipe.creator}</p>
                     {recipe.creator ==  username ? ( 
                         <>
-                            <Link to={`/edit/${recipeId}`} state={{userId: userId }}>
+                            <Link to={`/edit/${recipeId}`} state={{
+                                    userId: userId,
+                                    username: username,
+                                    title: recipe.title,
+                                    description: recipe.description,
+                                    ingredients: recipe.ingredients,
+                                    instructions: recipe.instructions
+                                }}>
                                 Edit
                             </Link>
                             <br></br>

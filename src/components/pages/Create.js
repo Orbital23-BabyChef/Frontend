@@ -7,7 +7,7 @@ import axios from "axios"
 function Create (){
     const location = useLocation()
     const userId = location.state.userId
-    const [username, setUsername] = useState("")
+    const [username, setUsername] = useState(location.state.username)
 
     const [title, setTitle] = useState("")
     const [description, setDescription] = useState("")
@@ -37,7 +37,7 @@ function Create (){
                 alert("Recipe already exists!")
             } else if (res.data == "recipenotexist") {
                 alert("Recipe added!")
-                history("/home", {state: {userId: userId}})
+                history("/home", {state: {userId: userId, username: username}})
             } else {
                 alert("Error!")
             }
