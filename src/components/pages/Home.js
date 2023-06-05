@@ -6,7 +6,8 @@ import '../RecipePreview.css'
 
 function Home (){
     const location = useLocation()
-    const [username, setUsername] = useState("")
+    const userId = location.state.userId
+    const [username, setUsername] = useState(location.state.username)
 
     const [recipeList, setRecipeList] = useState([])
     const [searchInput, setSearchInput] = useState("")
@@ -16,6 +17,14 @@ function Home (){
         setSearchInput(e.target.value);
     };
       
+    //Sets username 
+    useEffect(() => {
+        axios.get(`https://baby-chef.herokuapp.com/username/?id=${userId}`)
+        .then(res => {
+            setUsername(res.data.username);
+        })
+    })
+
     useEffect(() => {
         if (searchInput.length == 0) {
             axios.get("https://baby-chef.herokuapp.com/recipes").then( res => {
@@ -29,20 +38,14 @@ function Home (){
         }
     })
 
-    //Sets username 
-    useEffect(() => {
-        axios.get(`https://baby-chef.herokuapp.com/username/?id=${location.state.currId}`)
-        .then(res => {
-            setUsername(res.data.username);
-        })
-    })
+
     return (
         <div className="homepage">
             <h1>Hello {username}!</h1>
-            <Link to="/profile" state={{currUser: username}}>My profile</Link>
+            <Link to="/profile" state={{userId: userId, username: username}}>My profile</Link>
             <br></br>
             <br></br>
-            <Link to="/create" state={{id: username}}>Create a new Recipe</Link>
+            <Link to="/create" state={{userId: userId, username: username}}>Create a new Recipe</Link>
             <br></br>
             <br></br>
             <input
@@ -51,18 +54,11 @@ function Home (){
                 onChange={handleChange}
                 value={searchInput} />
                 {recipeList.map((value, key) => {
-                    return <div 
-                        key={value._id}>
-                        <div 
-                            className="recipePreview">
-                            <br></br>
-                                <div
-                                    className="recipeTitle">
-                                    <Link to={`/view/${value._id}`} state={{currUser: username}}>{value.title}</Link> 
-                                </div>
-                                <p className="fifty-chars">{value.description} </p>
-                                <p>Creator: {value.creator}</p>
-                        </div>
+                    return <div key={value._id}> 
+                        <hr></hr>
+                        <Link to={`/view/${value._id}`} state={{userId: userId, username: username}}>{value.title}</Link>
+                        <p>{value.description} </p>
+                        <p>Creator: {value.creator}</p> 
                     </div>
                 })}
         </div>

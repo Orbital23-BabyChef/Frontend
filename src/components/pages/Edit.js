@@ -6,36 +6,30 @@ import axios from "axios"
 
 function Edit (){
     const location = useLocation()
-    const username = location.state.currUser
-    const { id } = useParams()
-    const [ recipe, setRecipe ] = useState("")
+    const userId = location.state.userId
+    const [username, setUsername] = useState(location.state.username)
+
+    const recipeId = useParams().id
     
     const history = useNavigate();
 
+    //Sets username 
     useEffect(() => {
-        try {
-            axios.post("https://baby-chef.herokuapp.com/recipe", { id })
-            .then(res => {
-                setRecipe(res.data)
-            })
-            .catch(e => {
-                alert("Error!")
-                console.log(e)
-            })
-        } catch (e) {
-            console.log(e)
-        }
+        axios.get(`https://baby-chef.herokuapp.com/username/?id=${userId}`)
+        .then(res => {
+            setUsername(res.data.username);
+        })
     })
     
-    const [title, setTitle] = useState(recipe.title)
-    const [description, setDescription] = useState(recipe.description)
-    const [ingredients, setIngredients] = useState(recipe.ingredients)
-    const [instructions, setInstructions] = useState(recipe.instructions)
+    const [title, setTitle] = useState(location.state.title)
+    const [description, setDescription] = useState(location.state.description)
+    const [ingredients, setIngredients] = useState(location.state.ingredients)
+    const [instructions, setInstructions] = useState(location.state.instructions)
    
 
     const updateRecipe = () => {
-        axios.post('https://baby-chef.herokuapp.com/edit', {
-            id: id,
+        axios.post('http://localhost:3001/edit', {
+            id: recipeId,
             title: title,
             description: description,
             ingredients: ingredients,
@@ -45,7 +39,7 @@ function Edit (){
         .then(res => {
             if (res.data == "updateSuccess") {
                 alert("Recipe successfully updated")
-                history("/home", {state: {id: username}})
+                history("/home", {state: {userId: userId}})
             } else {
                 alert("Error!")
             }
@@ -58,7 +52,7 @@ function Edit (){
             <br></br>
             <input 
                 type="text"
-                defaultValue = {recipe.title} 
+                defaultValue = {title} 
                 onChange={(event) => {
                     setTitle(event.target.value)
                 }}
@@ -67,7 +61,7 @@ function Edit (){
             <label>Description</label>
             <br></br>
             <textarea 
-                defaultValue = {recipe.description} 
+                defaultValue = {description} 
                 onChange={(event) => {
                     setDescription(event.target.value)
                 }}
@@ -76,7 +70,7 @@ function Edit (){
             <label>Ingredients</label>
             <br></br>
             <textarea 
-                defaultValue = {recipe.ingredients} 
+                defaultValue = {ingredients} 
                 onChange={(event) => {
                     setIngredients(event.target.value)
                 }}
@@ -85,7 +79,7 @@ function Edit (){
             <label>Instructions</label>
             <br></br>
             <textarea 
-                defaultValue = {recipe.instructions} 
+                defaultValue = {instructions} 
                 onChange={(event) => {
                     setInstructions(event.target.value)
                 }}

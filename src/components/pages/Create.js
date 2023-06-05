@@ -1,12 +1,13 @@
 import React from "react"
 import { useLocation, useNavigate, Link } from 'react-router-dom'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import axios from "axios"
 
 
 function Create (){
     const location = useLocation()
-    const username = location.state.id
+    const userId = location.state.userId
+    const [username, setUsername] = useState(location.state.username)
 
     const [title, setTitle] = useState("")
     const [description, setDescription] = useState("")
@@ -14,6 +15,14 @@ function Create (){
     const [instructions, setInstructions] = useState("")
     
     const history = useNavigate();
+
+    //Sets username 
+    useEffect(() => {
+        axios.get(`https://baby-chef.herokuapp.com/username/?id=${userId}`)
+        .then(res => {
+            setUsername(res.data.username);
+        })
+    })
 
     const addToList = () => {
         axios.post('https://baby-chef.herokuapp.com/create', {
@@ -28,7 +37,7 @@ function Create (){
                 alert("Recipe already exists!")
             } else if (res.data == "recipenotexist") {
                 alert("Recipe added!")
-                history("/home", {state: {id: username}})
+                history("/home", {state: {userId: userId, username: username}})
             } else {
                 alert("Error!")
             }

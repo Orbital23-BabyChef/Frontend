@@ -15,7 +15,7 @@ function Signup() {
 
         try{
 
-            await axios.post("https://baby-chef.herokuapp.com/signup",{
+            await axios.post("https://baby-chef.herokuapp.com/username/signup",{
                 username, password, confirmPassword
             })
             .then(res => {
@@ -25,8 +25,8 @@ function Signup() {
                 else if(res.data == "mismatch"){
                     alert("Passwords do not match!")
                 }
-                else if(res.data == "notexist"){
-                    history("/home", {state: {id: username}})
+                else {
+                    history("/home", {state: {userId: res.data, username: username}})
                 }
             })
             .catch(e => {
