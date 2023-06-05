@@ -42,10 +42,10 @@ function Home (){
     return (
         <div className="homepage">
             <h1>Hello {username}!</h1>
-            <Link to="/profile" state={{userId: userId, username: username}}>My profile</Link>
+            <Link to="/profile" state={{currUser: username}}>My profile</Link>
             <br></br>
             <br></br>
-            <Link to="/create" state={{userId: userId, username: username}}>Create a new Recipe</Link>
+            <Link to="/create" state={{id: username}}>Create a new Recipe</Link>
             <br></br>
             <br></br>
             <input
@@ -54,11 +54,18 @@ function Home (){
                 onChange={handleChange}
                 value={searchInput} />
                 {recipeList.map((value, key) => {
-                    return <div key={value._id}> 
-                        <hr></hr>
-                        <Link to={`/view/${value._id}`} state={{userId: userId, username: username}}>{value.title}</Link>
-                        <p>{value.description} </p>
-                        <p>Creator: {value.creator}</p> 
+                    return <div 
+                        key={value._id}>
+                        <div 
+                            className="recipePreview">
+                            <br></br>
+                                <div
+                                    className="recipeTitle">
+                                    <Link to={`/view/${value._id}`} state={{userId: userId, username: username}}>{value.title}</Link>
+                                </div>
+                                <p className="fifty-chars">{value.description} </p>
+                                <p>Creator: {value.creator}</p>
+                        </div>
                     </div>
                 })}
         </div>
