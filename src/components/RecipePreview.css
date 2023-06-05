@@ -1,0 +1,39 @@
+.recipePreview {
+    width: 90%;
+    text-align: center;
+    margin: auto;
+    border-style: solid;
+    border-color: rgb(0, 161, 67);
+    border-width: 3px;
+    border-radius: 40px;
+    margin-bottom: 10px;
+}
+
+.recipeTitle {
+    font-family: Tahoma, Geneva, sans-serif;
+    font-size: 25px;
+    letter-spacing: -0.4px;
+    word-spacing: -0.2px;
+    color: #000000;
+    font-weight: 700;
+    text-decoration: none;
+    font-style: normal;
+    font-variant: normal;
+    text-transform: none;
+}
+
+a {
+    color: #005011;
+    text-decoration: none;
+  }
+
+.fifty-chars {
+    line-height: 1.5em;
+    height: 3em;       
+    overflow: hidden; 
+    text-overflow: ellipsis;
+}
+
+input[type=text] {
+    margin-left: auto;
+}

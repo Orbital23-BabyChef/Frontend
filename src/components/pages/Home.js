@@ -2,6 +2,7 @@ import React from "react"
 import { useLocation, useNavigate, Link } from 'react-router-dom'
 import { useEffect, useState } from 'react'
 import axios from "axios"
+import '../RecipePreview.css'
 
 function Home (){
     const location = useLocation()
@@ -50,11 +51,18 @@ function Home (){
                 onChange={handleChange}
                 value={searchInput} />
                 {recipeList.map((value, key) => {
-                    return <div key={value._id}> 
-                        <hr></hr>
-                        <Link to={`/view/${value._id}`} state={{currUser: username}}>{value.title}</Link>
-                        <p>{value.description} </p>
-                        <p>Creator: {value.creator}</p> 
+                    return <div 
+                        key={value._id}>
+                        <div 
+                            className="recipePreview">
+                            <br></br>
+                                <div
+                                    className="recipeTitle">
+                                    <Link to={`/view/${value._id}`} state={{currUser: username}}>{value.title}</Link> 
+                                </div>
+                                <p className="fifty-chars">{value.description} </p>
+                                <p>Creator: {value.creator}</p>
+                        </div>
                     </div>
                 })}
         </div>

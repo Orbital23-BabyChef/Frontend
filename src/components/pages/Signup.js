@@ -49,7 +49,7 @@ function Signup() {
                 <img src={logo} alt="Logo" />
             </div>
 
-            <h1>Create a new account now!</h1>
+            <h1>Create an account now!</h1>
 
             <form action="POST">
                 <input type="username" onChange={(e) => { setUsername(e.target.value) }} placeholder="Username"  />
