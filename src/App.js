@@ -1,11 +1,11 @@
 // import './App.css'
-import Home from "./components/Home"
-import Login from "./components/Login"
-import Signup from "./components/Signup"
-import Create from "./components/Create"
+import Home from "./components/pages/Home"
+import Login from "./components/pages/Login"
+import Signup from "./components/pages/Signup"
+import Create from "./components/pages/Create"
 import View from "./components/View"
-import Profile from "./components/Profile"
-import Edit from "./components/Edit"
+import Profile from "./components/pages/Profile"
+import Edit from "./components/pages/Edit"
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 
 function App() {
