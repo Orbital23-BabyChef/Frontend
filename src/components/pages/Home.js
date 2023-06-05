@@ -42,10 +42,10 @@ function Home (){
     return (
         <div className="homepage">
             <h1>Hello {username}!</h1>
-            <Link to="/profile" state={{currUser: username}}>My profile</Link>
+            <Link to="/profile" state={{userId: userId, username: username}}>My profile</Link>
             <br></br>
             <br></br>
-            <Link to="/create" state={{id: username}}>Create a new Recipe</Link>
+            <Link to="/create" state={{userId: userId, username: username}}>Create a new Recipe</Link>
             <br></br>
             <br></br>
             <input
