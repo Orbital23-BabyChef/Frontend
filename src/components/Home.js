@@ -5,10 +5,10 @@ import axios from "axios"
 
 function Home (){
     const location = useLocation()
-    const username = location.state.id
+    const [username, setUsername] = useState("")
 
     const [recipeList, setRecipeList] = useState([])
-    const [searchInput, setSearchInput] = useState("");
+    const [searchInput, setSearchInput] = useState("")
 
     const handleChange = (e) => {
         e.preventDefault();
@@ -28,6 +28,13 @@ function Home (){
         }
     })
 
+    //Sets username 
+    useEffect(() => {
+        axios.get(`https://baby-chef.herokuapp.com/username/?id=${location.state.currId}`)
+        .then(res => {
+            setUsername(res.data.username);
+        })
+    })
     return (
         <div className="homepage">
             <h1>Hello {username}!</h1>

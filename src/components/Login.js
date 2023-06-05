@@ -14,19 +14,19 @@ function Login() {
         e.preventDefault();
 
         try{
-            await axios.post("https://baby-chef.herokuapp.com/",{
+            await axios.post("https://baby-chef.herokuapp.com/login",{
                 username, password
             })
             .then(res => {
-                if (res.data == "exist"){
-                    history("/home", {state: {id: username}})
-                }else if( res.data == "notexist"){
+                if (res.data){
+                    history("/home", {state: {currId: res.data._id}})
+                } else {
                     alert("Incorrect Credentials")
                 }
             })
             .catch(e => {
                 alert("Error!")
-                console.log(e);
+                console.log(e)
             })
 
         }
