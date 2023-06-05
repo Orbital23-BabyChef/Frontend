@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react"
 import axios from "axios"
 import { useNavigate, Link } from "react-router-dom"
 import './Login.css'
+import logo from '../logo.png'
 
 
 function Login() {
@@ -40,8 +41,15 @@ function Login() {
 
 
     return (
-        <div className="login">
-
+        <div 
+            className="login"
+            style={{
+                alignItems: "center",
+                justifyContent: "center",
+                height: "100%",
+                textAlign: "center"
+              }}>
+            <img src={logo} alt="Logo" />
             <h1>Login</h1>
 
             <form action="POST">
