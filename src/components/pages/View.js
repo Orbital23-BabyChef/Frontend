@@ -7,11 +7,12 @@ import axios from "axios"
 
 function View (){
     const location = useLocation()
-    const currUser = location.state.currUser
+    const userId = location.state.userId
+    const [username, setUsername] = useState("")
 
-    const history = useNavigate();
+    const history = useNavigate()
     
-    const { id } = useParams()
+    const recipeId = useParams().id
     const [ recipe, setRecipe ] = useState("")
 
     const submit = () => {
@@ -23,11 +24,11 @@ function View (){
                 label: 'OK',
                 onClick: () => {
                     try {
-                        axios.post("https://baby-chef.herokuapp.com/delete/", { id })
+                        axios.post("https://baby-chef.herokuapp.com/delete/", { recipeId })
                         .then(res => {
                             if (res.data == "deleteSuccess") {
                                 alert("Record successfully deleted.")
-                                history("/home", {state:{id:currUser}})
+                                history("/home", {state:{userId:userId}})
                             } else {
                                 alert("Error!")
                             }
@@ -49,8 +50,16 @@ function View (){
     }
 
     useEffect(() => {
+        axios.get(`https://baby-chef.herokuapp.com/username/?id=${userId}`)
+        .then(res => {
+            setUsername(res.data.username);
+        })
+    })
+
+    useEffect(() => {
         try {
-            axios.post("https://baby-chef.herokuapp.com/recipe", { id })
+            console.log(recipeId)
+            axios.post("https://baby-chef.herokuapp.com/recipe", {id: recipeId})
             .then(res => {
                 setRecipe(res.data)
             })
@@ -63,6 +72,7 @@ function View (){
         }
     })
 
+
     return (
         <div className="view">
             {recipe ? (
@@ -72,9 +82,9 @@ function View (){
                     <p>{recipe.ingredients}</p>
                     <p>{recipe.instructions}</p>
                     <p>Creator: {recipe.creator}</p>
-                    {recipe.creator == currUser ? ( 
+                    {recipe.creator ==  username ? ( 
                         <>
-                            <Link to={`/edit/${id}`} state={{ id: id, currUser: currUser }}>
+                            <Link to={`/edit/${recipeId}`} state={{userId: userId }}>
                                 Edit
                             </Link>
                             <br></br>

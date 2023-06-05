@@ -6,15 +6,25 @@ import axios from "axios"
 
 function Edit (){
     const location = useLocation()
-    const username = location.state.currUser
-    const { id } = useParams()
+    const userId = location.state.userId
+    const [username, setUsername] = useState("")
+
+    const { recipeId } = useParams()
     const [ recipe, setRecipe ] = useState("")
     
     const history = useNavigate();
 
+    //Sets username 
+    useEffect(() => {
+        axios.get(`https://baby-chef.herokuapp.com/username/?id=${userId}`)
+        .then(res => {
+            setUsername(res.data.username);
+        })
+    })
+
     useEffect(() => {
         try {
-            axios.post("https://baby-chef.herokuapp.com/recipe", { id })
+            axios.post("https://baby-chef.herokuapp.com/recipe", { recipeId })
             .then(res => {
                 setRecipe(res.data)
             })
@@ -35,7 +45,7 @@ function Edit (){
 
     const updateRecipe = () => {
         axios.post('https://baby-chef.herokuapp.com/edit', {
-            id: id,
+            id: recipeId,
             title: title,
             description: description,
             ingredients: ingredients,
@@ -45,7 +55,7 @@ function Edit (){
         .then(res => {
             if (res.data == "updateSuccess") {
                 alert("Recipe successfully updated")
-                history("/home", {state: {id: username}})
+                history("/home", {state: {userId: userId}})
             } else {
                 alert("Error!")
             }
