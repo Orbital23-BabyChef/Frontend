@@ -44,7 +44,7 @@ function Login() {
         <div 
             className="centered-div">
                 <div className="logo">
-                <img src={logo} alt="Logo" />
+                <img src={logo} alt="Logo" style={{ width: 200, height: 200 }}/>
                 </div>
             
             <h1>Login</h1>

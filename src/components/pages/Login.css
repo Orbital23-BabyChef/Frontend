@@ -14,6 +14,8 @@ input[type=submit] {
     font-weight: bold;
    }
 
+
+
 input[type=username] {
     width: 70%;
     padding: 12px 20px;
@@ -28,7 +30,7 @@ input[type=password] {
     box-sizing: border-box;
   }
 
-img {
+.logo {
     object-fit: contain;
     padding-top: 30px;
     height: 200px;
