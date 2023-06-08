@@ -3,6 +3,10 @@ import { useLocation, useNavigate, Link } from 'react-router-dom'
 import { useEffect, useState } from 'react'
 import axios from "axios"
 import '../RecipePreview.css'
+import { Button } from "@mui/material"
+import profilepic from '../ProfilePicPlaceholder.png'
+import IconButton from '@mui/material/IconButton';
+import AddIcon from '@mui/icons-material/Add';
 
 function Home (){
     const location = useLocation()
@@ -41,33 +45,36 @@ function Home (){
 
     return (
         <div className="homepage">
-            <h1>Hello {username}!</h1>
-            <Link to="/profile" state={{userId: userId, username: username}}>My profile</Link>
-            <br></br>
-            <br></br>
-            <Link to="/create" state={{userId: userId, username: username}}>Create a new Recipe</Link>
-            <br></br>
-            <br></br>
+            <div className="searchBar">
             <input
                 type="text"
                 placeholder="Search here"
                 onChange={handleChange}
                 value={searchInput} />
-                {recipeList.map((value, key) => {
-                    return <div 
-                        key={value._id}>
+
+            <Button component={Link} to="/profile" state={{userId: userId, username: username}}>
+                    <img src={profilepic} style={{ width: 50, height: 50, marginLeft:10 }}   />
+            </Button>
+
+            <IconButton component={Link} to="/create" state={{userId: userId, username: username}}>
+                    <AddIcon style={{ width: 50, height: 50}}   />
+            </IconButton>
+            </div>
+            
+            {recipeList.map((value, key) => {
+                return  <div key={value._id}>
                         <div 
                             className="recipePreview">
                             <br></br>
-                                <div
-                                    className="recipeTitle">
-                                    <Link to={`/view/${value._id}`} state={{userId: userId, username: username}}>{value.title}</Link>
-                                </div>
-                                <p className="fifty-chars">{value.description} </p>
-                                <p>Creator: {value.creator}</p>
+                            <div
+                                className="recipeTitle">
+                                <Link to={`/view/${value._id}`} state={{userId: userId, username: username}}>{value.title}</Link>
+                            </div>
+                            <p className="fifty-chars">{value.description} </p>
+                            <p> Creator: {value.creator} </p>
                         </div>
-                    </div>
-                })}
+                        </div>
+            })}
         </div>
     )
 }

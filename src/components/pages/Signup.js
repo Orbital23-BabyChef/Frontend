@@ -45,8 +45,8 @@ function Signup() {
 
     return (
         <div className="centered-div">
-            <div className="logo">
-                <img src={logo} alt="Logo" />
+            <div>
+                <img className="logo" src={logo} alt="Logo" />
             </div>
 
             <h1>Create an account now!</h1>
