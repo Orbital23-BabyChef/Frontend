@@ -9,6 +9,9 @@ import { Button } from "@mui/material"
 import profilepic from '../ProfilePicPlaceholder.png'
 import IconButton from '@mui/material/IconButton';
 import AddIcon from '@mui/icons-material/Add';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+
 
 
 function Profile (){
@@ -20,6 +23,12 @@ function Profile (){
 
     const [recipeList, setRecipeList] = useState([])
     const [searchInput, setSearchInput] = useState("");
+
+    const toastStyling = {
+        position: toast.POSITION.BOTTOM_RIGHT,
+        hideProgressBar: true,
+        autoClose: 3000
+    }
 
     const handleChange = (e) => {
         e.preventDefault();
@@ -38,14 +47,14 @@ function Profile (){
                         axios.post("https://baby-chef.herokuapp.com/delete/", { recipeId })
                         .then(res => {
                             if (res.data == "deleteSuccess") {
-                                alert("Record successfully deleted.")
+                                sessionStorage.setItem("itemStatus", "deleted")
                                 history("/home", {state:{userId: userId, username: username}})
                             } else {
-                                alert("Error!")
+                                toast.error("Unknown error, try again later", toastStyling)
                             }
                         })
                         .catch(e => {
-                            alert("Error!")
+                            toast.error("Unknown error, try again later", toastStyling)
                             console.log(e)
                         })
                     } catch (e) {
@@ -117,6 +126,7 @@ function Profile (){
                     </div>
                 </div>
             })}
+            <ToastContainer />
         </div>
     )
 

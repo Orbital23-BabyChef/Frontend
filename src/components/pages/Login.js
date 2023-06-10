@@ -3,6 +3,8 @@ import axios from "axios"
 import { useNavigate, Link } from "react-router-dom"
 import './Login.css'
 import logo from '../logo.png'
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 
 function Login() {
@@ -11,6 +13,12 @@ function Login() {
 
     const [username, setUsername] = useState('')
     const [password, setPassword] = useState('')
+
+    const toastStyling = {
+        position: toast.POSITION.BOTTOM_RIGHT,
+        hideProgressBar: true,
+        autoClose: 3000
+    }
 
     async function submit(e){
         e.preventDefault();
@@ -23,11 +31,11 @@ function Login() {
                 if (res.data){
                     history("/home", {state: {userId: res.data._id, username: username}})
                 } else {
-                    alert("Incorrect Credentials")
+                    toast.error("Username/password not found!", toastStyling)
                 }
             })
             .catch(e => {
-                alert("Error!")
+                toast.error("Unknown error, try again later", toastStyling)
                 console.log(e)
             })
 
@@ -59,7 +67,7 @@ function Login() {
             </form>
             <br></br>
             <Link to="/signup">Create a new account instead</Link>
-
+            <ToastContainer />
         </div>
     )
 }

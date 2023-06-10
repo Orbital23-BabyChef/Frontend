@@ -2,7 +2,8 @@ import React from "react"
 import { useLocation, useNavigate, Link } from 'react-router-dom'
 import { useEffect, useState } from 'react'
 import axios from "axios"
-
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 function Create (){
     const location = useLocation()
@@ -14,6 +15,12 @@ function Create (){
     const [ingredients, setIngredients] = useState("")
     
     const history = useNavigate();
+
+    const toastStyling = {
+        position: toast.POSITION.BOTTOM_RIGHT,
+        hideProgressBar: true,
+        autoClose: 3000
+    }
 
     //Sets username 
     useEffect(() => {
@@ -33,12 +40,12 @@ function Create (){
         })
         .then(res => {
             if (res.data == "recipeexist") {
-                alert("Recipe already exists!")
+                toast.error("Recipe already exists!", toastStyling)
             } else if (res.data == "recipenotexist") {
-                alert("Recipe added!")
+                sessionStorage.setItem("itemStatus", "added")
                 history("/home", {state: {userId: userId, username: username}})
             } else {
-                alert("Error!")
+                toast.error("Unknown error, try again later", toastStyling)
             }
         });
     };
@@ -70,6 +77,7 @@ function Create (){
             />
             <br></br>
             <button onClick={addToList}>Create Recipe!</button>
+            <ToastContainer />
         </div>
     )
 }

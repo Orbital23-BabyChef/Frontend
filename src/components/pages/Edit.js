@@ -3,6 +3,9 @@ import { useLocation, useNavigate, useParams, Link } from 'react-router-dom'
 import { useState, useEffect } from 'react'
 import axios from "axios"
 
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+
 
 function Edit (){
     const location = useLocation()
@@ -12,6 +15,12 @@ function Edit (){
     const recipeId = useParams().id
     
     const history = useNavigate();
+
+    const toastStyling = {
+        position: toast.POSITION.BOTTOM_RIGHT,
+        hideProgressBar: true,
+        autoClose: 3000
+    }
 
     //Sets username 
     useEffect(() => {
@@ -27,7 +36,7 @@ function Edit (){
    
 
     const updateRecipe = () => {
-        axios.post('https://babychef-herokuapp.com/edit', {
+        axios.post('https://baby-chef.herokuapp.com/edit', {
             id: recipeId,
             title: title,
             description: description,
@@ -36,11 +45,15 @@ function Edit (){
         })
         .then(res => {
             if (res.data == "updateSuccess") {
-                alert("Recipe successfully updated")
+                sessionStorage.setItem("itemStatus", "edited")
                 history("/home", {state: {userId: userId, username: username}})
             } else {
-                alert("Error!")
+                toast.error("Unknown error, try again later", toastStyling)
             }
+        })
+        .catch(err => {
+            toast.error("Unknown error, try again later", toastStyling)
+            console.log(err)
         });
     };
 
@@ -75,6 +88,7 @@ function Edit (){
             />
             <br></br>
             <button onClick={updateRecipe}>Update Recipe!</button>
+            <ToastContainer />
         </div>
     )
 }

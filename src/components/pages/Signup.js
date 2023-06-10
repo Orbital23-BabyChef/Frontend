@@ -2,6 +2,8 @@ import React, { useEffect, useState } from "react"
 import axios from "axios"
 import { useNavigate, Link } from "react-router-dom"
 import logo from '../logo.png'
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 function Signup() {
     const history = useNavigate();
@@ -9,6 +11,12 @@ function Signup() {
     const [username, setUsername] = useState('')
     const [password, setPassword] = useState('')
     const [confirmPassword, setConfirmPassword] = useState('')
+
+    const toastStyling = {
+        position: toast.POSITION.BOTTOM_RIGHT,
+        hideProgressBar: true,
+        autoClose: 3000
+    }
 
     async function submit(e){
         e.preventDefault();
@@ -20,17 +28,17 @@ function Signup() {
             })
             .then(res => {
                 if (res.data == "exist") {
-                    alert("User already exists!")
+                    toast.error("Username already exists!", toastStyling)
                 }
                 else if(res.data == "mismatch"){
-                    alert("Passwords do not match!")
+                    toast.error("Passswords do not match!", toastStyling)
                 }
                 else {
                     history("/home", {state: {userId: res.data, username: username}})
                 }
             })
             .catch(e => {
-                alert("Error!")
+                toast.error("Unknown error, try again later", toastStyling)
                 console.log(e);
             })
 
@@ -65,7 +73,7 @@ function Signup() {
 
             <br />
             <Link to="/">Login Page</Link>
-
+            <ToastContainer />
         </div>
     )
 }

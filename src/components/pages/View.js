@@ -4,6 +4,9 @@ import { confirmAlert } from 'react-confirm-alert'
 import 'react-confirm-alert/src/react-confirm-alert.css';
 import axios from "axios"
 
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+
 
 function View (){
     const location = useLocation()
@@ -14,6 +17,12 @@ function View (){
     
     const recipeId = useParams().id
     const [ recipe, setRecipe ] = useState("")
+
+    const toastStyling = {
+        position: toast.POSITION.BOTTOM_RIGHT,
+        hideProgressBar: true,
+        autoClose: 3000
+    }
 
     const submit = () => {
         confirmAlert({
@@ -27,14 +36,14 @@ function View (){
                         axios.post("https://baby-chef.herokuapp.com/delete/", { recipeId })
                         .then(res => {
                             if (res.data == "deleteSuccess") {
-                                alert("Record successfully deleted.")
+                                sessionStorage.setItem("itemStatus", "deleted")
                                 history("/home", {state:{userId:userId, username:username}})
                             } else {
-                                alert("Error!")
+                                toast.error("Unknown error, try again later", toastStyling)
                             }
                         })
                         .catch(e => {
-                            alert("Error!")
+                            toast.error("Unknown error, try again later", toastStyling)
                             console.log(e)
                         })
                     } catch (e) {
@@ -63,10 +72,11 @@ function View (){
                 setRecipe(res.data)
             })
             .catch(e => {
-                alert("Error!")
+                toast.error("Unknown error, try again later", toastStyling)
                 console.log(e)
             });
         } catch (e) {
+            toast.error("Unknown error, try again later", toastStyling)
             console.log(e)
         }
     })
@@ -99,6 +109,7 @@ function View (){
                     ) : null}
                 </>
             ) : null}
+            <ToastContainer />
         </div>
       );
 

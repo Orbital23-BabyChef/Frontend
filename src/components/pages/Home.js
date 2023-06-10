@@ -8,6 +8,9 @@ import profilepic from '../ProfilePicPlaceholder.png'
 import IconButton from '@mui/material/IconButton';
 import AddIcon from '@mui/icons-material/Add';
 
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+
 function Home (){
     const location = useLocation()
     const userId = location.state.userId
@@ -16,11 +19,29 @@ function Home (){
     const [recipeList, setRecipeList] = useState([])
     const [searchInput, setSearchInput] = useState("")
 
+    const toastStyling = {
+        position: toast.POSITION.BOTTOM_RIGHT,
+        hideProgressBar: true,
+        autoClose: 3000
+    }
+
     const handleChange = (e) => {
         e.preventDefault();
         setSearchInput(e.target.value);
     };
-      
+
+    useEffect(() => {
+        const itemStatus = sessionStorage.getItem("itemStatus")
+        if (itemStatus == "deleted") {
+            toast.info("Recipe successfully deleted!", toastStyling)
+        } else if (itemStatus == "added") {
+            toast.success("Recipe successfully added!", toastStyling)
+        } else if (itemStatus == "edited") {
+            toast.success("Recipe successfully edited!", toastStyling)
+        }
+        sessionStorage.removeItem("itemStatus")
+    })
+
     //Sets username 
     useEffect(() => {
         axios.get(`https://baby-chef.herokuapp.com/username/?id=${userId}`)
@@ -70,6 +91,7 @@ function Home (){
                             </div>
                         </div>
             })}
+            <ToastContainer />
         </div>
     )
 }
