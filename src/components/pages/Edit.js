@@ -27,17 +27,17 @@ function Edit (){
    
 
     const updateRecipe = () => {
-        axios.post('https://baby-chef.herokuapp.com/username/edit', {
+        axios.post('http://localhost:3001/edit', {
             id: recipeId,
             title: title,
             description: description,
             ingredients: ingredients,
-            creator: username
+            creator: userId
         })
         .then(res => {
             if (res.data == "updateSuccess") {
                 alert("Recipe successfully updated")
-                history("/home", {state: {userId: userId}})
+                history("/home", {state: {userId: userId, username: username}})
             } else {
                 alert("Error!")
             }
