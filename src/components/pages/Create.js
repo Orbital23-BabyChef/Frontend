@@ -31,23 +31,31 @@ function Create (){
     })
 
     const addToList = () => {
-        axios.post('https://baby-chef.herokuapp.com/create', {
-            title: title,
-            description: description,
-            ingredients: ingredients,
-            creator: userId,
-            firststep: null
-        })
-        .then(res => {
-            if (res.data == "recipeexist") {
-                toast.error("Recipe already exists!", toastStyling)
-            } else if (res.data == "recipenotexist") {
-                sessionStorage.setItem("itemStatus", "added")
-                history("/home", {state: {userId: userId, username: username}})
-            } else {
-                toast.error("Unknown error, try again later", toastStyling)
-            }
-        });
+        if (title.length < 3) {
+            toast.error("TITLE cannot be less than 3 characters long", toastStyling)
+        } else if (description.length < 3) {
+            toast.error("DESCRIPTION cannot be less than 3 characters long", toastStyling)
+        } else if (ingredients.length < 3) {
+            toast.error("INGREDIENTS cannot be less than 3 characters long", toastStyling)
+        } else {
+            axios.post('https://baby-chef.herokuapp.com/create', {
+                title: title,
+                description: description,
+                ingredients: ingredients,
+                creator: userId,
+                firststep: null
+            })
+            .then(res => {
+                if (res.data == "recipeexist") {
+                    toast.error("Recipe already exists!", toastStyling)
+                } else if (res.data == "recipenotexist") {
+                    sessionStorage.setItem("itemStatus", "added")
+                    history("/home", {state: {userId: userId, username: username}})
+                } else {
+                    toast.error("Unknown error, try again later", toastStyling)
+                }
+            });
+        }
     };
 
     return (
