@@ -64,7 +64,7 @@ function Profile (){
     })
 
     useEffect(() => {
-        axios.post("https://baby-chef.herokuapp.com/searchMyRecipes", { username, searchInput })
+        axios.post("https://baby-chef.herokuapp.com/searchMyRecipes", { userId, searchInput })
         .then(response => {
             setRecipeList(response.data);
         })
