@@ -56,6 +56,9 @@ function Home (){
         .then(response => {
             setRecipeList(response.data);
         })
+        .catch(res => {
+            setRecipeList([])
+        })
     })
 
 
