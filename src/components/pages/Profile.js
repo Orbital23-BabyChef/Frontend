@@ -64,17 +64,10 @@ function Profile (){
     })
 
     useEffect(() => {
-        if (searchInput.length == 0) {
-            axios.post("https://baby-chef.herokuapp.com/myRecipes", { username })
-            .then(response => {
-                setRecipeList(response.data);
-            })
-        } else {
-            axios.post("https://baby-chef.herokuapp.com/searchMyRecipes", { username, searchInput })
-            .then(response => {
-                setRecipeList(response.data);
-            })
-        }
+        axios.post("https://baby-chef.herokuapp.com/searchMyRecipes", { username, searchInput })
+        .then(response => {
+            setRecipeList(response.data);
+        })
     })
 
     return (
