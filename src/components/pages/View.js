@@ -9,7 +9,6 @@ function View (){
     const location = useLocation()
     const userId = location.state.userId
     const [username, setUsername] = useState(location.state.username)
-    console.log(username)
 
     const history = useNavigate()
     
