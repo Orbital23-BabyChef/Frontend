@@ -27,7 +27,7 @@ function Edit (){
    
 
     const updateRecipe = () => {
-        axios.post('http://localhost:3001/edit', {
+        axios.post('https://babychef-herokuapp.com/edit', {
             id: recipeId,
             title: title,
             description: description,
