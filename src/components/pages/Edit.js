@@ -24,7 +24,6 @@ function Edit (){
     const [title, setTitle] = useState(location.state.title)
     const [description, setDescription] = useState(location.state.description)
     const [ingredients, setIngredients] = useState(location.state.ingredients)
-    const [instructions, setInstructions] = useState(location.state.instructions)
    
 
     const updateRecipe = () => {
@@ -33,7 +32,6 @@ function Edit (){
             title: title,
             description: description,
             ingredients: ingredients,
-            instructions: instructions,
             creator: username
         })
         .then(res => {
@@ -73,15 +71,6 @@ function Edit (){
                 defaultValue = {ingredients} 
                 onChange={(event) => {
                     setIngredients(event.target.value)
-                }}
-            />
-            <br></br>
-            <label>Instructions</label>
-            <br></br>
-            <textarea 
-                defaultValue = {instructions} 
-                onChange={(event) => {
-                    setInstructions(event.target.value)
                 }}
             />
             <br></br>
