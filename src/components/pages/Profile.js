@@ -4,6 +4,11 @@ import { useEffect, useState } from 'react'
 import axios from "axios"
 import { confirmAlert } from 'react-confirm-alert'
 import 'react-confirm-alert/src/react-confirm-alert.css';
+import '../RecipePreview.css'
+import { Button } from "@mui/material"
+import profilepic from '../ProfilePicPlaceholder.png'
+import IconButton from '@mui/material/IconButton';
+import AddIcon from '@mui/icons-material/Add';
 
 
 function Profile (){
@@ -73,21 +78,32 @@ function Profile (){
     return (
         <div className="profile">
             <h1>{username}'s Profile</h1>
-            <Link to="/create" state={{userId: userId, username: username}}>Create a new Recipe</Link>
-            <br />
-            <br />
-            <input
-                type="text"
-                placeholder="Search here"
-                onChange={handleChange}
-                value={searchInput} />
-                {recipeList.map((value, key) => {
-                    return <div key={value._id}> 
-                        <hr></hr>
-                        <Link to={`/view/${value._id}`} state={{userId: userId, username: username}}>{value.title}</Link>
-                        <hr></hr>
-                        <p>{value.description} </p>
-                        <p>Creator: {username}</p> 
+            <div className="searchBar">
+                <input
+                    type="text"
+                    placeholder="Search here"
+                    onChange={handleChange}
+                    value={searchInput} />
+
+                <Button component={Link} to="/profile" state={{userId: userId, username: username}}>
+                        <img src={profilepic} style={{ width: 50, height: 50, marginLeft:10 }}   />
+                </Button>
+
+                <IconButton component={Link} to="/create" state={{userId: userId, username: username}}>
+                        <AddIcon style={{ width: 50, height: 50}}   />
+                </IconButton>
+            </div>
+            {recipeList.map((value, key) => {
+                return <div key={value._id}>
+                    <div 
+                        className="recipePreview">
+                        <br></br>
+                        <div
+                            className="recipeTitle">
+                            <Link to={`/view/${value._id}`} state={{userId: userId, username: username}}>{value.title}</Link>
+                        </div>
+                        <p className="fifty-chars">{value.description} </p>
+                        <p> Creator: {username} </p>
                         <Link to={`/edit/${value._id}`} state={{
                             userId: userId, 
                             username: username,
@@ -99,7 +115,8 @@ function Profile (){
                         <br></br>
                         <button onClick={() => submit(value._id)}>Delete</button>
                     </div>
-                })}
+                </div>
+            })}
         </div>
     )
 
