@@ -28,18 +28,13 @@ function Home (){
             setUsername(res.data.username);
         })
     })
+    
 
     useEffect(() => {
-        if (searchInput.length == 0) {
-            axios.get("https://baby-chef.herokuapp.com/recipes").then( res => {
-                setRecipeList(res.data);
-            })
-        } else {
-            axios.post("https://baby-chef.herokuapp.com/search", { searchInput })
-            .then(response => {
-                setRecipeList(response.data);
-            })
-        }
+        axios.post("http://localhost:3001/search", { searchInput })
+        .then(response => {
+            setRecipeList(response.data);
+        })
     })
 
 
