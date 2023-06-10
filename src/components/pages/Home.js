@@ -41,19 +41,19 @@ function Home (){
     return (
         <div className="homepage">
             <div className="searchBar">
-            <input
-                type="text"
-                placeholder="Search here"
-                onChange={handleChange}
-                value={searchInput} />
+                <input
+                    type="text"
+                    placeholder="Search here"
+                    onChange={handleChange}
+                    value={searchInput} 
+                />
+                <Button component={Link} to="/profile" state={{userId: userId, username: username}}>
+                        <img src={profilepic} style={{ width: 50, height: 50, marginLeft:10 }}   />
+                </Button>
 
-            <Button component={Link} to="/profile" state={{userId: userId, username: username}}>
-                    <img src={profilepic} style={{ width: 50, height: 50, marginLeft:10 }}   />
-            </Button>
-
-            <IconButton component={Link} to="/create" state={{userId: userId, username: username}}>
-                    <AddIcon style={{ width: 50, height: 50}}   />
-            </IconButton>
+                <IconButton component={Link} to="/create" state={{userId: userId, username: username}}>
+                        <AddIcon style={{ width: 50, height: 50}}   />
+                </IconButton>
             </div>
             
             {recipeList.map((value, key) => {
