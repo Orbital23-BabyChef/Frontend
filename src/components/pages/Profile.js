@@ -87,7 +87,7 @@ function Profile (){
                         <Link to={`/view/${value._id}`} state={{userId: userId, username: username}}>{value.title}</Link>
                         <hr></hr>
                         <p>{value.description} </p>
-                        <p>Creator: {value.creator}</p> 
+                        <p>Creator: {username}</p> 
                         <Link to={`/edit/${value._id}`} state={{
                             userId: userId, 
                             username: username,
