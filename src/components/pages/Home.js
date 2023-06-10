@@ -31,7 +31,7 @@ function Home (){
     
 
     useEffect(() => {
-        axios.post("http://localhost:3001/search", { searchInput })
+        axios.post("https://baby-chef.herokuapp.com/search", { searchInput })
         .then(response => {
             setRecipeList(response.data);
         })
