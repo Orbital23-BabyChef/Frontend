@@ -38,21 +38,26 @@ function Create (){
         } else if (ingredients.length < 3) {
             toast.error("INGREDIENTS cannot be less than 3 characters long", toastStyling)
         } else {
-            axios.post('https://baby-chef.herokuapp.com/create', {
+            axios.post('https://baby-chef.herokuapp.com/checkRecipe', {
                 title: title,
                 description: description,
                 ingredients: ingredients,
                 creator: userId,
-                firststep: null
             })
             .then(res => {
                 if (res.data == "recipeexist") {
                     toast.error("Recipe already exists!", toastStyling)
-                } else if (res.data == "recipenotexist") {
-                    sessionStorage.setItem("itemStatus", "added")
-                    history("/home", {state: {userId: userId, username: username}})
-                } else {
+                } else if (res.data == "recipefail") {
                     toast.error("Unknown error, try again later", toastStyling)
+                } else {
+                    history("/steps/create", {state: {
+                        userId: userId, 
+                        title: title,
+                        description: description,
+                        ingredients: ingredients,
+                        username: username,
+                        steps:[]
+                    }})
                 }
             });
         }
@@ -84,7 +89,7 @@ function Create (){
                 }}
             />
             <br></br>
-            <button onClick={addToList}>Create Recipe!</button>
+            <button onClick={addToList}>Next Step</button>
             <ToastContainer />
         </div>
     )

@@ -6,6 +6,7 @@ import Create from "./components/pages/Create"
 import View from "./components/pages/View"
 import Profile from "./components/pages/Profile"
 import Edit from "./components/pages/Edit"
+import Steps from "./components/pages/Steps"
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 
 function App() {
@@ -20,6 +21,7 @@ function App() {
           <Route path="/view/:id" element={<View/>}/>
           <Route path="/profile" element={<Profile/>}/>
           <Route path="/edit/:id" element={<Edit/>}/>
+          <Route path="/steps/:id" element={<Steps/>}/>
         </Routes>
       </Router>
     </div>
