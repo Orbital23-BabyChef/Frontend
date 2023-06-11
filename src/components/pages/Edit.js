@@ -36,25 +36,33 @@ function Edit (){
    
 
     const updateRecipe = () => {
-        axios.post('https://baby-chef.herokuapp.com/edit', {
-            id: recipeId,
-            title: title,
-            description: description,
-            ingredients: ingredients,
-            creator: userId
-        })
-        .then(res => {
-            if (res.data == "updateSuccess") {
-                sessionStorage.setItem("itemStatus", "edited")
-                history("/home", {state: {userId: userId, username: username}})
-            } else {
+        if (title.length < 3) {
+            toast.error("TITLE cannot be less than 3 characters long", toastStyling)
+        } else if (description.length < 3) {
+            toast.error("DESCRIPTION cannot be less than 3 characters long", toastStyling)
+        } else if (ingredients.length < 3) {
+            toast.error("INGREDIENTS cannot be less than 3 characters long", toastStyling)
+        } else {
+            axios.post('https://baby-chef.herokuapp.com/edit', {
+                id: recipeId,
+                title: title,
+                description: description,
+                ingredients: ingredients,
+                creator: userId
+            })
+            .then(res => {
+                if (res.data == "updateSuccess") {
+                    sessionStorage.setItem("itemStatus", "edited")
+                    history("/home", {state: {userId: userId, username: username}})
+                } else {
+                    toast.error("Unknown error, try again later", toastStyling)
+                }
+            })
+            .catch(err => {
                 toast.error("Unknown error, try again later", toastStyling)
-            }
-        })
-        .catch(err => {
-            toast.error("Unknown error, try again later", toastStyling)
-            console.log(err)
-        });
+                console.log(err)
+            });
+        }
     };
 
     return (
