@@ -4,6 +4,8 @@ import { useEffect, useState } from 'react'
 import axios from "axios"
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import './Create.css'
+import { Button, green } from '@mui/material'
 
 function Create (){
     const location = useLocation()
@@ -65,14 +67,17 @@ function Create (){
 
     return (
         <div className="create">
-            <label>Title</label>
+            <div className="createTitle">
+            <label>Name of Dish</label>
             <br></br>
             <input type="text" 
                 onChange={(event) => {
                     setTitle(event.target.value)
                 }}
             />
+            </div>
             <br></br>
+            <div>
             <label>Description</label>
             <br></br>
             <textarea 
@@ -80,7 +85,9 @@ function Create (){
                     setDescription(event.target.value)
                 }}
             />
+            </div>
             <br></br>
+            <div>
             <label>Ingredients</label>
             <br></br>
             <textarea 
@@ -88,8 +95,15 @@ function Create (){
                     setIngredients(event.target.value)
                 }}
             />
+            </div>
             <br></br>
-            <button onClick={addToList}>Next Step</button>
+            <Button 
+                className="createNextStepButton" 
+                variant="contained"
+                size="normal"
+                color="primary"
+                sx={{mb: 2}}
+                onClick={addToList}>Next Step</Button>
             <ToastContainer />
         </div>
     )

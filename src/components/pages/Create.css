@@ -1,0 +1,30 @@
+.create {
+    width: 90%;
+    text-align: center;
+    margin: auto;
+    margin-top: 50px;
+    border-style: solid;
+    border-color: rgb(0, 161, 67);
+    border-width: 3px;
+    border-radius: 40px;
+}
+
+label {
+    font-family: Tahoma, Geneva, sans-serif;
+    font-size: 25px;
+}
+
+textarea{
+    width: 50%;
+    padding: 12px 20px;
+    margin: 8px 0;
+    box-sizing: border-box;
+  }
+
+.createTitle {
+    margin-top: 20px;
+}
+
+.createNextStepButton {
+    margin-bottom: 50px;
+}

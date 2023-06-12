@@ -47,4 +47,5 @@ input[type=text] {
     padding: 12px 20px;
     box-sizing: border-box;
     height: 50px;
+    margin: 8px 0;
    }

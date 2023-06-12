@@ -67,7 +67,7 @@ function Home (){
             <div className="searchBar">
                 <input
                     type="text"
-                    placeholder="Search here"
+                    placeholder="Search for your next recipe"
                     onChange={handleChange}
                     value={searchInput} 
                 />
