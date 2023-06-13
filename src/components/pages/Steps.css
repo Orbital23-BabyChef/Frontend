@@ -1,0 +1,44 @@
+.steps {
+    width: 90%;
+    text-align: center;
+    margin: auto;
+    margin-top: 30px;
+    border-style: solid;
+    border-color: #00a143;
+    border-width: 3px;
+    border-radius: 40px;
+    padding: 1%
+}
+
+.createdStepsList {
+    margin:auto
+}
+
+.createdStep {
+    background-color: #9bf0be;
+    margin: 1%;
+    border-style: solid;
+    border-color: #00a143;
+    border-width: 3px;
+    border-radius: 40px;
+    padding: 1%;
+}
+
+.stepNumber{
+    color: #165E00;
+    font-family: verdana;
+    font-weight: bold;
+    text-decoration: underline;
+}
+
+.stepDescription{
+    width: 70%;
+    margin: auto;
+    text-align: left;
+    font-family: verdana;
+    margin-top: 1%;
+}
+
+.test{
+    background-color: #00a143;
+}

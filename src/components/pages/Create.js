@@ -5,7 +5,18 @@ import axios from "axios"
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import './Create.css'
-import { Button, green } from '@mui/material'
+import { Button, createTheme, ThemeProvider } from "@mui/material"
+
+const theme = createTheme({
+    palette: {
+      primary: {
+        main: '#00a143',
+      },
+      secondary: {
+        main: '#eb3828',
+      },
+    },
+})
 
 function Create (){
     const location = useLocation()
@@ -66,6 +77,7 @@ function Create (){
     };
 
     return (
+        <ThemeProvider theme={theme}>
         <div className="create">
             <div className="createTitle">
             <label>Name of Dish</label>
@@ -96,16 +108,14 @@ function Create (){
                 }}
             />
             </div>
-            <br></br>
             <Button 
-                className="createNextStepButton" 
-                variant="contained"
-                size="normal"
+                variant="outlined"
                 color="primary"
-                sx={{mb: 2}}
+                sx={{border: 2, fontWeight: 'bold', fontSize: 16, margin: '10px'}}
                 onClick={addToList}>Next Step</Button>
             <ToastContainer />
         </div>
+        </ThemeProvider>
     )
 }
 

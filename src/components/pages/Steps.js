@@ -1,11 +1,23 @@
 import React from "react"
 import { useLocation, useNavigate } from 'react-router-dom'
 import { useState, useEffect } from 'react'
-import { Button } from "@mui/material"
+import { Button, createTheme, ThemeProvider } from "@mui/material"
 import axios from "axios"
 
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import './Steps.css'
+
+const theme = createTheme({
+    palette: {
+      primary: {
+        main: '#00a143',
+      },
+      secondary: {
+        main: '#eb3828',
+      },
+    },
+  })
 
 function Steps() {
     const history = useNavigate()
@@ -29,6 +41,7 @@ function Steps() {
     //confirming => user is in the process of confirming all steps created
 
     //store values input in forms
+    const [stepType, setStepType] = useState(undefined)
     const [stepDescription, setStepDescription] = useState(undefined)
     const [stepDuration, setStepDuration] = useState(undefined)
     const [stepConcurrentSteps, setStepConcurrentSteps] = useState(undefined)
@@ -36,6 +49,7 @@ function Steps() {
 
     const addStepToList = () => {
         const newStep = {
+            stepType,
             stepDescription,
             stepDuration,
             stepConcurrentSteps,
@@ -47,6 +61,7 @@ function Steps() {
 
     const returnToDefault = () => {
         setCurrProcess("default")
+        setStepType(undefined)
         setStepDescription(undefined)
         setStepDuration(undefined)
         setStepConcurrentSteps(undefined)
@@ -76,34 +91,66 @@ function Steps() {
     }
 
     return (
+        <ThemeProvider theme={theme}>
         <div className="steps">
+            <div className="createdStepsList">
             {currSteps.map((value, key) => {
-                return <div>
-                    <hr />
-                    <div>
-                        {value.stepDescription}
-                        <br />
-                        {value.stepDuration ? value.stepDuration + " seconds" : ""}
-                        <br />
-                        {value.stepConcurrentSteps}
-                        <br />
-                        {value.stepAfterStep}
-                    </div>
-                </div>
+                return <div className="createdStep">
+                            <div className="stepNumber">
+                                Step {key + 1} ({value.stepType})
+                            </div>
+                            <div className="stepDescription">
+                                <div>Description: {value.stepDescription}</div>
+                                <div style={{marginTop: 10}}>{value.stepDuration ?  "Duration: " + value.stepDuration + " seconds": ""}</div>
+                                <div style={{marginTop: 10}}>{value.stepConcurrentSteps ? "Concurrently: " + value.stepConcurrentSteps : ""}</div>
+                                <div style={{marginTop: 10}}>{value.stepAfterStep ? "End of duration: " + value.stepAfterStep : ""}</div>
+                            </div>
+                        </div>
             })}
+            </div>
             { currProcess == "default" 
-                ? <Button onClick={() => {setCurrProcess("static/duration")}}>Add Step</Button>
+                ? <Button 
+                    onClick={() => {setCurrProcess("static/duration")}}
+                    variant="outlined"
+                    color="primary"
+                    sx={{border: 2, fontWeight: 'bold', fontSize: 16, margin: '10px'}}>
+                        + Add Step</Button>
                 : currProcess == "static/duration"
                 ? <div>
-                    <Button onClick={() => {setCurrProcess("staticCreating")}}>Static</Button>
-                    <Button onClick={() => {setCurrProcess("durationCreating")}}>Duration</Button>
-                    <Button onClick={() => {setCurrProcess("default")}}>Cancel</Button>
+                    <Button 
+                        onClick={() => {setCurrProcess("staticCreating"); setStepType("Static")}}
+                        variant="outlined"
+                        color="primary"
+                        sx={{border: 2, fontWeight: 'bold', fontSize: 16, margin: '10px'}}
+                    >Static</Button>
+                    <Button 
+                        onClick={() => {setCurrProcess("durationCreating"); setStepType("Duration")}}
+                        variant="outlined"
+                        color="primary"
+                        sx={{border: 2, fontWeight: 'bold', fontSize: 16, margin: '10px'}}
+                    >Duration</Button>
+                    <Button 
+                        onClick={() => {setCurrProcess("default")}}
+                        variant="outlined"
+                        color="primary"
+                        sx={{border: 2, fontWeight: 'bold', fontSize: 16, margin: '10px'}}
+                    >Cancel</Button>
                   </div>
                 : currProcess == "staticCreating"
                 ? <div>
                     <input type="text" onChange={(e) => {setStepDescription(e.target.value)}} placeholder="Description" />
-                    <Button onClick={addStepToList}>Create Step</Button>
-                    <Button onClick={returnToDefault}>Cancel</Button>
+                    <Button 
+                        onClick={addStepToList}
+                        variant="outlined"
+                        color="primary"
+                        sx={{border: 2, fontWeight: 'bold', fontSize: 16, margin: '10px'}}
+                    >Create Step</Button>
+                    <Button 
+                        onClick={returnToDefault}
+                        variant="outlined"
+                        color="primary"
+                        sx={{border: 2, fontWeight: 'bold', fontSize: 16, margin: '10px'}}
+                    >Cancel</Button>
                   </div>
                 : currProcess == "durationCreating"
                 ? <div>
@@ -114,15 +161,26 @@ function Steps() {
                     <input type="submit" onClick={addStepToList} />
                   </div>
                 : currProcess == "confirming"
-                ? <Button onClick={createRecipe}>Create Recipe!</Button>
+                ? <Button 
+                    onClick={createRecipe}
+                    variant="outlined"
+                    color="primary"
+                    sx={{border: 2, fontWeight: 'bold', fontSize: 16, margin: '10px'}}
+                  >Create Recipe!</Button>
                 : <h1>Error!</h1>
             }
             <br />
             {currSteps.length >= 1 && currProcess == "default"
-                ? <Button onClick={() => setCurrProcess("confirming")}>Confirm</Button>
+                ? <Button 
+                    onClick={() => setCurrProcess("confirming")}
+                    variant="outlined"
+                    color="secondary"
+                    sx={{border: 2, fontWeight: 'bold', fontSize: 16, margin: '10px'}}
+                  >Confirm</Button>
                 : <></>}
             <ToastContainer />
         </div>
+        </ThemeProvider>
     )
 }
 
