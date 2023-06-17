@@ -90,6 +90,23 @@ function View (){
                     <p>{recipe.description}</p>
                     <p>{recipe.ingredients}</p>
                     <p>{recipe.instructions}</p>
+                    <hr />
+                    <p>Instruction Preview:</p>
+                    {recipe.steps.map((value, key) => {
+                        return <div> 
+                            <h4>Step X</h4>
+                            <p>{value.stepDescription}</p>
+                            {value.stepType == "Duration" 
+                            ? <div>
+                                <p>{value.stepConcurrentSteps}</p>
+                                <p>{value.stepDuration}</p>
+                                <p>{value.stepConcurrentSteps}</p>
+                                <p>{value.stepAfterSteps}</p>
+                              </div>
+                            : <></>}
+                        </div>
+                    })}
+                    <hr />
                     <p>Creator: {recipe.creator}</p>
                     {recipe.creator ==  username ? ( 
                         <>
