@@ -101,9 +101,9 @@ function Steps() {
                             </div>
                             <div className="stepDescription">
                                 <div>Description: {value.stepDescription}</div>
-                                <div style={{marginTop: 10}}>{value.stepDuration ?  "Duration: " + value.stepDuration + " seconds": ""}</div>
-                                <div style={{marginTop: 10}}>{value.stepConcurrentSteps ? "Concurrently: " + value.stepConcurrentSteps : ""}</div>
-                                <div style={{marginTop: 10}}>{value.stepAfterStep ? "End of duration: " + value.stepAfterStep : ""}</div>
+                                <div style={{marginTop: 10}}>{value.stepType == "Duration" ? "Duration: " + value.stepDuration + " seconds": ""}</div>
+                                <div style={{marginTop: 10}}>{value.stepType == "Duration" ? "Concurrently: " + value.stepConcurrentSteps : ""}</div>
+                                <div style={{marginTop: 10}}>{value.stepType == "Duration" ? "End of duration: " + value.stepAfterStep : ""}</div>
                             </div>
                         </div>
             })}
