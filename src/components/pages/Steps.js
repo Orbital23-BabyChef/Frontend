@@ -24,9 +24,12 @@ function Steps() {
     const location = useLocation()
     //Stores recipe ID, will be "create" if is new recipe
     const recipeId = useParams().id
-    console.log(recipeId)
+    
+    //true if current view is an edit page, false if it is a create page
+    const isEdit = recipeId != "create"
+
     const [ currSteps, setCurrSteps ] = useState(location.state.steps)
-    console.log(currSteps)
+
     const userId = location.state.userId
     const username = location.state.username
 
@@ -73,7 +76,7 @@ function Steps() {
     }
     
     const createRecipe = async() => {
-        if (recipeId == "create") {
+        if (!isEdit) { // is creating a new post
             await axios.post("https://baby-chef.herokuapp.com/createRecipe", {
                 title: location.state.title,
                 description: location.state.description,
@@ -191,7 +194,7 @@ function Steps() {
                     variant="outlined"
                     color="primary"
                     sx={{border: 2, fontWeight: 'bold', fontSize: 16, margin: '10px'}}
-                  >Create Recipe!</Button>
+                  >{isEdit ? "Complete Edit" : "Create Recipe!"}</Button>
                 : <h1>Error!</h1>
             }
             <br />

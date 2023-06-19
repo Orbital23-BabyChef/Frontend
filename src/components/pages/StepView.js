@@ -75,7 +75,8 @@ function StepView() {
                                                                : "end")
     // Static => showing the description from a static page
     // Duration => showing the timed description from a duration page
-    // Timing => showing timer with other relevant information
+    // timing => showing timer with other relevant information
+    // end => showing end screen of the recipe interactive UI
     
     const time = new Date();
     time.setSeconds(time.getSeconds() + (currStep 
@@ -130,7 +131,10 @@ function StepView() {
     })
 
     return (<div>
-        <p>Step {stepNum + 1}</p>
+        { currProcess != "end"
+            ? <p>Step {stepNum + 1}</p>
+            : <></>
+        }
         { currProcess == "Static"
             ? <>
                 <p>{currStep.stepDescription}</p>
