@@ -102,6 +102,10 @@ function StepView() {
             : "end");
     };
 
+    const prevPage = () => {
+        setCurrProcess(recipe.steps[stepNum - 1].stepType);
+    }
+
     useEffect(() => {
         axios.get(`https://baby-chef.herokuapp.com/username/?id=${userId}`)
         .then(res => {
@@ -160,7 +164,20 @@ function StepView() {
                 <Link to={`/home`} state={{ username, userId }}>
                     Back to Home
                 </Link>
-            </>}
+            </>
+        }
+        { stepNum > 0 
+            ? <Link to={`/stepview/${recipeId}/${stepNum - 1}`} state={{ 
+                username: username, 
+                userId: userId, 
+                recipe: recipe 
+            }}>
+                <Button onClick={prevPage}> 
+                    Previous Step
+                </Button>
+            </Link>
+            : <></>
+        }
     </div>)
 }
 
