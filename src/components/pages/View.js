@@ -125,6 +125,7 @@ function View (){
                             <button onClick={submit}>Delete</button>
                         </>
                     ) : null}
+                    
                     <Link to={`/stepview/${recipeId}/0`} state={{
                         username: username,
                         userId: userId,
