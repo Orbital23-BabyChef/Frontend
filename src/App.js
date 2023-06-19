@@ -7,6 +7,7 @@ import View from "./components/pages/View"
 import Profile from "./components/pages/Profile"
 import Edit from "./components/pages/Edit"
 import Steps from "./components/pages/Steps"
+import StepView from "./components/pages/StepView"
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 
 function App() {
@@ -22,6 +23,7 @@ function App() {
           <Route path="/profile" element={<Profile/>}/>
           <Route path="/edit/:id" element={<Edit/>}/>
           <Route path="/steps/:id" element={<Steps/>}/>
+          <Route path="/stepview/:id/:stepnum" element={<StepView/>}/>
         </Routes>
       </Router>
     </div>
