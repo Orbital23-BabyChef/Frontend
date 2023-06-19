@@ -1,17 +1,31 @@
 import React from "react"
 import { useLocation, useNavigate, useParams, Link } from 'react-router-dom'
-import { useState, useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import axios from "axios"
-
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import './Create.css'
+import { Button, createTheme, ThemeProvider } from "@mui/material"
 
+const theme = createTheme({
+    palette: {
+      primary: {
+        main: '#00a143',
+      },
+      secondary: {
+        main: '#eb3828',
+      },
+    },
+})
 
 function Edit (){
     const location = useLocation()
     const userId = location.state.userId
     const [username, setUsername] = useState(location.state.username)
-
+    const [title, setTitle] = useState(location.state.title)
+    const [description, setDescription] = useState(location.state.description)
+    const [ingredients, setIngredients] = useState(location.state.ingredients)
+    const steps = location.state.steps
     const recipeId = useParams().id
     
     const history = useNavigate();
@@ -29,11 +43,6 @@ function Edit (){
             setUsername(res.data.username);
         })
     })
-    
-    const [title, setTitle] = useState(location.state.title)
-    const [description, setDescription] = useState(location.state.description)
-    const [ingredients, setIngredients] = useState(location.state.ingredients)
-   
 
     const updateRecipe = () => {
         if (title.length < 3) {
@@ -43,61 +52,60 @@ function Edit (){
         } else if (ingredients.length < 3) {
             toast.error("INGREDIENTS cannot be less than 3 characters long", toastStyling)
         } else {
-            axios.post('https://baby-chef.herokuapp.com/edit', {
-                id: recipeId,
+            history(`/steps/${recipeId}`, {state: {
+                userId: userId, 
                 title: title,
                 description: description,
                 ingredients: ingredients,
-                creator: userId
-            })
-            .then(res => {
-                if (res.data == "updateSuccess") {
-                    sessionStorage.setItem("itemStatus", "edited")
-                    history("/home", {state: {userId: userId, username: username}})
-                } else {
-                    toast.error("Unknown error, try again later", toastStyling)
-                }
-            })
-            .catch(err => {
-                toast.error("Unknown error, try again later", toastStyling)
-                console.log(err)
-            });
+                username: username,
+                steps: steps
+            }})
         }
     };
 
     return (
-        <div className="edit">
-            <label>Title</label>
+        <ThemeProvider theme={theme}>
+        <div className="create">
+            <div className="createTitle">
+            <label>Name of Dish</label>
             <br></br>
-            <input 
-                type="text"
-                defaultValue = {title} 
+            <input type="text" 
+                defaultValue = {title}
                 onChange={(event) => {
                     setTitle(event.target.value)
                 }}
             />
+            </div>
             <br></br>
+            <div>
             <label>Description</label>
             <br></br>
             <textarea 
-                defaultValue = {description} 
+                defaultValue={description}
                 onChange={(event) => {
                     setDescription(event.target.value)
                 }}
             />
+            </div>
             <br></br>
+            <div>
             <label>Ingredients</label>
             <br></br>
             <textarea 
-                defaultValue = {ingredients} 
+                defaultValue={ingredients}
                 onChange={(event) => {
                     setIngredients(event.target.value)
                 }}
             />
-            <br></br>
-            <button onClick={updateRecipe}>Update Recipe!</button>
+            </div>
+            <Button 
+                variant="outlined"
+                color="primary"
+                sx={{border: 2, fontWeight: 'bold', fontSize: 16, margin: '10px'}}
+                onClick={updateRecipe}>Edit Steps</Button>
             <ToastContainer />
         </div>
+        </ThemeProvider>
     )
 }
 

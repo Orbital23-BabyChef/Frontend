@@ -116,7 +116,8 @@ function View (){
                                     title: recipe.title,
                                     description: recipe.description,
                                     ingredients: recipe.ingredients,
-                                    instructions: recipe.instructions
+                                    instructions: recipe.instructions,
+                                    steps: recipe.steps
                                 }}>
                                 Edit
                             </Link>

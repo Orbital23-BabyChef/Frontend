@@ -1,5 +1,5 @@
 import React from "react"
-import { useLocation, useNavigate } from 'react-router-dom'
+import { useLocation, useNavigate, useParams } from 'react-router-dom'
 import { useState, useEffect } from 'react'
 import { Button, createTheme, ThemeProvider } from "@mui/material"
 import axios from "axios"
@@ -22,7 +22,11 @@ const theme = createTheme({
 function Steps() {
     const history = useNavigate()
     const location = useLocation()
+    //Stores recipe ID, will be "create" if is new recipe
+    const recipeId = useParams().id
+    console.log(recipeId)
     const [ currSteps, setCurrSteps ] = useState(location.state.steps)
+    console.log(currSteps)
     const userId = location.state.userId
     const username = location.state.username
 
@@ -67,27 +71,48 @@ function Steps() {
         setStepConcurrentSteps(undefined)
         setStepAfterStep(undefined)
     }
-
-    
     
     const createRecipe = async() => {
-        await axios.post("https://baby-chef.herokuapp.com/createRecipe", {
-            title: location.state.title,
-            description: location.state.description,
-            ingredients: location.state.ingredients,
-            creator: userId,
-            steps: currSteps
-        })
-        .then(res => {
-            if (res.data == "recipeexists") {//shouldn't really happen
-                toast.error("Recipe already exists!", toastStyling)
-            } else if (res.data == "recipefail") {
+        if (recipeId == "create") {
+            await axios.post("https://baby-chef.herokuapp.com/createRecipe", {
+                title: location.state.title,
+                description: location.state.description,
+                ingredients: location.state.ingredients,
+                creator: userId,
+                steps: currSteps
+            })
+            .then(res => {
+                if (res.data == "recipeexists") {//shouldn't really happen
+                    toast.error("Recipe already exists!", toastStyling)
+                } else if (res.data == "recipefail") {
+                    toast.error("Unknown error, try again later", toastStyling)
+                } else {
+                    sessionStorage.setItem("itemStatus", "added")
+                    history("/home", {state: {userId: userId, username: username}})
+                }
+            })
+        } else {
+            axios.post('https://baby-chef.herokuapp.com/edit', {
+                id: recipeId,
+                title: location.state.title,
+                description: location.state.description,
+                ingredients: location.state.ingredients,
+                creator: userId,
+                steps: currSteps
+            })
+            .then(res => {
+                if (res.data == "updateSuccess") {
+                    sessionStorage.setItem("itemStatus", "edited")
+                    history("/home", {state: {userId: userId, username: username}})
+                } else {
+                    toast.error("Unknown error, try again later", toastStyling)
+                }
+            })
+            .catch(err => {
                 toast.error("Unknown error, try again later", toastStyling)
-            } else {
-                sessionStorage.setItem("itemStatus", "added")
-                history("/home", {state: {userId: userId, username: username}})
-            }
-        })
+                console.log(err)
+            });
+        }
     }
 
     return (
