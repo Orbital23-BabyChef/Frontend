@@ -1,7 +1,8 @@
 import React from "react"
 import { useLocation, useNavigate, useParams } from 'react-router-dom'
 import { useState, useEffect } from 'react'
-import { Button, createTheme, ThemeProvider } from "@mui/material"
+import { Button, createTheme, ThemeProvider, IconButton } from "@mui/material"
+import HelpIcon from '@mui/icons-material/Help';
 import axios from "axios"
 
 import { ToastContainer, toast } from 'react-toastify';
@@ -219,8 +220,8 @@ function Steps() {
                 ? <div>
                     <input className="detailsTextBox" onChange={(e) => {setStepDescription(e.target.value)}} placeholder="Description" />
                     <br></br>
-                    <input className="time" onChange={(e) => {updateMin(e.target.value)}} placeholder="00" />{'min '} 
-                    <input className="time" onChange={(e) => {updateSec(e.target.value)}} placeholder="00" />sec
+                    <input className="time" onChange={(e) => {updateMin(e.target.value)}} placeholder="00" />{' min '} 
+                    <input className="time" onChange={(e) => {updateSec(e.target.value)}} placeholder="00" />{' sec '}
                     <br></br>
                     <input className="detailsTextBox" onChange={(e) => {setStepConcurrentSteps(e.target.value)}} placeholder="Concurrent Steps" />
                     <br></br>
@@ -257,6 +258,11 @@ function Steps() {
                   >Confirm</Button>
                 : <></>}
             <ToastContainer />
+        </div>
+        <div>
+            <IconButton>
+                <HelpIcon style={{ width: 50, height: 50}}   />
+            </IconButton>
         </div>
         </ThemeProvider>
     )
