@@ -66,6 +66,14 @@ function Steps() {
         returnToDefault()
     }
 
+    const removeStepFromList = (key) => {
+        setCurrSteps((prevSteps) => {
+            const updatedSteps = [...prevSteps];
+            updatedSteps.splice(key, 1);
+            return updatedSteps;
+        });
+    }
+
     const returnToDefault = () => {
         setCurrProcess("default")
         setStepType(undefined)
@@ -133,6 +141,7 @@ function Steps() {
                                 <div style={{marginTop: 10}}>{value.stepType == "Duration" ? "Concurrently: " + value.stepConcurrentSteps : ""}</div>
                                 <div style={{marginTop: 10}}>{value.stepType == "Duration" ? "End of duration: " + value.stepAfterStep : ""}</div>
                             </div>
+                            <Button onClick={() => removeStepFromList(key)}>Delete Step</Button>
                         </div>
             })}
             </div>
