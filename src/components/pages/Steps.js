@@ -223,6 +223,12 @@ function Steps() {
                     <input type="text" onChange={(e) => {setStepConcurrentSteps(e.target.value)}} placeholder="Concurrent Steps" />
                     <input type="text" onChange={(e) => {setStepAfterStep(e.target.value)}} placeholder="Ending step" />
                     <input type="submit" onClick={addStepToList} />
+                    <Button 
+                        onClick={() => {setCurrProcess("default")}}
+                        variant="outlined"
+                        color="primary"
+                        sx={{border: 2, fontWeight: 'bold', fontSize: 16, margin: '10px'}}
+                    >Cancel</Button>
                   </div>
                 : currProcess == "confirming"
                 ? <Button 
