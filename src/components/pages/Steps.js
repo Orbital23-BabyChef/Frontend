@@ -50,18 +50,44 @@ function Steps() {
     //store values input in forms
     const [stepType, setStepType] = useState(undefined)
     const [stepDescription, setStepDescription] = useState(undefined)
-    const [stepDuration, setStepDuration] = useState(undefined)
+    //Duration stored in a length 2 array of [<mins>, <secs>]
+    const [stepDuration, setStepDuration] = useState([undefined, undefined])
     const [stepConcurrentSteps, setStepConcurrentSteps] = useState(undefined)
-    const [stepAfterStep, setStepAfterStep] = useState(undefined)
+    const [stepAfterStep, setStepAfterStep] = useState(undefined) 
+
+    const updateMin = (newMin) => {
+        setStepDuration((prevState) => [newMin, prevState[1]]);
+    }
+
+    const updateSec = (newSec) => {
+        setStepDuration((prevState) => [prevState[0], newSec]);
+    }
+
+    // useEffect(() => {
+    //     console.log(stepDuration)
+    //     console.log(stepDescription)
+    // })
 
     const addStepToList = () => {
+        // formatting duration into seconds 
+        const min = +stepDuration[0];
+        const sec = +stepDuration[1];
+
+        if (isNaN(min) || isNaN(sec)) {
+            toast.error("Duration fields must be a valid numerical value!", toastStyling)
+            return
+        }
+        
+        const newDuration = min*60 + sec;
+
         const newStep = {
             stepType,
             stepDescription,
-            stepDuration,
+            stepDuration: newDuration,
             stepConcurrentSteps,
             stepAfterStep
         }
+
         currSteps.push(newStep)
         returnToDefault()
     }
@@ -78,7 +104,7 @@ function Steps() {
         setCurrProcess("default")
         setStepType(undefined)
         setStepDescription(undefined)
-        setStepDuration(undefined)
+        setStepDuration([undefined, undefined])
         setStepConcurrentSteps(undefined)
         setStepAfterStep(undefined)
     }
@@ -93,7 +119,7 @@ function Steps() {
                 steps: currSteps
             })
             .then(res => {
-                if (res.data == "recipeexists") {//shouldn't really happen
+                if (res.data == "recipeexists") { //shouldn't really happen
                     toast.error("Recipe already exists!", toastStyling)
                 } else if (res.data == "recipefail") {
                     toast.error("Unknown error, try again later", toastStyling)
@@ -137,9 +163,9 @@ function Steps() {
                             </div>
                             <div className="stepDescription">
                                 <div>Description: {value.stepDescription}</div>
-                                <div style={{marginTop: 10}}>{value.stepType == "Duration" ? "Duration: " + value.stepDuration + " seconds": ""}</div>
-                                <div style={{marginTop: 10}}>{value.stepType == "Duration" ? "Concurrently: " + value.stepConcurrentSteps : ""}</div>
-                                <div style={{marginTop: 10}}>{value.stepType == "Duration" ? "End of duration: " + value.stepAfterStep : ""}</div>
+                                <div style={{marginTop: 10}}>{value.stepType == "Duration" ? `Duration: ${value.stepDuration} seconds`: ""}</div>
+                                <div style={{marginTop: 10}}>{value.stepType == "Duration" ? `Concurrently: ${value.stepConcurrentSteps}` : ""}</div>
+                                <div style={{marginTop: 10}}>{value.stepType == "Duration" ? `End of duration: ${value.stepAfterStep}` : ""}</div>
                             </div>
                             <Button onClick={() => removeStepFromList(key)}>Delete Step</Button>
                         </div>
@@ -192,7 +218,8 @@ function Steps() {
                 : currProcess == "durationCreating"
                 ? <div>
                     <input type="text" onChange={(e) => {setStepDescription(e.target.value)}} placeholder="Description" />
-                    <input type="text" onChange={(e) => {setStepDuration(e.target.value)}} placeholder="Duration in seconds" />
+                    <input type="text" onChange={(e) => {updateMin(e.target.value)}} placeholder="00" /> min
+                    <input type="text" onChange={(e) => {updateSec(e.target.value)}} placeholder="00" /> sec
                     <input type="text" onChange={(e) => {setStepConcurrentSteps(e.target.value)}} placeholder="Concurrent Steps" />
                     <input type="text" onChange={(e) => {setStepAfterStep(e.target.value)}} placeholder="Ending step" />
                     <input type="submit" onClick={addStepToList} />
