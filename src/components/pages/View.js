@@ -1,12 +1,24 @@
 import { useLocation, useNavigate, Link, useParams } from 'react-router-dom'
 import { React, useEffect, useState } from 'react'
+import { Button, createTheme, ThemeProvider } from "@mui/material"
 import { confirmAlert } from 'react-confirm-alert'
 import 'react-confirm-alert/src/react-confirm-alert.css';
 import axios from "axios"
+import './View.css'
 
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
+const theme = createTheme({
+    palette: {
+      primary: {
+        main: '#00a143',
+      },
+      secondary: {
+        main: '#eb3828',
+      },
+    },
+  })
 
 function View (){
     const location = useLocation()
@@ -83,12 +95,20 @@ function View (){
 
 
     return (
+        <ThemeProvider theme={theme}>
         <div className="view">
             {recipe ? (
                 <>
-                    <h3>{recipe.title}</h3>
-                    <p>{recipe.description}</p>
-                    <p>{recipe.ingredients}</p>
+                    <div className='title'>
+                        <h3>{recipe.title}</h3>
+                        </div>
+                    <div className='description'>
+                        <p>{recipe.description}</p>
+                        </div>
+                    <div className='ingredients'>
+                        <p>{recipe.ingredients}</p>
+                        </div>
+                    
                     <p>{recipe.instructions}</p>
                     <hr />
                     <p>Instruction Preview:</p>
@@ -108,33 +128,45 @@ function View (){
                     })}
                     <hr />
                     <p>Creator: {recipe.creator}</p>
+
+                    <Button component={Link} to={`/stepview/${recipeId}/0`} 
+                        state={{
+                            username: username,
+                            userId: userId,
+                            recipe: recipe
+                        }}
+                        variant="contained"
+                        color="primary"
+                        sx={{border: 2, fontWeight: 'bold', fontSize: 16, margin: '10px'}}
+                    >Start Cooking Now!</Button>
+                    <br></br>
                     {recipe.creator ==  username ? ( 
                         <>
-                            <Link to={`/edit/${recipeId}`} state={{
-                                    userId: userId,
-                                    username: username,
-                                    title: recipe.title,
-                                    description: recipe.description,
-                                    ingredients: recipe.ingredients,
-                                    instructions: recipe.instructions,
-                                    steps: recipe.steps
-                                }}>
+                            <Button component={Link} to={`/edit/${recipeId}`}
+                                    state={{
+                                        userId: userId,
+                                        username: username,
+                                        title: recipe.title,
+                                        description: recipe.description,
+                                        ingredients: recipe.ingredients,
+                                        instructions: recipe.instructions,
+                                        steps: recipe.steps
+                                    }}>
                                 Edit
-                            </Link>
-                            <br></br>
-                            <button onClick={submit}>Delete</button>
+                            </Button>
+                            <Button 
+                                onClick={submit}
+                                color='secondary'
+                                >Delete</Button>
                         </>
                     ) : null}
                     
-                    <Link to={`/stepview/${recipeId}/0`} state={{
-                        username: username,
-                        userId: userId,
-                        recipe: recipe
-                    }}>Start Cooking Now!</Link>
+                    
                 </>
             ) : null}
             <ToastContainer />
         </div>
+        </ThemeProvider>
       );
 
 }
