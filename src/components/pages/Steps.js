@@ -73,7 +73,7 @@ function Steps() {
         const min = +stepDuration[0];
         const sec = +stepDuration[1];
 
-        if (isNaN(min) || isNaN(sec)) {
+        if (stepType == "Duration" && (isNaN(min) || isNaN(sec))) {
             toast.error("Duration fields must be a valid numerical value!", toastStyling)
             return
         }
