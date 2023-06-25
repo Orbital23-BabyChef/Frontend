@@ -46,6 +46,11 @@ function Steps() {
     //staticCreating => user is in the process of creating a static step
     //durationCreating => user is in the process of creating a duration step
     //confirming => user is in the process of confirming all steps created
+    //editing => user is in the process of editting a step in the list
+
+    //this variable stores the index of the step being edited
+    const [ editingIndex, setEditingIndex ] = useState(undefined)
+    //undefined => no element currently being edited
 
     //store values input in forms
     const [stepType, setStepType] = useState(undefined)
@@ -63,10 +68,7 @@ function Steps() {
         setStepDuration((prevState) => [prevState[0], newSec]);
     }
 
-    // useEffect(() => {
-    //     console.log(stepDuration)
-    //     console.log(stepDescription)
-    // })
+    const minsIn = (secs) => Math.floor(secs/60)
 
     const addStepToList = () => {
         // formatting duration into seconds 
@@ -74,8 +76,8 @@ function Steps() {
         const sec = +stepDuration[1];
 
         if (stepType == "Duration" && (isNaN(min) || isNaN(sec))) {
-            toast.error("Duration fields must be a valid numerical value!", toastStyling)
-            return
+            toast.error("Duration fields must be a valid numerical value!", toastStyling);
+            return;
         }
         
         const newDuration = min*60 + sec;
@@ -92,12 +94,52 @@ function Steps() {
         returnToDefault()
     }
 
+    const updateStepinList = (index) => {
+        // formatting duration into seconds 
+        const min = +stepDuration[0];
+        const sec = +stepDuration[1];
+
+        if (stepType == "Duration" && (isNaN(min) || isNaN(sec))) {
+            toast.error("Duration fields must be a valid numerical value!", toastStyling);
+            return;
+        }
+        
+        const newDuration = min*60 + sec;
+
+        const newStep = {
+            stepType,
+            stepDescription,
+            stepDuration: newDuration,
+            stepConcurrentSteps,
+            stepAfterStep
+        }
+
+        setCurrSteps((prevSteps) => {
+            const updatedSteps = [...prevSteps]
+            updatedSteps[index] = newStep
+            return updatedSteps
+        })
+
+        returnToDefault()
+    }
+
     const removeStepFromList = (key) => {
         setCurrSteps((prevSteps) => {
             const updatedSteps = [...prevSteps];
             updatedSteps.splice(key, 1);
             return updatedSteps;
         });
+    }
+
+    const startEditing = (key) => {
+        setCurrProcess("editing")
+        setEditingIndex(key)
+        const currStep = currSteps[key]
+        setStepType(currStep.stepType)
+        setStepDescription(currStep.stepDescription)
+        setStepDuration([minsIn(currStep.stepDuration), currStep.stepDuration%60])
+        setStepConcurrentSteps(currStep.stepConcurrentSteps)
+        setStepAfterStep(currStep.stepAfterStep)
     }
 
     const returnToDefault = () => {
@@ -107,6 +149,7 @@ function Steps() {
         setStepDuration([undefined, undefined])
         setStepConcurrentSteps(undefined)
         setStepAfterStep(undefined)
+        setEditingIndex(undefined)
     }
     
     const createRecipe = async() => {
@@ -152,12 +195,18 @@ function Steps() {
         }
     }
 
+    useEffect(() => {
+        console.log(stepDescription)
+    })
+
     return (
         <ThemeProvider theme={theme}>
         <div className="steps">
             <div className="createdStepsList">
             {currSteps.map((value, key) => {
                 return <div className="createdStep">
+                    { currProcess != "editing" || key != editingIndex
+                        ? <div>
                             <div className="stepNumber">
                                 Step {key + 1} ({value.stepType})
                             </div>
@@ -167,10 +216,51 @@ function Steps() {
                                 <div style={{marginTop: 10}}>{value.stepType == "Duration" ? `Concurrently: ${value.stepConcurrentSteps}` : ""}</div>
                                 <div style={{marginTop: 10}}>{value.stepType == "Duration" ? `End of duration: ${value.stepAfterStep}` : ""}</div>
                             </div>
-                            <Button onClick={() => removeStepFromList(key)}>Delete Step</Button>
                         </div>
+                        : <div>
+                            <input type="text" 
+                                onChange={(e) => {setStepDescription(e.target.value)}} 
+                                placeholder="Description"
+                                defaultValue = {value.stepDescription} 
+                            />
+                            <input type="text" 
+                                onChange={(e) => {updateMin(e.target.value)}} 
+                                placeholder="00" 
+                                defaultValue={minsIn(value.stepDuration)}
+                            /> min
+                            <input type="text" 
+                                onChange={(e) => {updateSec(e.target.value)}} 
+                                placeholder="00" 
+                                defaultValue={value.stepDuration%60}
+                            /> sec
+                            <input type="text" 
+                                onChange={(e) => {setStepConcurrentSteps(e.target.value)}} 
+                                placeholder="Concurrent Steps"
+                                defaultValue={value.stepConcurrentSteps} 
+                            />
+                            <input type="text" 
+                                onChange={(e) => {setStepAfterStep(e.target.value)}} 
+                                placeholder="Ending step"
+                                defaultValue={value.stepAfterStep} 
+                            />
+                            <input type="submit" onClick={() => updateStepinList(key)} />
+                            <Button 
+                                onClick={() => {setCurrProcess("default")}}
+                                variant="outlined"
+                                color="primary"
+                                sx={{border: 2, fontWeight: 'bold', fontSize: 16, margin: '10px'}}
+                            >Cancel</Button>
+                        </div>               
+                    }
+                    { currProcess == "default"
+                        ? <div>
+                            <Button onClick={() => startEditing(key)}>Edit</Button>
+                            <Button onClick={() => removeStepFromList(key)}>Delete</Button>
+                        </div>
+                        : <div></div>
+                    }
+                </div> 
             })}
-            </div>
             { currProcess == "default" 
                 ? <Button 
                     onClick={() => {setCurrProcess("static/duration")}}
@@ -237,6 +327,8 @@ function Steps() {
                     color="primary"
                     sx={{border: 2, fontWeight: 'bold', fontSize: 16, margin: '10px'}}
                   >{isEdit ? "Complete Edit" : "Create Recipe!"}</Button>
+                : currProcess == "editing"
+                ? <></>
                 : <h1>Error!</h1>
             }
             <br />
@@ -249,9 +341,10 @@ function Steps() {
                   >Confirm</Button>
                 : <></>}
             <ToastContainer />
+            </div>
         </div>
         </ThemeProvider>
     )
 }
 
-export default Steps
+export default Steps;
