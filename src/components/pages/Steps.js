@@ -341,7 +341,7 @@ function Steps() {
                 : <h1>Error!</h1>
             }
             <br />
-            {currSteps.length >= 1 && currProcess == "default"
+            { currSteps.length >= 1 && currProcess == "default"
                 ? <Button 
                     onClick={() => setCurrProcess("confirming")}
                     variant="outlined"

@@ -33,7 +33,7 @@ function MyTimer({ expiryTimestamp, timeInSecs, endingStep }) {
         {!isComplete 
             ? <div style={{textAlign: 'center'}}>
                 <div style={{fontSize: '30px'}}>
-                <span>{minutes}</span>:<span>{seconds}</span>
+                <span>{minutes}</span>:<span>{seconds.toString().padStart(2,"0")}</span>
                 </div>
                 <p>{isRunning ? 'Running' : 'Not running'}</p>
                 <button onClick={pause}>Pause</button>
