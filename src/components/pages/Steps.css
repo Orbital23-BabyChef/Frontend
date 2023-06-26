@@ -39,6 +39,18 @@
     margin-top: 1%;
 }
 
-.test{
-    background-color: #00a143;
+.time{
+    width:15%;
+    padding: 12px 20px;
+    box-sizing: border-box;
+    height: 50px;
+    margin: 8px 0;
+}
+
+.detailsTextBox{
+    width:80%;
+    padding: 12px 20px;
+    box-sizing: border-box;
+    height: 50px;
+    margin: 8px 0;
 }

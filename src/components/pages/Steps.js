@@ -1,7 +1,8 @@
 import React from "react"
 import { useLocation, useNavigate, useParams } from 'react-router-dom'
 import { useState, useEffect } from 'react'
-import { Button, createTheme, ThemeProvider } from "@mui/material"
+import { Button, createTheme, ThemeProvider, IconButton } from "@mui/material"
+import HelpIcon from '@mui/icons-material/Help';
 import axios from "axios"
 
 import { ToastContainer, toast } from 'react-toastify';
@@ -307,16 +308,24 @@ function Steps() {
                   </div>
                 : currProcess == "durationCreating"
                 ? <div>
-                    <input type="text" onChange={(e) => {setStepDescription(e.target.value)}} placeholder="Description" />
-                    <input type="text" onChange={(e) => {updateMin(e.target.value)}} placeholder="00" /> min
-                    <input type="text" onChange={(e) => {updateSec(e.target.value)}} placeholder="00" /> sec
-                    <input type="text" onChange={(e) => {setStepConcurrentSteps(e.target.value)}} placeholder="Concurrent Steps" />
-                    <input type="text" onChange={(e) => {setStepAfterStep(e.target.value)}} placeholder="Ending step" />
-                    <input type="submit" onClick={addStepToList} />
+                    <input className="detailsTextBox" onChange={(e) => {setStepDescription(e.target.value)}} placeholder="Description" />
+                    <br></br>
+                    <input className="time" onChange={(e) => {updateMin(e.target.value)}} placeholder="00" />{' min '} 
+                    <input className="time" onChange={(e) => {updateSec(e.target.value)}} placeholder="00" />{' sec '}
+                    <br></br>
+                    <input className="detailsTextBox" onChange={(e) => {setStepConcurrentSteps(e.target.value)}} placeholder="Concurrent Steps" />
+                    <br></br>
+                    <input className="detailsTextBox" onChange={(e) => {setStepAfterStep(e.target.value)}} placeholder="Ending step" />
+                    <br></br>
+                    <Button onClick={addStepToList}
+                        variant="outlined"
+                        color="primary"
+                        sx={{border: 2, fontWeight: 'bold', fontSize: 16, margin: '10px'}}                  
+                    >Submit</Button>
                     <Button 
                         onClick={() => {setCurrProcess("default")}}
                         variant="outlined"
-                        color="primary"
+                        color="secondary"
                         sx={{border: 2, fontWeight: 'bold', fontSize: 16, margin: '10px'}}
                     >Cancel</Button>
                   </div>
@@ -342,6 +351,11 @@ function Steps() {
                 : <></>}
             <ToastContainer />
             </div>
+        </div>
+        <div>
+            <IconButton>
+                <HelpIcon style={{ width: 50, height: 50}}   />
+            </IconButton>
         </div>
         </ThemeProvider>
     )
