@@ -44,7 +44,7 @@ function Profile (){
                 label: 'OK',
                 onClick: () => {
                     try {
-                        axios.post("https://baby-chef.herokuapp.com/delete/", { recipeId })
+                        axios.post("http://localhost:3001/delete/", { recipeId })
                         .then(res => {
                             if (res.data == "deleteSuccess") {
                                 sessionStorage.setItem("itemStatus", "deleted")
@@ -71,14 +71,14 @@ function Profile (){
 
     //Sets username 
     useEffect(() => {
-        axios.get(`https://baby-chef.herokuapp.com/username/?id=${userId}`)
+        axios.get(`http://localhost:3001/username/?id=${userId}`)
         .then(res => {
             setUsername(res.data.username);
         })
     })
 
     useEffect(() => {
-        axios.post("https://baby-chef.herokuapp.com/searchMyRecipes", { userId, searchInput })
+        axios.post("http://localhost:3001/searchMyRecipes", { userId, searchInput })
         .then(response => {
             setRecipeList(response.data);
         })

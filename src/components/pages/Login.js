@@ -24,7 +24,7 @@ function Login() {
         e.preventDefault();
 
         try{
-            await axios.post("https://baby-chef.herokuapp.com/login",{
+            await axios.post("http://localhost:3001/login",{
                 username, password
             })
             .then(res => {

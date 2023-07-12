@@ -1,21 +1,38 @@
-import React from "react"
-import { useLocation, useNavigate, useParams, Link} from 'react-router-dom'
-import { useState, useEffect } from 'react'
-import axios from "axios"
+import React from "react";
+import { useLocation, useNavigate, useParams, Link} from 'react-router-dom';
+import { useState, useEffect } from 'react';
+import axios from "axios";
 import { useTimer } from 'react-timer-hook';
-import { Button, createTheme, ThemeProvider } from "@mui/material"
+import { iconButton, Button, createTheme, ThemeProvider } from "@mui/material";
+import PauseIcon from '@mui/icons-material/Pause';
+import PlayArrowIcon from '@mui/icons-material/PlayArrow';
+import RestartAltIcon from '@mui/icons-material/RestartAlt';
 
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import './Steps.css'
+import './StepView.css'
 
 import Popup from 'reactjs-popup';
 import 'reactjs-popup/dist/index.css';
+
+const theme = createTheme({
+    palette: {
+      primary: {
+        main: '#00a143',
+      },
+      secondary: {
+        main: '#eb3828',
+      },
+    },
+  })
 
 //function created for timer functionality
 function MyTimer({ expiryTimestamp, timeInSecs, endingStep }) {
     const [ showPopUp, setShowPopUp ] = useState(false)
     const [ isComplete, setIsComplete ] = useState(false)
+
+    const iconSize = 50
 
     const {
       seconds,
@@ -32,17 +49,18 @@ function MyTimer({ expiryTimestamp, timeInSecs, endingStep }) {
     return (<>
         {!isComplete 
             ? <div style={{textAlign: 'center'}}>
-                <div style={{fontSize: '30px'}}>
+                <div style={{fontSize: '100px'}}>
                 <span>{minutes}</span>:<span>{seconds.toString().padStart(2,"0")}</span>
                 </div>
-                <p>{isRunning ? 'Running' : 'Not running'}</p>
-                <button onClick={pause}>Pause</button>
-                <button onClick={resume}>Resume</button>
-                <button onClick={() => {
+                { isRunning
+                    ? <PauseIcon style={{ width:iconSize, height:iconSize }} onClick={pause}></PauseIcon>
+                    : <PlayArrowIcon style={{ width:iconSize, height:iconSize }} onClick={resume}></PlayArrowIcon>
+                }  
+                <RestartAltIcon style={{ width:iconSize, height:iconSize }} onClick={() => {
                 const time = new Date();
                 time.setSeconds(time.getSeconds() + timeInSecs);
                 restart(time)
-                }}>Restart</button>
+                }}>Restart</RestartAltIcon>
                 <Popup open={showPopUp} onClose={() => setShowPopUp(false)}>
                     <div>{endingStep}</div>
                     <button onClick={() => {
@@ -108,7 +126,7 @@ function StepView() {
     }
 
     useEffect(() => {
-        axios.get(`https://baby-chef.herokuapp.com/username/?id=${userId}`)
+        axios.get(`http://localhost:3001/username/?id=${userId}`)
         .then(res => {
             setUsername(res.data.username);
         })
@@ -116,7 +134,7 @@ function StepView() {
 
     useEffect(() => {
         try {
-            axios.post("https://baby-chef.herokuapp.com/recipe", {id: recipeId})
+            axios.post("http://localhost:3001/recipe", {id: recipeId})
             .then(res => {
                 setRecipe(res.data)
             })
@@ -130,38 +148,35 @@ function StepView() {
         }
     })
 
-    return (<div>
+    return (
+        <ThemeProvider theme={theme}>
+        <div className="stepView">
         { currProcess != "end"
-            ? <p>Step {stepNum + 1}</p>
+            ? <h3 className="stepViewNumber">Step {stepNum + 1}</h3>
             : <></>
         }
         { currProcess == "Static"
-            ? <>
-                <p>{currStep.stepDescription}</p>
-                <Link to={`/stepview/${recipeId}/${stepNum + 1}`} state={{ 
-                    username: username, 
-                    userId: userId, 
-                    recipe: recipe 
-                }}>
-                    <Button onClick={nextPage}>Next Step</Button>
-                </Link>
-            </>
+            ? <div className="staticStepDetails">{currStep.stepDescription}</div>
             : currProcess == "Duration"
             ? <>
-                <p>{currStep.stepDescription} FOR {secsToMMSS(currStep.stepDuration)}</p>
-                <Button onClick={() => {setCurrProcess("timing")}}>Start Timer</Button>
+                <div className="staticStepDetails">
+                    {currStep.stepDescription} <br/> FOR {secsToMMSS(currStep.stepDuration)}</div>
+                <Button 
+                    state={{
+                        username: username,
+                        userId: userId,
+                        recipe: recipe
+                    }}
+                    variant="contained"
+                    color="primary"
+                    onClick={() => {setCurrProcess("timing")}}
+                    sx={{border: 2, borderColor: '#000000', fontWeight: 'bold', fontSize: 16, margin: '5px'}}
+                >Start Timer</Button>
             </>
             : currProcess == "timing"
             ? <>
                 <MyTimer expiryTimestamp={time} timeInSecs={+currStep.stepDuration} endingStep={currStep.stepAfterStep} />
                 <p>{currStep.stepConcurrentSteps}</p>
-                <Link to={`/stepview/${recipeId}/${stepNum + 1}`} state={{ 
-                    username: username, 
-                    userId: userId, 
-                    recipe: recipe 
-                }}>
-                    <Button onClick={nextPage}>Next Step</Button>
-                </Link>
             </>
             : <>
                 <p>That's the end of the recipe, enjoy your dish!</p>
@@ -170,19 +185,39 @@ function StepView() {
                 </Link>
             </>
         }
-        { stepNum > 0 
-            ? <Link to={`/stepview/${recipeId}/${stepNum - 1}`} state={{ 
-                username: username, 
-                userId: userId, 
-                recipe: recipe 
-            }}>
-                <Button onClick={prevPage}> 
-                    Previous Step
-                </Button>
-            </Link>
-            : <></>
-        }
-    </div>)
+        <div>
+            { stepNum > 0 
+                ? 
+                    <Button component={Link} to={`/stepview/${recipeId}/${stepNum - 1}`} 
+                        state={{
+                            username: username,
+                            userId: userId,
+                            recipe: recipe
+                        }}
+                        variant="contained"
+                        color="primary"
+                        onClick={prevPage}
+                        sx={{border: 2, borderColor: '#000000', fontWeight: 'bold', fontSize: 16, margin: '5px'}}
+                    >{"<"}</Button>
+                : <></>
+            }
+            { currProcess != "Duration"
+                ? <Button component={Link} to={`/stepview/${recipeId}/${stepNum + 1}`} 
+                    state={{
+                        username: username,
+                        userId: userId,
+                        recipe: recipe
+                    }}
+                    variant="contained"
+                    color="primary"
+                    onClick={nextPage}
+                    sx={{border: 2, borderColor: '#000000', fontWeight: 'bold', fontSize: 16, margin: '5px'}}
+                >{">"}</Button>
+                :<></>
+            }
+        </div> 
+    </div>
+    </ThemeProvider>)
 }
 
 export default StepView

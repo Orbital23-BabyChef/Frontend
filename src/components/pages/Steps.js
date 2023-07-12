@@ -155,7 +155,7 @@ function Steps() {
     
     const createRecipe = async() => {
         if (!isEdit) { // is creating a new post
-            await axios.post("https://baby-chef.herokuapp.com/createRecipe", {
+            await axios.post("http://localhost:3001/createRecipe", {
                 title: location.state.title,
                 description: location.state.description,
                 ingredients: location.state.ingredients,
@@ -173,7 +173,7 @@ function Steps() {
                 }
             })
         } else {
-            axios.post('https://baby-chef.herokuapp.com/edit', {
+            axios.post('http://localhost:3001/edit', {
                 id: recipeId,
                 title: location.state.title,
                 description: location.state.description,

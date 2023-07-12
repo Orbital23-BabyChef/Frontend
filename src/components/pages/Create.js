@@ -37,7 +37,7 @@ function Create (){
 
     //Sets username 
     useEffect(() => {
-        axios.get(`https://baby-chef.herokuapp.com/username/?id=${userId}`)
+        axios.get(`http://localhost:3001/username/?id=${userId}`)
         .then(res => {
             setUsername(res.data.username);
         })
@@ -51,7 +51,7 @@ function Create (){
         } else if (ingredients.length < 3) {
             toast.error("INGREDIENTS cannot be less than 3 characters long", toastStyling)
         } else {
-            axios.post('https://baby-chef.herokuapp.com/checkRecipe', {
+            axios.post('http://localhost:3001/checkRecipe', {
                 title: title,
                 description: description,
                 ingredients: ingredients,
