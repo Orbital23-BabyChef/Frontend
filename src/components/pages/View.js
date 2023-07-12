@@ -45,7 +45,7 @@ function View (){
                 label: 'OK',
                 onClick: () => {
                     try {
-                        axios.post("http://localhost:3001/delete/", { recipeId })
+                        axios.post("https://baby-chef-backend-031f48e42090.herokuapp.com/delete/", { recipeId })
                         .then(res => {
                             if (res.data == "deleteSuccess") {
                                 sessionStorage.setItem("itemStatus", "deleted")
@@ -71,7 +71,7 @@ function View (){
     }
 
     useEffect(() => {
-        axios.get(`http://localhost:3001/username/?id=${userId}`)
+        axios.get(`https://baby-chef-backend-031f48e42090.herokuapp.com/username/?id=${userId}`)
         .then(res => {
             setUsername(res.data.username);
         })
@@ -79,7 +79,7 @@ function View (){
 
     useEffect(() => {
         try {
-            axios.post("http://localhost:3001/recipe", {id: recipeId})
+            axios.post("https://baby-chef-backend-031f48e42090.herokuapp.com/recipe", {id: recipeId})
             .then(res => {
                 setRecipe(res.data)
             })

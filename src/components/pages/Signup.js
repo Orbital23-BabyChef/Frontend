@@ -23,7 +23,7 @@ function Signup() {
 
         try{
 
-            await axios.post("http://localhost:3001/signup",{
+            await axios.post("https://baby-chef-backend-031f48e42090.herokuapp.com/signup",{
                 username, password, confirmPassword
             })
             .then(res => {

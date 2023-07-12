@@ -38,7 +38,7 @@ function Edit (){
 
     //Sets username 
     useEffect(() => {
-        axios.get(`http://localhost:3001/username/?id=${userId}`)
+        axios.get(`https://baby-chef-backend-031f48e42090.herokuapp.com/username/?id=${userId}`)
         .then(res => {
             setUsername(res.data.username);
         })

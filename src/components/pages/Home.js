@@ -44,7 +44,7 @@ function Home (){
 
     //Sets username 
     useEffect(() => {
-        axios.get(`http://localhost:3001/username/?id=${userId}`)
+        axios.get(`https://baby-chef-backend-031f48e42090.herokuapp.com/username/?id=${userId}`)
         .then(res => {
             setUsername(res.data.username);
         })
@@ -52,7 +52,7 @@ function Home (){
     
 
     useEffect(() => {
-        axios.post("http://localhost:3001/search", { searchInput })
+        axios.post("https://baby-chef-backend-031f48e42090.herokuapp.com/search", { searchInput })
         .then(response => {
             setRecipeList(response.data);
         })
