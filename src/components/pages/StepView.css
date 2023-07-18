@@ -28,3 +28,42 @@
     align-items: center;
     margin: 1em;
 }
+
+.durationStepDetails {
+    text-align: center;
+    height: 50vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    margin: 1em;
+}
+
+.endingStepDetails {
+    font-family: "Georgia", Times, serif;
+    font-size: 30px;    
+    text-transform: capitalize;
+    color: #5d5d5d;
+    height: 50vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 1em;
+}
+
+.stepButtons {
+    border: 2px solid #000000;
+    font-weight: bold;
+    font-size: 16px;
+    margin: 10px;
+    margin-left: auto;
+    margin-right: auto;
+    display: block;
+    width: 75%;
+  }
+
+.durationConcurrentSteps{
+    display: flex;
+    float: left;
+
+}

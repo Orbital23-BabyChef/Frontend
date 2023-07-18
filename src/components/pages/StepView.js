@@ -46,7 +46,7 @@ function MyTimer({ expiryTimestamp, timeInSecs, endingStep }) {
       restart,
     } = useTimer({ expiryTimestamp, onExpire: () => setShowPopUp(true)});
   
-    return (<>
+    return (<div>
         {!isComplete 
             ? <div style={{textAlign: 'center'}}>
                 <div style={{fontSize: '100px'}}>
@@ -71,7 +71,7 @@ function MyTimer({ expiryTimestamp, timeInSecs, endingStep }) {
             </div>
             : <p>☑ {endingStep}</p>
         }
-    </>);
+    </div>);
   }
 
 function StepView() {
@@ -153,7 +153,7 @@ function StepView() {
         <div className="stepView">
         { currProcess != "end"
             ? <h3 className="stepViewNumber">Step {stepNum + 1}</h3>
-            : <></>
+            : <h3 className="stepViewNumber">END OF RECIPE</h3>
         }
         { currProcess == "Static"
             ? <div className="staticStepDetails">{currStep.stepDescription}</div>
@@ -170,22 +170,47 @@ function StepView() {
                     variant="contained"
                     color="primary"
                     onClick={() => {setCurrProcess("timing")}}
-                    sx={{border: 2, borderColor: '#000000', fontWeight: 'bold', fontSize: 16, margin: '5px'}}
+                    className="stepButtons"
                 >Start Timer</Button>
             </>
             : currProcess == "timing"
-            ? <>
-                <MyTimer expiryTimestamp={time} timeInSecs={+currStep.stepDuration} endingStep={currStep.stepAfterStep} />
-                <p>{currStep.stepConcurrentSteps}</p>
-            </>
-            : <>
-                <p>That's the end of the recipe, enjoy your dish!</p>
-                <Link to={`/home`} state={{ username, userId }}>
-                    Back to Home
-                </Link>
-            </>
+            ? <div className="durationStepDetails"> 
+                <MyTimer 
+                    expiryTimestamp={time} 
+                    timeInSecs={+currStep.stepDuration} 
+                    endingStep={currStep.stepAfterStep} 
+                />
+                <p className="durationConcurrentSteps">{currStep.stepConcurrentSteps}</p>
+            </div>
+            : <p className="endingStepDetails">That's the end of the recipe, enjoy your dish!</p>
         }
         <div>
+            { currProcess != "Duration" && currProcess != "end"
+                ? <Button component={Link} to={`/stepview/${recipeId}/${stepNum + 1}`} 
+                    state={{
+                        username: username,
+                        userId: userId,
+                        recipe: recipe
+                    }}
+                    variant="contained"
+                    color="primary"
+                    onClick={nextPage}
+                    className="stepButtons"
+                >Continue</Button>
+                :<></>
+            }
+            { currProcess == "end" 
+                ? <Button component={Link} to={`/home`} 
+                    state={{
+                        username: username,
+                        userId: userId,
+                    }}
+                    variant="contained"
+                    color="primary"
+                    className="stepButtons"
+                >Back to Homepage</Button>
+                :<></>
+            }
             { stepNum > 0 
                 ? 
                     <Button component={Link} to={`/stepview/${recipeId}/${stepNum - 1}`} 
@@ -197,23 +222,18 @@ function StepView() {
                         variant="contained"
                         color="primary"
                         onClick={prevPage}
-                        sx={{border: 2, borderColor: '#000000', fontWeight: 'bold', fontSize: 16, margin: '5px'}}
-                    >{"<"}</Button>
-                : <></>
-            }
-            { currProcess != "Duration"
-                ? <Button component={Link} to={`/stepview/${recipeId}/${stepNum + 1}`} 
-                    state={{
-                        username: username,
-                        userId: userId,
-                        recipe: recipe
-                    }}
-                    variant="contained"
-                    color="primary"
-                    onClick={nextPage}
-                    sx={{border: 2, borderColor: '#000000', fontWeight: 'bold', fontSize: 16, margin: '5px'}}
-                >{">"}</Button>
-                :<></>
+                        className="stepButtons"
+                    >Back to Prev Step</Button>
+                :  
+                    <Button component={Link} to={`/view/${recipeId}`} 
+                        state={{
+                            username: username,
+                            userId: userId
+                        }}
+                        variant="contained"
+                        color="primary"
+                        className="stepButtons"
+                    >Back to Recipe Page</Button>
             }
         </div> 
     </div>

@@ -204,7 +204,7 @@ function Steps() {
         <ThemeProvider theme={theme}>
         <div className="steps">
             <div className="createdStepsList">
-            {currSteps.map((value, key) => {
+            { currSteps.map((value, key) => {
                 return <div className="createdStep">
                     { currProcess != "editing" || key != editingIndex
                         ? <div>
@@ -218,7 +218,8 @@ function Steps() {
                                 <div style={{marginTop: 10}}>{value.stepType == "Duration" ? `End of duration: ${value.stepAfterStep}` : ""}</div>
                             </div>
                         </div>
-                        : <div>
+                        : value.stepType == "Duration"
+                        ? <div>
                             <input type="text" 
                                 onChange={(e) => {setStepDescription(e.target.value)}} 
                                 placeholder="Description"
@@ -251,7 +252,22 @@ function Steps() {
                                 color="primary"
                                 sx={{border: 2, fontWeight: 'bold', fontSize: 16, margin: '10px'}}
                             >Cancel</Button>
-                        </div>               
+                        </div>
+                        : <div>
+                            <input type="text" onChange={(e) => {setStepDescription(e.target.value)}} placeholder="Description" defaultValue = {value.stepDescription} />
+                            <Button 
+                                onClick={() => updateStepinList(key)}
+                                variant="outlined"
+                                color="primary"
+                                sx={{border: 2, fontWeight: 'bold', fontSize: 16, margin: '10px'}}
+                            >Create Step</Button>
+                            <Button 
+                                onClick={returnToDefault}
+                                variant="outlined"
+                                color="primary"
+                                sx={{border: 2, fontWeight: 'bold', fontSize: 16, margin: '10px'}}
+                            >Cancel</Button>
+                        </div>        
                     }
                     { currProcess == "default"
                         ? <div>
