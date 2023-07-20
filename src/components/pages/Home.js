@@ -3,10 +3,14 @@ import { useLocation, useNavigate, Link } from 'react-router-dom'
 import { useEffect, useState } from 'react'
 import axios from "axios"
 import '../RecipePreview.css'
+
+import { styled } from '@mui/material/styles';
 import { Button } from "@mui/material"
 import profilepic from '../ProfilePicPlaceholder.png'
 import IconButton from '@mui/material/IconButton';
 import AddIcon from '@mui/icons-material/Add';
+import ThumbUpIcon from '@mui/icons-material/ThumbUp';
+import ThumbUpOutlinedIcon from '@mui/icons-material/ThumbUpOutlined';
 
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
@@ -15,6 +19,7 @@ function Home (){
     const location = useLocation()
     const userId = location.state.userId
     const [username, setUsername] = useState(location.state.username)
+    const [likedRecipes, setLikedRecipes] = useState({})
 
     const [recipeList, setRecipeList] = useState([])
     const [searchInput, setSearchInput] = useState("")
@@ -29,6 +34,34 @@ function Home (){
         e.preventDefault();
         setSearchInput(e.target.value);
     };
+
+    const StyledThumbUpIcon = styled(ThumbUpIcon)(({ theme }) => ({
+        cursor: 'pointer',
+    }));
+
+    const StyledThumbUpOutlinedIcon = styled(ThumbUpOutlinedIcon)(({ theme }) => ({
+        cursor: 'pointer',
+    }));
+
+    const likeRecipe = (recipeId) => {
+        axios.post(`https://baby-chef-backend-031f48e42090.herokuapp.com/like`, {userId, recipeId})
+        .then(res => {
+            setLikedRecipes(prevLikedPosts => ({
+                ...prevLikedPosts,
+                [recipeId]: true,
+            }));
+        })
+    }
+
+    const unlikeRecipe = (recipeId) => {
+        axios.post(`https://baby-chef-backend-031f48e42090.herokuapp.com/unlike`, {userId, recipeId})
+        .then(res => {
+            setLikedRecipes(prevLikedPosts => ({
+                ...prevLikedPosts,
+                [recipeId]: true,
+            }));
+        })
+    }
 
     useEffect(() => {
         const itemStatus = sessionStorage.getItem("itemStatus")
@@ -47,6 +80,7 @@ function Home (){
         axios.get(`https://baby-chef-backend-031f48e42090.herokuapp.com/username/?id=${userId}`)
         .then(res => {
             setUsername(res.data.username);
+            setLikedRecipes(res.data.likedPosts);
         })
     })
     
@@ -91,6 +125,11 @@ function Home (){
                                 </div>
                                 <p className="fifty-chars">{value.description} </p>
                                 <p> Creator: {value.creator} </p>
+                                <p> Likes: {value.likeCount} </p>
+                                { !likedRecipes[value._id]
+                                    ? <StyledThumbUpOutlinedIcon onClick={() => likeRecipe(value._id)}></StyledThumbUpOutlinedIcon>
+                                    : <StyledThumbUpIcon onClick={() => unlikeRecipe(value._id)}></StyledThumbUpIcon>
+                                }   
                             </div>
                         </div>
             })}
