@@ -49,17 +49,17 @@ function Home (){
             setUsername(res.data.username);
         })
     })
-    
 
+    //Runs only on first render to retrieve entire list of recipes
     useEffect(() => {
-        axios.post("https://baby-chef-backend-031f48e42090.herokuapp.com/search", { searchInput })
+        axios.get("https://baby-chef-backend-031f48e42090.herokuapp.com/fullRecipeList")
         .then(response => {
             setRecipeList(response.data);
         })
         .catch(res => {
             setRecipeList([])
         })
-    })
+    }, [])
 
 
     return (
@@ -80,20 +80,23 @@ function Home (){
                 </IconButton>
             </div>
             
-            {recipeList.map((value, key) => {
-                return  <div key={value._id}>
-                            <div 
-                                className="recipePreview">
-                                <br></br>
-                                <div
-                                    className="recipeTitle">
-                                    <Link to={`/view/${value._id}`} state={{userId: userId, username: username}}>{value.title}</Link>
+            {/* Takes recipe list and filters it according to current search input, is not case sensitive*/}
+            {recipeList
+                .filter(recipe => recipe.title.toLowerCase().includes(searchInput))
+                .map((value, key) => {
+                    return  <div key={value._id}>
+                                <div 
+                                    className="recipePreview">
+                                    <br></br>
+                                    <div
+                                        className="recipeTitle">
+                                        <Link to={`/view/${value._id}`} state={{userId: userId, username: username}}>{value.title}</Link>
+                                    </div>
+                                    <p className="fifty-chars">{value.description} </p>
+                                    <p> Creator: {value.creator} </p>
                                 </div>
-                                <p className="fifty-chars">{value.description} </p>
-                                <p> Creator: {value.creator} </p>
                             </div>
-                        </div>
-            })}
+                })}
             <ToastContainer />
         </div>
     )
