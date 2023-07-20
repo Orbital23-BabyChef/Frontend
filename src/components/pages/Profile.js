@@ -77,10 +77,14 @@ function Profile (){
         })
     })
 
+    //Runs only on first render to retrieve entire list of recipes by this user
     useEffect(() => {
-        axios.post("https://baby-chef-backend-031f48e42090.herokuapp.com/searchMyRecipes", { userId, searchInput })
+        axios.post("https://baby-chef-backend-031f48e42090.herokuapp.com/searchMyRecipes", { userId })
         .then(response => {
             setRecipeList(response.data);
+        })
+        .catch(res => {
+            setRecipeList([])
         })
     })
 
@@ -102,29 +106,31 @@ function Profile (){
                         <AddIcon style={{ width: 50, height: 50}}   />
                 </IconButton>
             </div>
-            {recipeList.map((value, key) => {
-                return <div key={value._id}>
-                    <div 
-                        className="recipePreview">
-                        <br></br>
-                        <div
-                            className="recipeTitle">
-                            <Link to={`/view/${value._id}`} state={{userId: userId, username: username}}>{value.title}</Link>
+            {recipeList
+                .filter(recipe => recipe.title.toLowerCase().includes(searchInput))
+                .map((value, key) => {
+                    return <div key={value._id}>
+                        <div 
+                            className="recipePreview">
+                            <br></br>
+                            <div
+                                className="recipeTitle">
+                                <Link to={`/view/${value._id}`} state={{userId: userId, username: username}}>{value.title}</Link>
+                            </div>
+                            <p className="fifty-chars">{value.description} </p>
+                            <p> Creator: {username} </p>
+                            <Link to={`/edit/${value._id}`} state={{
+                                userId: userId, 
+                                username: username,
+                                title: value.title,
+                                description: value.description,
+                                ingredients: value.ingredients,
+                                instructions: value.instructions
+                            }}>Edit</Link>
+                            <br></br>
+                            <button onClick={() => submit(value._id)}>Delete</button>
                         </div>
-                        <p className="fifty-chars">{value.description} </p>
-                        <p> Creator: {username} </p>
-                        <Link to={`/edit/${value._id}`} state={{
-                            userId: userId, 
-                            username: username,
-                            title: value.title,
-                            description: value.description,
-                            ingredients: value.ingredients,
-                            instructions: value.instructions
-                        }}>Edit</Link>
-                        <br></br>
-                        <button onClick={() => submit(value._id)}>Delete</button>
                     </div>
-                </div>
             })}
             <ToastContainer />
         </div>
