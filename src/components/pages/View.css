@@ -10,7 +10,15 @@
     padding: 1%
 }
 
+.backArrow {
+    float:left;
+    margin:10px;
+    margin-right:0px;
+    color: #7a7a7a;
+}
+
 .title {
+    margin:30px;
     text-align: center;
     font-size: 25px;
     text-transform: capitalize

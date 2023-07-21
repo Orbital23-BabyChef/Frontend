@@ -1,6 +1,7 @@
 import { useLocation, useNavigate, Link, useParams } from 'react-router-dom'
 import { React, useEffect, useState } from 'react'
 import { Button, createTheme, ThemeProvider } from "@mui/material"
+import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import { confirmAlert } from 'react-confirm-alert'
 import 'react-confirm-alert/src/react-confirm-alert.css';
 import axios from "axios"
@@ -99,9 +100,17 @@ function View (){
         <div className="view">
             {recipe ? (
                 <>
+                    <Link 
+                        to={`/home`} 
+                        state={{
+                            username: username,
+                            userId: userId,
+                        }}
+                    ><ArrowBackIcon className='backArrow'/></Link>
+                    
                     <div className='title'>
                         <h3>{recipe.title}</h3>
-                        </div>
+                    </div>
                     <div className='description'>
                         <p>{recipe.description}</p>
                         </div>
@@ -139,6 +148,7 @@ function View (){
                         color="primary"
                         sx={{border: 2, fontWeight: 'bold', fontSize: 16, margin: '10px'}}
                     >Start Cooking Now!</Button>
+
                     <br></br>
                     {recipe.creator ==  username ? ( 
                         <>
