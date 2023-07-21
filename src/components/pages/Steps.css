@@ -54,3 +54,9 @@
     height: 50px;
     margin: 8px 0;
 }
+
+.concurrentSteps{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}

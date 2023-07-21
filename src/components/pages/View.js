@@ -113,10 +113,10 @@ function View (){
                     </div>
                     <div className='description'>
                         <p>{recipe.description}</p>
-                        </div>
+                    </div>
                     <div className='ingredients'>
                         <p>{recipe.ingredients}</p>
-                        </div>
+                    </div>
                     
                     <p>{recipe.instructions}</p>
                     <hr />
