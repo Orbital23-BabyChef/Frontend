@@ -50,6 +50,12 @@ function Home (){
                 ...prevLikedPosts,
                 [recipeId]: true,
             }));
+            setRecipeList(prevRecipeList => prevRecipeList.map(recipe => {
+                if (recipe._id === recipeId) {
+                  return { ...recipe, likeCount: recipe.likeCount + 1 };
+                }
+                return recipe;
+            }));
         })
     }
 
@@ -58,7 +64,13 @@ function Home (){
         .then(res => {
             setLikedRecipes(prevLikedPosts => ({
                 ...prevLikedPosts,
-                [recipeId]: true,
+                [recipeId]: false,
+            }));
+            setRecipeList(prevRecipeList => prevRecipeList.map(recipe => {
+                if (recipe._id === recipeId) {
+                  return { ...recipe, likeCount: recipe.likeCount - 1 };
+                }
+                return recipe;
             }));
         })
     }
@@ -82,7 +94,7 @@ function Home (){
             setUsername(res.data.username);
             setLikedRecipes(res.data.likedPosts);
         })
-    })
+    }, [])
 
     //Runs only on first render to retrieve entire list of recipes
     useEffect(() => {
