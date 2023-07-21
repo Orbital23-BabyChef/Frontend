@@ -51,9 +51,7 @@ function Steps() {
     //durationCreatingONE => user is in the process of creating a duration step (timed component)
     //durationCreatingTWO => user is in the process of creating a duration step (concurrent component)
     //confirming => user is in the process of confirming all steps created
-    //editingStatic => user is in the process of editting a step in the list
-    //editingDurationONE => user is in the process of editing a duration step (timed component)
-    //editingDurationTWO => user is in the process of editing a duration step (concurrent component)
+    //editing => user is in the process of editting a step in the list
 
     //this variable stores the index of the step being edited
     const [ editingIndex, setEditingIndex ] = useState(undefined)
@@ -263,36 +261,47 @@ function Steps() {
                         </div>
                         : value.stepType == "Duration"
                         ? <div>
-                            <input type="text" 
+                            <input className="detailsTextBox" 
+                                type="text" 
                                 onChange={(e) => {setStepDescription(e.target.value)}} 
-                                placeholder="Description"
-                                defaultValue = {value.stepDescription} 
-                            />
-                            <input type="text" 
-                                onChange={(e) => {updateMin(e.target.value)}} 
+                                placeholder="Description" 
+                                defaultValue = {value.stepDescription} />
+                            <br></br>
+                            <input className="time" 
+                                type="text" 
+                                onChange={(e) => {updateMin(e.target.value)}}  
                                 placeholder="00" 
-                                defaultValue={minsIn(value.stepDuration)}
-                            /> min
-                            <input type="text" 
-                                onChange={(e) => {updateSec(e.target.value)}} 
+                                defaultValue={minsIn(value.stepDuration)} />{' min '} 
+                            <input className="time" 
+                                type="text" 
+                                onChange={(e) => {updateSec(e.target.value)}}  
                                 placeholder="00" 
-                                defaultValue={value.stepDuration%60}
-                            /> sec
-                            <input type="text" 
-                                onChange={(e) => {setStepConcurrentSteps(e.target.value)}} 
-                                placeholder="Concurrent Steps"
-                                defaultValue={value.stepConcurrentSteps} 
-                            />
-                            <input type="text" 
+                                defaultValue={value.stepDuration%60} />{' sec '}
+                            <br></br>
+                            <input className="detailsTextBox" 
                                 onChange={(e) => {setStepAfterStep(e.target.value)}} 
-                                placeholder="Ending step"
-                                defaultValue={value.stepAfterStep} 
-                            />
-                            <input type="submit" onClick={() => updateStepinList(key)} />
+                                placeholder="Ending step" 
+                                defaultValue={value.stepAfterStep}/>
+                            <br></br>
+                            <Button 
+                                onClick={() => {
+                                    const min = +stepDuration[0];
+                                    const sec = +stepDuration[1];
+
+                                    if (stepType == "Duration" && (isNaN(min) || isNaN(sec))) {
+                                        toast.error("Duration fields must be a valid numerical value!", toastStyling);
+                                        return;
+                                    }
+                                    setCurrProcess("editingDurationTWO");
+                                }}
+                                variant="outlined"
+                                color="primary"
+                                sx={{border: 2, fontWeight: 'bold', fontSize: 16, margin: '10px'}}
+                            >Next</Button>
                             <Button 
                                 onClick={() => {setCurrProcess("default")}}
                                 variant="outlined"
-                                color="primary"
+                                color="secondary"
                                 sx={{border: 2, fontWeight: 'bold', fontSize: 16, margin: '10px'}}
                             >Cancel</Button>
                         </div>
