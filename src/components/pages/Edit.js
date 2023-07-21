@@ -6,6 +6,7 @@ import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import './Create.css'
 import { Button, createTheme, ThemeProvider } from "@mui/material"
+import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 
 const theme = createTheme({
     palette: {
@@ -66,6 +67,13 @@ function Edit (){
     return (
         <ThemeProvider theme={theme}>
         <div className="create">
+            <Link 
+                to={`/view/${recipeId}`} 
+                state={{
+                    username: username,
+                    userId: userId,
+                }}
+            ><ArrowBackIcon className='backArrow'/></Link>
             <div className="createTitle">
             <label>Name of Dish</label>
             <br></br>
