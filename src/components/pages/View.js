@@ -123,16 +123,21 @@ function View (){
                     <p>Instruction Preview:</p>
                     {recipe.steps.map((value, key) => {
                         return <div key={recipe.steps.indexOf(value)}> 
-                            <h4>Step {key+1}</h4>
-                            <p>{value.stepDescription}</p>
                             {value.stepType == "Duration" 
                             ? <div>
+                                <h4>Step {key+1} (Duration)</h4>
                                 <p>{value.stepDescription}</p>
-                                <p>{value.stepDuration}</p>
-                                <p>{value.stepConcurrentSteps}</p>
-                                <p>{value.stepAfterSteps}</p>
+                                <p>Duration (in secs): {value.stepDuration}</p>
+                                <p>Concurrent Steps: {Array.isArray(value.stepConcurrentSteps) 
+                                        ? value.stepConcurrentSteps.reduce((h, acc) => h + ", " + acc)
+                                        : undefined
+                                    }</p>
+                                <p>Ending Steps: {value.stepAfterSteps}</p>
                               </div>
-                            : <></>}
+                            : <div>
+                                <h4>Step {key+1} (Static)</h4>
+                                <p>{value.stepDescription}</p>
+                            </div>}
                         </div>
                     })}
                     <hr />
