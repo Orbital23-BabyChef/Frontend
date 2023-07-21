@@ -129,7 +129,7 @@ function Home (){
                                     <p className="fifty-chars">{value.description} </p>
                                     <p> Creator: {value.creator} </p>
                                     <p> Likes: {value.likeCount} </p>
-                                    { !likedRecipes[value._id]
+                                    { likedRecipes != undefined && !likedRecipes[value._id]
                                         ? <StyledThumbUpOutlinedIcon onClick={() => likeRecipe(value._id)}></StyledThumbUpOutlinedIcon>
                                         : <StyledThumbUpIcon onClick={() => unlikeRecipe(value._id)}></StyledThumbUpIcon>
                                     }   
