@@ -57,7 +57,7 @@ function Steps() {
     const [stepType, setStepType] = useState(undefined)
     const [stepDescription, setStepDescription] = useState(undefined)
     //Duration stored in a length 2 array of [<mins>, <secs>]
-    const [stepDuration, setStepDuration] = useState([undefined, undefined])
+    const [stepDuration, setStepDuration] = useState([0, 0])
     const [stepConcurrentSteps, setStepConcurrentSteps] = useState(undefined)
     const [stepAfterStep, setStepAfterStep] = useState(undefined) 
 
@@ -326,8 +326,8 @@ function Steps() {
                 ? <div>
                     <input className="detailsTextBox" onChange={(e) => {setStepDescription(e.target.value)}} placeholder="Description" />
                     <br></br>
-                    <input className="time" onChange={(e) => {updateMin(e.target.value)}} placeholder="00" />{' min '} 
-                    <input className="time" onChange={(e) => {updateSec(e.target.value)}} placeholder="00" />{' sec '}
+                    <input className="time" onChange={(e) => {updateMin(e.target.value)}} defaultValue="0" />{' min '} 
+                    <input className="time" onChange={(e) => {updateSec(e.target.value)}} defaultValue="0" />{' sec '}
                     <br></br>
                     <input className="detailsTextBox" onChange={(e) => {setStepConcurrentSteps(e.target.value)}} placeholder="Concurrent Steps" />
                     <br></br>
