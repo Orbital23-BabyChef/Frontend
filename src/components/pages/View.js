@@ -127,7 +127,7 @@ function View (){
                             <p>{value.stepDescription}</p>
                             {value.stepType == "Duration" 
                             ? <div>
-                                <p>{value.stepConcurrentSteps}</p>
+                                <p>{value.stepDescription}</p>
                                 <p>{value.stepDuration}</p>
                                 <p>{value.stepConcurrentSteps}</p>
                                 <p>{value.stepAfterSteps}</p>
@@ -150,7 +150,7 @@ function View (){
                     >Start Cooking Now!</Button>
 
                     <br></br>
-                    {recipe.creator ==  username ? ( 
+                    { recipe.creator ==  username ? ( 
                         <>
                             <Button component={Link} to={`/edit/${recipeId}`}
                                     state={{
