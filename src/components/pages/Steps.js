@@ -422,9 +422,31 @@ function Steps() {
             </div>
         </div>
         <div>
-            <IconButton>
-                <HelpIcon style={{ width: 50, height: 50}}   />
-            </IconButton>
+            <Popup trigger={<HelpIcon style={{ width: 50, height: 50 }}></HelpIcon>} contentStyle={{ width: '90%' }} closeOnDocumentClick modal>
+                <div className="header">Guide to creating recipes</div>
+                <br></br>
+                <div>
+                    BabyChef aims to provide learning chefs with simple to follow step-by-step instructions.
+                    As such, it is recommended that you break down your steps into smaller short steps!
+                    <br></br><hr></hr>
+                    <strong>Static Step:</strong> Steps that do not have a timed component.
+                    <br></br>
+                    <br></br><strong>Examples:</strong>
+                    <br></br>Dice the potatoes into 1-inch cubes
+                    <br></br>Fill a pot of water and get it to a rolling boil
+                    <br></br><hr></hr>
+                    <strong>Duration Step:</strong> Steps that contains a timed element. A timer will be started automatically for those following this step. The <i><strong>ending message</strong></i> will be shown once the timer is up
+                    <br></br><br></br>
+                    There is also an option to include <i><strong>concurrent steps</strong></i>, which are steps that can be performed whilst waiting for the original <i><strong>duration step</strong></i> to finish.
+                    It will be necessary to complete both the original <i><strong>duration step</strong></i>, and all <i><strong>concurrent steps</strong></i>, before moving on to the next step.
+                    <br></br>
+                    <br></br><strong>Example:</strong>
+                    <br></br><i>Descripton</i>: Put diced potatoes into boiling water
+                    <br></br><i>Duration</i>: 20 min 0 sec
+                    <br></br><i>Concurrent Steps</i>: Chop carrots into small pieces
+                    <br></br><i>Ending step</i>: Off the heat and take potatoes out
+                </div>
+            </Popup>
         </div>
         </ThemeProvider>
     )

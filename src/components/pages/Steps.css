@@ -55,8 +55,18 @@
     margin: 8px 0;
 }
 
+<<<<<<< HEAD
 .concurrentSteps{
     display: flex;
     flex-direction: column;
     align-items: center;
 }
+=======
+.header {
+    width: 100%;
+    border-bottom: 1px solid gray;
+    font-size: 18px;
+    text-align: center;
+    padding: 5px;
+  }
+>>>>>>> 145cf617c4b49a5388a0153c28785861599011e5
