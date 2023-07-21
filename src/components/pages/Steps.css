@@ -7,7 +7,7 @@
     border-color: #00a143;
     border-width: 3px;
     border-radius: 40px;
-    padding: 1%
+    padding: 1%;
 }
 
 .createdStepsList {
@@ -55,11 +55,19 @@
     margin: 8px 0;
 }
 
+.backArrow {
+    float:left;
+    margin:10px;
+    margin-right:0px;
+    color: #7a7a7a;
+}
+
 .concurrentSteps{
     display: flex;
     flex-direction: column;
-    align-items: center;
+    place-items: center;
 }
+
 .header {
     width: 100%;
     border-bottom: 1px solid gray;

@@ -1,13 +1,16 @@
 import React from "react"
-import { useLocation, useNavigate, useParams } from 'react-router-dom'
+import { useLocation, useNavigate, Link, useParams } from 'react-router-dom'
 import { useState, useEffect } from 'react'
+import axios from "axios"
+
 import { Button, createTheme, ThemeProvider, IconButton } from "@mui/material"
 import HelpIcon from '@mui/icons-material/Help';
-import axios from "axios"
+import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import './Steps.css'
+import Popup from 'reactjs-popup';
 
 const theme = createTheme({
     palette: {
@@ -48,7 +51,9 @@ function Steps() {
     //durationCreatingONE => user is in the process of creating a duration step (timed component)
     //durationCreatingTWO => user is in the process of creating a duration step (concurrent component)
     //confirming => user is in the process of confirming all steps created
-    //editing => user is in the process of editting a step in the list
+    //editingStatic => user is in the process of editting a step in the list
+    //editingDurationONE => user is in the process of editing a duration step (timed component)
+    //editingDurationTWO => user is in the process of editing a duration step (concurrent component)
 
     //this variable stores the index of the step being edited
     const [ editingIndex, setEditingIndex ] = useState(undefined)
@@ -72,14 +77,29 @@ function Steps() {
 
     const minsIn = (secs) => Math.floor(secs/60)
 
-    const addStepToList = () => {
-        // formatting duration into seconds 
+    const checkStepBeforeContinuing = () => {
         const min = +stepDuration[0];
         const sec = +stepDuration[1];
 
         if (stepType == "Duration" && (isNaN(min) || isNaN(sec))) {
             toast.error("Duration fields must be a valid numerical value!", toastStyling);
             return;
+        }
+        setCurrProcess("durationCreatingTWO");
+    }
+
+    const addStepToList = () => {
+        // formatting duration into seconds 
+        const min = +stepDuration[0];
+        const sec = +stepDuration[1];
+
+        if (stepType == "Duration") {
+            for (let index in stepConcurrentSteps) {
+                if (stepConcurrentSteps[index].length == 0) {
+                    toast.error("Concurrent steps cannot be empty!", toastStyling);
+                    return;
+                }
+            }
         }
         
         const newDuration = min*60 + sec;
@@ -205,6 +225,13 @@ function Steps() {
         <ThemeProvider theme={theme}>
         <div className="steps">
             <div className="createdStepsList">
+            <Link 
+                to={`/view/${recipeId}`} 
+                state={{
+                    username: username,
+                    userId: userId,
+                }}
+            ><ArrowBackIcon className='backArrow'/></Link>
             { currSteps.map((value, key) => {
                 return <div className="createdStep">
                     { currProcess != "editing" || key != editingIndex
@@ -214,9 +241,24 @@ function Steps() {
                             </div>
                             <div className="stepDescription">
                                 <div>Description: {value.stepDescription}</div>
-                                <div style={{marginTop: 10}}>{value.stepType == "Duration" ? `Duration: ${value.stepDuration} seconds`: ""}</div>
-                                <div style={{marginTop: 10}}>{value.stepType == "Duration" ? `Concurrently: ${value.stepConcurrentSteps}` : ""}</div>
-                                <div style={{marginTop: 10}}>{value.stepType == "Duration" ? `End of duration: ${value.stepAfterStep}` : ""}</div>
+                                <div style={{marginTop: 10}}>
+                                    { value.stepType == "Duration" 
+                                        ? `Duration: ${value.stepDuration} seconds`
+                                        : ""
+                                    }
+                                </div>
+                                <div style={{marginTop: 10}}>
+                                    { value.stepType == "Duration" && Array.isArray(value.stepConcurrentSteps)
+                                        ? `Concurrently: ${value.stepConcurrentSteps.reduce((h, acc) => h + ", " + acc)}` 
+                                        : ""
+                                    }
+                                </div>
+                                <div style={{marginTop: 10}}>
+                                    { value.stepType == "Duration" 
+                                        ? `End of duration: ${value.stepAfterStep}` 
+                                        : ""
+                                    }
+                                </div>
                             </div>
                         </div>
                         : value.stepType == "Duration"
@@ -333,7 +375,7 @@ function Steps() {
                     <input className="detailsTextBox" onChange={(e) => {setStepAfterStep(e.target.value)}} placeholder="Ending step" />
                     <br></br>
                     <Button 
-                        onClick={() => {setCurrProcess("durationCreatingTWO")}}
+                        onClick={checkStepBeforeContinuing}
                         variant="outlined"
                         color="primary"
                         sx={{border: 2, fontWeight: 'bold', fontSize: 16, margin: '10px'}}
@@ -348,8 +390,8 @@ function Steps() {
                 : currProcess == "durationCreatingTWO"
                 ? <div>
                     <h4>Concurrent Steps</h4>
-                    <div>
-                        {stepConcurrentSteps.map((step, index) => 
+                    <div className="concurrentSteps">
+                        { stepConcurrentSteps.map((step, index) => 
                             <input
                                 key={index}
                                 type="text"
@@ -358,9 +400,9 @@ function Steps() {
                                     const updatedSteps = [...stepConcurrentSteps];
                                     updatedSteps[index] = e.target.value;
                                     setStepConcurrentSteps(updatedSteps);
+                                    console.log(updatedSteps)
                                 }}
                                 placeholder="Concurrent Step"
-                                className="concurrentSteps"
                             />
                         )}
                     </div>
