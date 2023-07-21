@@ -54,3 +54,11 @@
     height: 50px;
     margin: 8px 0;
 }
+
+.header {
+    width: 100%;
+    border-bottom: 1px solid gray;
+    font-size: 18px;
+    text-align: center;
+    padding: 5px;
+  }

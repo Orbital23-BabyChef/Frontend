@@ -2,6 +2,7 @@ import React from "react"
 import { useLocation, useNavigate, useParams } from 'react-router-dom'
 import { useState, useEffect } from 'react'
 import { Button, createTheme, ThemeProvider, IconButton } from "@mui/material"
+import Popup from 'reactjs-popup';
 import HelpIcon from '@mui/icons-material/Help';
 import axios from "axios"
 
@@ -11,25 +12,31 @@ import './Steps.css'
 
 const theme = createTheme({
     palette: {
-      primary: {
-        main: '#00a143',
-      },
-      secondary: {
-        main: '#eb3828',
-      },
+        primary: {
+            main: '#00a143',
+        },
+        secondary: {
+            main: '#eb3828',
+        },
     },
-  })
+})
+
+const helpPopup = () => (
+    <Popup trigger={<button className="button"> Open Modal </button>} modal>
+        <span> Modal content </span>
+    </Popup>
+)
 
 function Steps() {
     const history = useNavigate()
     const location = useLocation()
     //Stores recipe ID, will be "create" if is new recipe
     const recipeId = useParams().id
-    
+
     //true if current view is an edit page, false if it is a create page
     const isEdit = recipeId != "create"
 
-    const [ currSteps, setCurrSteps ] = useState(location.state.steps)
+    const [currSteps, setCurrSteps] = useState(location.state.steps)
 
     const userId = location.state.userId
     const username = location.state.username
@@ -41,7 +48,7 @@ function Steps() {
     }
 
     //this variable stores the current state of the step creation process
-    const [ currProcess, setCurrProcess ] = useState("default")
+    const [currProcess, setCurrProcess] = useState("default")
     //default => can either submit steps created or add a new step
     //static/duration => choosing between a static or duration step
     //staticCreating => user is in the process of creating a static step
@@ -50,7 +57,7 @@ function Steps() {
     //editing => user is in the process of editting a step in the list
 
     //this variable stores the index of the step being edited
-    const [ editingIndex, setEditingIndex ] = useState(undefined)
+    const [editingIndex, setEditingIndex] = useState(undefined)
     //undefined => no element currently being edited
 
     //store values input in forms
@@ -59,7 +66,7 @@ function Steps() {
     //Duration stored in a length 2 array of [<mins>, <secs>]
     const [stepDuration, setStepDuration] = useState([0, 0])
     const [stepConcurrentSteps, setStepConcurrentSteps] = useState(undefined)
-    const [stepAfterStep, setStepAfterStep] = useState(undefined) 
+    const [stepAfterStep, setStepAfterStep] = useState(undefined)
 
     const updateMin = (newMin) => {
         setStepDuration((prevState) => [newMin, prevState[1]]);
@@ -69,7 +76,7 @@ function Steps() {
         setStepDuration((prevState) => [prevState[0], newSec]);
     }
 
-    const minsIn = (secs) => Math.floor(secs/60)
+    const minsIn = (secs) => Math.floor(secs / 60)
 
     const addStepToList = () => {
         // formatting duration into seconds 
@@ -80,8 +87,8 @@ function Steps() {
             toast.error("Duration fields must be a valid numerical value!", toastStyling);
             return;
         }
-        
-        const newDuration = min*60 + sec;
+
+        const newDuration = min * 60 + sec;
 
         const newStep = {
             stepType,
@@ -104,8 +111,8 @@ function Steps() {
             toast.error("Duration fields must be a valid numerical value!", toastStyling);
             return;
         }
-        
-        const newDuration = min*60 + sec;
+
+        const newDuration = min * 60 + sec;
 
         const newStep = {
             stepType,
@@ -138,7 +145,7 @@ function Steps() {
         const currStep = currSteps[key]
         setStepType(currStep.stepType)
         setStepDescription(currStep.stepDescription)
-        setStepDuration([minsIn(currStep.stepDuration), currStep.stepDuration%60])
+        setStepDuration([minsIn(currStep.stepDuration), currStep.stepDuration % 60])
         setStepConcurrentSteps(currStep.stepConcurrentSteps)
         setStepAfterStep(currStep.stepAfterStep)
     }
@@ -152,8 +159,8 @@ function Steps() {
         setStepAfterStep(undefined)
         setEditingIndex(undefined)
     }
-    
-    const createRecipe = async() => {
+
+    const createRecipe = async () => {
         if (!isEdit) { // is creating a new post
             await axios.post("https://baby-chef-backend-031f48e42090.herokuapp.com/createRecipe", {
                 title: location.state.title,
@@ -162,16 +169,16 @@ function Steps() {
                 creator: userId,
                 steps: currSteps
             })
-            .then(res => {
-                if (res.data == "recipeexists") { //shouldn't really happen
-                    toast.error("Recipe already exists!", toastStyling)
-                } else if (res.data == "recipefail") {
-                    toast.error("Unknown error, try again later", toastStyling)
-                } else {
-                    sessionStorage.setItem("itemStatus", "added")
-                    history("/home", {state: {userId: userId, username: username}})
-                }
-            })
+                .then(res => {
+                    if (res.data == "recipeexists") { //shouldn't really happen
+                        toast.error("Recipe already exists!", toastStyling)
+                    } else if (res.data == "recipefail") {
+                        toast.error("Unknown error, try again later", toastStyling)
+                    } else {
+                        sessionStorage.setItem("itemStatus", "added")
+                        history("/home", { state: { userId: userId, username: username } })
+                    }
+                })
         } else {
             axios.post('https://baby-chef-backend-031f48e42090.herokuapp.com/edit', {
                 id: recipeId,
@@ -181,198 +188,216 @@ function Steps() {
                 creator: userId,
                 steps: currSteps
             })
-            .then(res => {
-                if (res.data == "updateSuccess") {
-                    sessionStorage.setItem("itemStatus", "edited")
-                    history("/home", {state: {userId: userId, username: username}})
-                } else {
+                .then(res => {
+                    if (res.data == "updateSuccess") {
+                        sessionStorage.setItem("itemStatus", "edited")
+                        history("/home", { state: { userId: userId, username: username } })
+                    } else {
+                        toast.error("Unknown error, try again later", toastStyling)
+                    }
+                })
+                .catch(err => {
                     toast.error("Unknown error, try again later", toastStyling)
-                }
-            })
-            .catch(err => {
-                toast.error("Unknown error, try again later", toastStyling)
-                console.log(err)
-            });
+                    console.log(err)
+                });
         }
     }
 
-    useEffect(() => {
-        console.log(stepDescription)
-    })
-
     return (
         <ThemeProvider theme={theme}>
-        <div className="steps">
-            <div className="createdStepsList">
-            { currSteps.map((value, key) => {
-                return <div className="createdStep">
-                    { currProcess != "editing" || key != editingIndex
-                        ? <div>
-                            <div className="stepNumber">
-                                Step {key + 1} ({value.stepType})
+            <div className="steps">
+                <div className="createdStepsList">
+                    {currSteps.map((value, key) => {
+                        return <div className="createdStep">
+                            {currProcess != "editing" || key != editingIndex
+                                ? <div>
+                                    <div className="stepNumber">
+                                        Step {key + 1} ({value.stepType})
+                                    </div>
+                                    <div className="stepDescription">
+                                        <div>Description: {value.stepDescription}</div>
+                                        <div style={{ marginTop: 10 }}>{value.stepType == "Duration" ? `Duration: ${value.stepDuration} seconds` : ""}</div>
+                                        <div style={{ marginTop: 10 }}>{value.stepType == "Duration" ? `Concurrently: ${value.stepConcurrentSteps}` : ""}</div>
+                                        <div style={{ marginTop: 10 }}>{value.stepType == "Duration" ? `End of duration: ${value.stepAfterStep}` : ""}</div>
+                                    </div>
+                                </div>
+                                : value.stepType == "Duration"
+                                    ? <div>
+                                        <input type="text"
+                                            onChange={(e) => { setStepDescription(e.target.value) }}
+                                            placeholder="Description"
+                                            defaultValue={value.stepDescription}
+                                        />
+                                        <input type="text"
+                                            onChange={(e) => { updateMin(e.target.value) }}
+                                            placeholder="00"
+                                            defaultValue={minsIn(value.stepDuration)}
+                                        /> min
+                                        <input type="text"
+                                            onChange={(e) => { updateSec(e.target.value) }}
+                                            placeholder="00"
+                                            defaultValue={value.stepDuration % 60}
+                                        /> sec
+                                        <input type="text"
+                                            onChange={(e) => { setStepConcurrentSteps(e.target.value) }}
+                                            placeholder="Concurrent Steps"
+                                            defaultValue={value.stepConcurrentSteps}
+                                        />
+                                        <input type="text"
+                                            onChange={(e) => { setStepAfterStep(e.target.value) }}
+                                            placeholder="Ending step"
+                                            defaultValue={value.stepAfterStep}
+                                        />
+                                        <input type="submit" onClick={() => updateStepinList(key)} />
+                                        <Button
+                                            onClick={() => { setCurrProcess("default") }}
+                                            variant="outlined"
+                                            color="primary"
+                                            sx={{ border: 2, fontWeight: 'bold', fontSize: 16, margin: '10px' }}
+                                        >Cancel</Button>
+                                    </div>
+                                    : <div>
+                                        <input type="text" onChange={(e) => { setStepDescription(e.target.value) }} placeholder="Description" defaultValue={value.stepDescription} />
+                                        <Button
+                                            onClick={() => updateStepinList(key)}
+                                            variant="outlined"
+                                            color="primary"
+                                            sx={{ border: 2, fontWeight: 'bold', fontSize: 16, margin: '10px' }}
+                                        >Create Step</Button>
+                                        <Button
+                                            onClick={returnToDefault}
+                                            variant="outlined"
+                                            color="primary"
+                                            sx={{ border: 2, fontWeight: 'bold', fontSize: 16, margin: '10px' }}
+                                        >Cancel</Button>
+                                    </div>
+                            }
+                            {currProcess == "default"
+                                ? <div>
+                                    <Button onClick={() => startEditing(key)}>Edit</Button>
+                                    <Button onClick={() => removeStepFromList(key)}>Delete</Button>
+                                </div>
+                                : <div></div>
+                            }
+                        </div>
+                    })}
+                    {currProcess == "default"
+                        ? <Button
+                            onClick={() => { setCurrProcess("static/duration") }}
+                            variant="outlined"
+                            color="primary"
+                            sx={{ border: 2, fontWeight: 'bold', fontSize: 16, margin: '10px' }}>
+                            + Add Step</Button>
+                        : currProcess == "static/duration"
+                            ? <div>
+                                <Button
+                                    onClick={() => { setCurrProcess("staticCreating"); setStepType("Static") }}
+                                    variant="outlined"
+                                    color="primary"
+                                    sx={{ border: 2, fontWeight: 'bold', fontSize: 16, margin: '10px' }}
+                                >Static</Button>
+                                <Button
+                                    onClick={() => { setCurrProcess("durationCreating"); setStepType("Duration") }}
+                                    variant="outlined"
+                                    color="primary"
+                                    sx={{ border: 2, fontWeight: 'bold', fontSize: 16, margin: '10px' }}
+                                >Duration</Button>
+                                <Button
+                                    onClick={() => { setCurrProcess("default") }}
+                                    variant="outlined"
+                                    color="primary"
+                                    sx={{ border: 2, fontWeight: 'bold', fontSize: 16, margin: '10px' }}
+                                >Cancel</Button>
                             </div>
-                            <div className="stepDescription">
-                                <div>Description: {value.stepDescription}</div>
-                                <div style={{marginTop: 10}}>{value.stepType == "Duration" ? `Duration: ${value.stepDuration} seconds`: ""}</div>
-                                <div style={{marginTop: 10}}>{value.stepType == "Duration" ? `Concurrently: ${value.stepConcurrentSteps}` : ""}</div>
-                                <div style={{marginTop: 10}}>{value.stepType == "Duration" ? `End of duration: ${value.stepAfterStep}` : ""}</div>
-                            </div>
-                        </div>
-                        : value.stepType == "Duration"
-                        ? <div>
-                            <input type="text" 
-                                onChange={(e) => {setStepDescription(e.target.value)}} 
-                                placeholder="Description"
-                                defaultValue = {value.stepDescription} 
-                            />
-                            <input type="text" 
-                                onChange={(e) => {updateMin(e.target.value)}} 
-                                placeholder="00" 
-                                defaultValue={minsIn(value.stepDuration)}
-                            /> min
-                            <input type="text" 
-                                onChange={(e) => {updateSec(e.target.value)}} 
-                                placeholder="00" 
-                                defaultValue={value.stepDuration%60}
-                            /> sec
-                            <input type="text" 
-                                onChange={(e) => {setStepConcurrentSteps(e.target.value)}} 
-                                placeholder="Concurrent Steps"
-                                defaultValue={value.stepConcurrentSteps} 
-                            />
-                            <input type="text" 
-                                onChange={(e) => {setStepAfterStep(e.target.value)}} 
-                                placeholder="Ending step"
-                                defaultValue={value.stepAfterStep} 
-                            />
-                            <input type="submit" onClick={() => updateStepinList(key)} />
-                            <Button 
-                                onClick={() => {setCurrProcess("default")}}
-                                variant="outlined"
-                                color="primary"
-                                sx={{border: 2, fontWeight: 'bold', fontSize: 16, margin: '10px'}}
-                            >Cancel</Button>
-                        </div>
-                        : <div>
-                            <input type="text" onChange={(e) => {setStepDescription(e.target.value)}} placeholder="Description" defaultValue = {value.stepDescription} />
-                            <Button 
-                                onClick={() => updateStepinList(key)}
-                                variant="outlined"
-                                color="primary"
-                                sx={{border: 2, fontWeight: 'bold', fontSize: 16, margin: '10px'}}
-                            >Create Step</Button>
-                            <Button 
-                                onClick={returnToDefault}
-                                variant="outlined"
-                                color="primary"
-                                sx={{border: 2, fontWeight: 'bold', fontSize: 16, margin: '10px'}}
-                            >Cancel</Button>
-                        </div>        
+                            : currProcess == "staticCreating"
+                                ? <div>
+                                    <input type="text" onChange={(e) => { setStepDescription(e.target.value) }} placeholder="Description" />
+                                    <Button
+                                        onClick={addStepToList}
+                                        variant="outlined"
+                                        color="primary"
+                                        sx={{ border: 2, fontWeight: 'bold', fontSize: 16, margin: '10px' }}
+                                    >Create Step</Button>
+                                    <Button
+                                        onClick={returnToDefault}
+                                        variant="outlined"
+                                        color="primary"
+                                        sx={{ border: 2, fontWeight: 'bold', fontSize: 16, margin: '10px' }}
+                                    >Cancel</Button>
+                                </div>
+                                : currProcess == "durationCreating"
+                                    ? <div>
+                                        <input className="detailsTextBox" onChange={(e) => { setStepDescription(e.target.value) }} placeholder="Description" />
+                                        <br></br>
+                                        <input className="time" onChange={(e) => { updateMin(e.target.value) }} defaultValue="0" />{' min '}
+                                        <input className="time" onChange={(e) => { updateSec(e.target.value) }} defaultValue="0" />{' sec '}
+                                        <br></br>
+                                        <input className="detailsTextBox" onChange={(e) => { setStepConcurrentSteps(e.target.value) }} placeholder="Concurrent Steps" />
+                                        <br></br>
+                                        <input className="detailsTextBox" onChange={(e) => { setStepAfterStep(e.target.value) }} placeholder="Ending step" />
+                                        <br></br>
+                                        <Button onClick={addStepToList}
+                                            variant="outlined"
+                                            color="primary"
+                                            sx={{ border: 2, fontWeight: 'bold', fontSize: 16, margin: '10px' }}
+                                        >Submit</Button>
+                                        <Button
+                                            onClick={() => { setCurrProcess("default") }}
+                                            variant="outlined"
+                                            color="secondary"
+                                            sx={{ border: 2, fontWeight: 'bold', fontSize: 16, margin: '10px' }}
+                                        >Cancel</Button>
+                                    </div>
+                                    : currProcess == "confirming"
+                                        ? <Button
+                                            onClick={createRecipe}
+                                            variant="outlined"
+                                            color="primary"
+                                            sx={{ border: 2, fontWeight: 'bold', fontSize: 16, margin: '10px' }}
+                                        >{isEdit ? "Complete Edit" : "Create Recipe!"}</Button>
+                                        : currProcess == "editing"
+                                            ? <></>
+                                            : <h1>Error!</h1>
                     }
-                    { currProcess == "default"
-                        ? <div>
-                            <Button onClick={() => startEditing(key)}>Edit</Button>
-                            <Button onClick={() => removeStepFromList(key)}>Delete</Button>
-                        </div>
-                        : <div></div>
-                    }
-                </div> 
-            })}
-            { currProcess == "default" 
-                ? <Button 
-                    onClick={() => {setCurrProcess("static/duration")}}
-                    variant="outlined"
-                    color="primary"
-                    sx={{border: 2, fontWeight: 'bold', fontSize: 16, margin: '10px'}}>
-                        + Add Step</Button>
-                : currProcess == "static/duration"
-                ? <div>
-                    <Button 
-                        onClick={() => {setCurrProcess("staticCreating"); setStepType("Static")}}
-                        variant="outlined"
-                        color="primary"
-                        sx={{border: 2, fontWeight: 'bold', fontSize: 16, margin: '10px'}}
-                    >Static</Button>
-                    <Button 
-                        onClick={() => {setCurrProcess("durationCreating"); setStepType("Duration")}}
-                        variant="outlined"
-                        color="primary"
-                        sx={{border: 2, fontWeight: 'bold', fontSize: 16, margin: '10px'}}
-                    >Duration</Button>
-                    <Button 
-                        onClick={() => {setCurrProcess("default")}}
-                        variant="outlined"
-                        color="primary"
-                        sx={{border: 2, fontWeight: 'bold', fontSize: 16, margin: '10px'}}
-                    >Cancel</Button>
-                  </div>
-                : currProcess == "staticCreating"
-                ? <div>
-                    <input type="text" onChange={(e) => {setStepDescription(e.target.value)}} placeholder="Description" />
-                    <Button 
-                        onClick={addStepToList}
-                        variant="outlined"
-                        color="primary"
-                        sx={{border: 2, fontWeight: 'bold', fontSize: 16, margin: '10px'}}
-                    >Create Step</Button>
-                    <Button 
-                        onClick={returnToDefault}
-                        variant="outlined"
-                        color="primary"
-                        sx={{border: 2, fontWeight: 'bold', fontSize: 16, margin: '10px'}}
-                    >Cancel</Button>
-                  </div>
-                : currProcess == "durationCreating"
-                ? <div>
-                    <input className="detailsTextBox" onChange={(e) => {setStepDescription(e.target.value)}} placeholder="Description" />
-                    <br></br>
-                    <input className="time" onChange={(e) => {updateMin(e.target.value)}} defaultValue="0" />{' min '} 
-                    <input className="time" onChange={(e) => {updateSec(e.target.value)}} defaultValue="0" />{' sec '}
-                    <br></br>
-                    <input className="detailsTextBox" onChange={(e) => {setStepConcurrentSteps(e.target.value)}} placeholder="Concurrent Steps" />
-                    <br></br>
-                    <input className="detailsTextBox" onChange={(e) => {setStepAfterStep(e.target.value)}} placeholder="Ending step" />
-                    <br></br>
-                    <Button onClick={addStepToList}
-                        variant="outlined"
-                        color="primary"
-                        sx={{border: 2, fontWeight: 'bold', fontSize: 16, margin: '10px'}}                  
-                    >Submit</Button>
-                    <Button 
-                        onClick={() => {setCurrProcess("default")}}
-                        variant="outlined"
-                        color="secondary"
-                        sx={{border: 2, fontWeight: 'bold', fontSize: 16, margin: '10px'}}
-                    >Cancel</Button>
-                  </div>
-                : currProcess == "confirming"
-                ? <Button 
-                    onClick={createRecipe}
-                    variant="outlined"
-                    color="primary"
-                    sx={{border: 2, fontWeight: 'bold', fontSize: 16, margin: '10px'}}
-                  >{isEdit ? "Complete Edit" : "Create Recipe!"}</Button>
-                : currProcess == "editing"
-                ? <></>
-                : <h1>Error!</h1>
-            }
-            <br />
-            { currSteps.length >= 1 && currProcess == "default"
-                ? <Button 
-                    onClick={() => setCurrProcess("confirming")}
-                    variant="outlined"
-                    color="secondary"
-                    sx={{border: 2, fontWeight: 'bold', fontSize: 16, margin: '10px'}}
-                  >Confirm</Button>
-                : <></>}
-            <ToastContainer />
+                    <br />
+                    {currSteps.length >= 1 && currProcess == "default"
+                        ? <Button
+                            onClick={() => setCurrProcess("confirming")}
+                            variant="outlined"
+                            color="secondary"
+                            sx={{ border: 2, fontWeight: 'bold', fontSize: 16, margin: '10px' }}
+                        >Confirm</Button>
+                        : <></>}
+                    <ToastContainer />
+                </div>
             </div>
-        </div>
-        <div>
-            <IconButton>
-                <HelpIcon style={{ width: 50, height: 50}}   />
-            </IconButton>
-        </div>
+            <div>
+                <Popup trigger={<HelpIcon style={{ width: 50, height: 50 }}></HelpIcon>} contentStyle={{ width: '90%' }} closeOnDocumentClick modal>
+                    <div className="header">Guide to creating recipes</div>
+                    <br></br>
+                    <div>
+                        BabyChef aims to provide learning chefs with simple to follow step-by-step instructions.
+                        As such, it is recommended that you break down your steps into smaller short steps!
+                        <br></br><hr></hr>
+                        <strong>Static Step:</strong> Steps that do not have a timed component.
+                        <br></br>
+                        <br></br><strong>Examples:</strong>
+                        <br></br>Dice the potatoes into 1-inch cubes
+                        <br></br>Fill a pot of water and get it to a rolling boil
+                        <br></br><hr></hr>
+                        <strong>Duration Step:</strong> Steps that contains a timed element. A timer will be started automatically for those following this step. The <i><strong>ending message</strong></i> will be shown once the timer is up
+                        <br></br><br></br>
+                        There is also an option to include <i><strong>concurrent steps</strong></i>, which are steps that can be performed whilst waiting for the original <i><strong>duration step</strong></i> to finish.
+                        It will be necessary to complete both the original <i><strong>duration step</strong></i>, and all <i><strong>concurrent steps</strong></i>, before moving on to the next step.
+                        <br></br>
+                        <br></br><strong>Example:</strong>
+                        <br></br><i>Descripton</i>: Put diced potatoes into boiling water
+                        <br></br><i>Duration</i>: 20 min 0 sec
+                        <br></br><i>Concurrent Steps</i>: Chop carrots into small pieces
+                        <br></br><i>Ending step</i>: Off the heat and take potatoes out
+                    </div>
+                </Popup>
+            </div>
         </ThemeProvider>
     )
 }
