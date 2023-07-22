@@ -11,6 +11,7 @@ import { Button } from "@mui/material"
 import profilepic from '../ProfilePicPlaceholder.png'
 import IconButton from '@mui/material/IconButton';
 import AddIcon from '@mui/icons-material/Add';
+import HomeIcon from '@mui/icons-material/Home';
 import ThumbUpIcon from '@mui/icons-material/ThumbUp';
 import ThumbUpOutlinedIcon from '@mui/icons-material/ThumbUpOutlined';
 
@@ -120,9 +121,11 @@ function Profile (){
         axios.get(`https://baby-chef-backend-031f48e42090.herokuapp.com/username/?id=${userId}`)
         .then(res => {
             setUsername(res.data.username);
-            setLikedRecipes(res.data.likedPosts);
+            setLikedRecipes(res.data.likedPosts
+                             ? res.data.likedPosts
+                             : {});
         })
-    })
+    }, [])
 
     //Runs only on first render to retrieve entire list of recipes by this user
     useEffect(() => {
@@ -145,10 +148,9 @@ function Profile (){
                     onChange={handleChange}
                     value={searchInput} />
 
-                <Button component={Link} to="/profile" state={{userId, username, likedRecipes}}>
-                        <img src={profilepic} style={{ width: 50, height: 50, marginLeft:10 }}   />
-                </Button>
-
+                <IconButton component={Link} to="/home" state={{userId, username, likedRecipes}}>
+                    <HomeIcon style={{ width: 50, height: 50, marginLeft:10 }}/>
+                </IconButton>
                 <IconButton component={Link} to="/create" state={{userId, username, likedRecipes}}>
                         <AddIcon style={{ width: 50, height: 50}}   />
                 </IconButton>
