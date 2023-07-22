@@ -19,7 +19,9 @@ function Home (){
     const location = useLocation()
     const userId = location.state.userId
     const [username, setUsername] = useState(location.state.username)
-    const [likedRecipes, setLikedRecipes] = useState(location.state.likedRecipes)
+    const [likedRecipes, setLikedRecipes] = useState(location.state.likedRecipes
+                                                      ? location.state.likedRecipes
+                                                      : {})
 
     const [recipeList, setRecipeList] = useState([])
     const [searchInput, setSearchInput] = useState("")
@@ -92,7 +94,9 @@ function Home (){
         axios.get(`https://baby-chef-backend-031f48e42090.herokuapp.com/username/?id=${userId}`)
         .then(res => {
             setUsername(res.data.username);
-            setLikedRecipes(res.data.likedPosts);
+            setLikedRecipes(res.data.likedPosts
+                             ? res.data.likedPosts
+                             : {});
         })
     }, [])
 
@@ -106,7 +110,6 @@ function Home (){
             setRecipeList([])
         })
     }, [])
-
 
     return (
         <div className="homepage">
