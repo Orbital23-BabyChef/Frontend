@@ -56,6 +56,12 @@ function Steps() {
     //this variable stores the index of the step being edited
     const [ editingIndex, setEditingIndex ] = useState(undefined)
     //undefined => no element currently being edited
+    
+    const [ editingProcess, setEditingProcess ] = useState(undefined)
+    //undefined => no step currently bring edited
+    //static => step being edited is static
+    //durationONE => step being edited is duration (timed component)
+    //durationTWO => step being edited is duration (concurrent component)
 
     //store values input in forms
     const [stepType, setStepType] = useState(undefined)
@@ -155,6 +161,9 @@ function Steps() {
         setCurrProcess("editing")
         setEditingIndex(key)
         const currStep = currSteps[key]
+        setEditingProcess(currStep.stepType == "Static"
+                            ? "static"
+                            : "durationONE")
         setStepType(currStep.stepType)
         setStepDescription(currStep.stepDescription)
         setStepDuration([minsIn(currStep.stepDuration), currStep.stepDuration%60])
@@ -215,10 +224,6 @@ function Steps() {
         }
     }
 
-    useEffect(() => {
-        console.log(stepDescription)
-    })
-
     return (
         <ThemeProvider theme={theme}>
         <div className="steps">
@@ -260,51 +265,103 @@ function Steps() {
                             </div>
                         </div>
                         : value.stepType == "Duration"
-                        ? <div>
-                            <input className="detailsTextBox" 
-                                type="text" 
-                                onChange={(e) => {setStepDescription(e.target.value)}} 
-                                placeholder="Description" 
-                                defaultValue = {value.stepDescription} />
-                            <br></br>
-                            <input className="time" 
-                                type="text" 
-                                onChange={(e) => {updateMin(e.target.value)}}  
-                                placeholder="00" 
-                                defaultValue={minsIn(value.stepDuration)} />{' min '} 
-                            <input className="time" 
-                                type="text" 
-                                onChange={(e) => {updateSec(e.target.value)}}  
-                                placeholder="00" 
-                                defaultValue={value.stepDuration%60} />{' sec '}
-                            <br></br>
-                            <input className="detailsTextBox" 
-                                onChange={(e) => {setStepAfterStep(e.target.value)}} 
-                                placeholder="Ending step" 
-                                defaultValue={value.stepAfterStep}/>
-                            <br></br>
-                            <Button 
-                                onClick={() => {
-                                    const min = +stepDuration[0];
-                                    const sec = +stepDuration[1];
+                            ? editingProcess == "durationONE"
+                                ? <div>
+                                    <input className="detailsTextBox" 
+                                        type="text" 
+                                        onChange={(e) => {setStepDescription(e.target.value)}} 
+                                        placeholder="Description" 
+                                        defaultValue = {value.stepDescription} />
+                                    <br></br>
+                                    <input className="time" 
+                                        type="text" 
+                                        onChange={(e) => {updateMin(e.target.value)}}  
+                                        placeholder="00" 
+                                        defaultValue={minsIn(value.stepDuration)} />{' min '} 
+                                    <input className="time" 
+                                        type="text" 
+                                        onChange={(e) => {updateSec(e.target.value)}}  
+                                        placeholder="00" 
+                                        defaultValue={value.stepDuration%60} />{' sec '}
+                                    <br></br>
+                                    <input className="detailsTextBox" 
+                                        onChange={(e) => {setStepAfterStep(e.target.value)}} 
+                                        placeholder="Ending step" 
+                                        defaultValue={value.stepAfterStep}/>
+                                    <br></br>
+                                    <Button 
+                                        onClick={() => {
+                                            const min = +stepDuration[0];
+                                            const sec = +stepDuration[1];
 
-                                    if (stepType == "Duration" && (isNaN(min) || isNaN(sec))) {
-                                        toast.error("Duration fields must be a valid numerical value!", toastStyling);
-                                        return;
-                                    }
-                                    setCurrProcess("editingDurationTWO");
-                                }}
-                                variant="outlined"
-                                color="primary"
-                                sx={{border: 2, fontWeight: 'bold', fontSize: 16, margin: '10px'}}
-                            >Next</Button>
-                            <Button 
-                                onClick={() => {setCurrProcess("default")}}
-                                variant="outlined"
-                                color="secondary"
-                                sx={{border: 2, fontWeight: 'bold', fontSize: 16, margin: '10px'}}
-                            >Cancel</Button>
-                        </div>
+                                            if (stepType == "Duration" && (isNaN(min) || isNaN(sec))) {
+                                                toast.error("Duration fields must be a valid numerical value!", toastStyling);
+                                                return;
+                                            }
+                                            setEditingProcess("durationTWO");
+                                        }}
+                                        variant="outlined"
+                                        color="primary"
+                                        sx={{border: 2, fontWeight: 'bold', fontSize: 16, margin: '10px'}}
+                                    >Next</Button>
+                                    <Button 
+                                        onClick={() => {setCurrProcess("default")}}
+                                        variant="outlined"
+                                        color="secondary"
+                                        sx={{border: 2, fontWeight: 'bold', fontSize: 16, margin: '10px'}}
+                                    >Cancel</Button>
+                                </div>
+                                : <div>
+                                    <h4>Concurrent Steps</h4>
+                                    <div className="concurrentSteps">
+                                        { stepConcurrentSteps.map((step, index) => 
+                                            <input
+                                                key={index}
+                                                type="text"
+                                                value={step}
+                                                onChange={(e) => {
+                                                    const updatedSteps = [...stepConcurrentSteps];
+                                                    updatedSteps[index] = e.target.value;
+                                                    setStepConcurrentSteps(updatedSteps);
+                                                }}
+                                                placeholder="Concurrent Step"
+                                            />
+                                        )}
+                                    </div>
+                                    <div>
+                                        <Button onClick={() => {
+                                            setStepConcurrentSteps([...stepConcurrentSteps, ""]);
+                                        }}
+                                            variant="outlined"
+                                            color="primary"
+                                            sx={{border: 2, fontWeight: 'bold', fontSize: 16, margin: '10px'}}                  
+                                        >+</Button>
+                                        <Button onClick={() => {
+                                            setStepConcurrentSteps(prevSteps => {
+                                                const updatedSteps = [...prevSteps];
+                                                updatedSteps.pop();
+                                                return updatedSteps;
+                                            });
+                                        }}
+                                            variant="outlined"
+                                            color="primary"
+                                            sx={{border: 2, fontWeight: 'bold', fontSize: 16, margin: '10px'}}                  
+                                        >-</Button>
+                                    </div>
+                                    <div>
+                                        <Button 
+                                            onClick={returnToDefault}
+                                            variant="outlined"
+                                            color="primary"
+                                            sx={{border: 2, fontWeight: 'bold', fontSize: 16, margin: '10px'}}
+                                        >Cancel</Button>
+                                        <Button onClick={() => updateStepinList(key)}
+                                            variant="outlined"
+                                            color="primary"
+                                            sx={{border: 2, fontWeight: 'bold', fontSize: 16, margin: '10px'}}                  
+                                        >Edit Step</Button>
+                                    </div>
+                                </div>
                         : <div>
                             <input type="text" onChange={(e) => {setStepDescription(e.target.value)}} placeholder="Description" defaultValue = {value.stepDescription} />
                             <Button 
@@ -400,20 +457,22 @@ function Steps() {
                 ? <div>
                     <h4>Concurrent Steps</h4>
                     <div className="concurrentSteps">
-                        { stepConcurrentSteps.map((step, index) => 
-                            <input
-                                key={index}
-                                type="text"
-                                value={step}
-                                onChange={(e) => {
-                                    const updatedSteps = [...stepConcurrentSteps];
-                                    updatedSteps[index] = e.target.value;
-                                    setStepConcurrentSteps(updatedSteps);
-                                    console.log(updatedSteps)
-                                }}
-                                placeholder="Concurrent Step"
-                            />
-                        )}
+                        { Array.isArray(stepConcurrentSteps)
+                            ? stepConcurrentSteps.map((step, index) => 
+                                <input
+                                    key={index}
+                                    type="text"
+                                    value={step}
+                                    onChange={(e) => {
+                                        const updatedSteps = [...stepConcurrentSteps];
+                                        updatedSteps[index] = e.target.value;
+                                        setStepConcurrentSteps(updatedSteps);
+                                    }}
+                                    placeholder="Concurrent Step"
+                                />
+                            )
+                            :<></>
+                        }
                     </div>
                     <div>
                         <Button onClick={() => {
