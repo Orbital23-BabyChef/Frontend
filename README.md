@@ -75,4 +75,7 @@ This section has moved here: [https://facebook.github.io/create-react-app/docs/t
 
 User Testing:
 - During recipe creation, duration in duration steps requires numerical input for both min and seconds, a "0" has to be manually input if needed.
-- Change: Default value of "0" to be added 
+~~- Change: Default value of "0" to be added~~ (Completed)
+
+- Newly Created users experience an error of reading "undefined" in the home page
+~~- Change: Fix bug, likely related to rating system~~ (Completed)
