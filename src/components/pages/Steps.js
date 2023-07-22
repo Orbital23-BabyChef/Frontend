@@ -36,6 +36,7 @@ function Steps() {
 
     const userId = location.state.userId
     const username = location.state.username
+    const [likedRecipes, setLikedRecipes] = useState(location.state.likedRecipes)
 
     const toastStyling = {
         position: toast.POSITION.BOTTOM_RIGHT,
@@ -197,7 +198,7 @@ function Steps() {
                     toast.error("Unknown error, try again later", toastStyling)
                 } else {
                     sessionStorage.setItem("itemStatus", "added")
-                    history("/home", {state: {userId: userId, username: username}})
+                    history("/home", {state: {userId, username, likedRecipes}})
                 }
             })
         } else {
@@ -212,7 +213,7 @@ function Steps() {
             .then(res => {
                 if (res.data == "updateSuccess") {
                     sessionStorage.setItem("itemStatus", "edited")
-                    history("/home", {state: {userId: userId, username: username}})
+                    history("/home", {state: {userId, username, likedRecipes}})
                 } else {
                     toast.error("Unknown error, try again later", toastStyling)
                 }

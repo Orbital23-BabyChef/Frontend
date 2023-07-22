@@ -23,7 +23,7 @@ function Profile (){
     const location = useLocation()
     const [username, setUsername] = useState(location.state.username)
     const userId = location.state.userId
-    const [likedRecipes, setLikedRecipes] = useState({})
+    const [likedRecipes, setLikedRecipes] = useState(location.state.likedRecipes)
     
     const history = useNavigate()
 
@@ -62,7 +62,7 @@ function Profile (){
                         .then(res => {
                             if (res.data == "deleteSuccess") {
                                 sessionStorage.setItem("itemStatus", "deleted")
-                                history("/home", {state:{userId: userId, username: username}})
+                                history("/home", {state:{userId, username, likedRecipes}})
                             } else {
                                 toast.error("Unknown error, try again later", toastStyling)
                             }
@@ -145,11 +145,11 @@ function Profile (){
                     onChange={handleChange}
                     value={searchInput} />
 
-                <Button component={Link} to="/profile" state={{userId: userId, username: username}}>
+                <Button component={Link} to="/profile" state={{userId, username, likedRecipes}}>
                         <img src={profilepic} style={{ width: 50, height: 50, marginLeft:10 }}   />
                 </Button>
 
-                <IconButton component={Link} to="/create" state={{userId: userId, username: username}}>
+                <IconButton component={Link} to="/create" state={{userId, username, likedRecipes}}>
                         <AddIcon style={{ width: 50, height: 50}}   />
                 </IconButton>
             </div>
@@ -162,7 +162,7 @@ function Profile (){
                             <br></br>
                             <div
                                 className="recipeTitle">
-                                <Link to={`/view/${value._id}`} state={{userId: userId, username: username}}>{value.title}</Link>
+                                <Link to={`/view/${value._id}`} state={{userId, username, likedRecipes}}>{value.title}</Link>
                             </div>
                             <p className="fifty-chars">{value.description} </p>
                             <p> Creator: {username} </p>

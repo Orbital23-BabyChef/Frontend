@@ -23,6 +23,7 @@ function Edit (){
     const location = useLocation()
     const userId = location.state.userId
     const [username, setUsername] = useState(location.state.username)
+    const [likedRecipes, setLikedRecipes] = useState(location.state.likedRecipes)
     const [title, setTitle] = useState(location.state.title)
     const [description, setDescription] = useState(location.state.description)
     const [ingredients, setIngredients] = useState(location.state.ingredients)
@@ -72,6 +73,7 @@ function Edit (){
                 state={{
                     username: username,
                     userId: userId,
+                    likedRecipes: likedRecipes
                 }}
             ><ArrowBackIcon className='backArrow'/></Link>
             <div className="createTitle">

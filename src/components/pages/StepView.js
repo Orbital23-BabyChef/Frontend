@@ -87,7 +87,7 @@ function StepView() {
 
     const [ username, setUsername ] = useState(location.state.username)
     const [ recipe, setRecipe ] = useState(location.state.recipe)
-    const [ likedRecipes, setLikedRecipes ] = useState({})
+    const [ likedRecipes, setLikedRecipes ] = useState(location.state.likedRecipes)
      
     //step to be shown for the given recipeID and stepnum
     const currStep = recipe.steps[stepNum]
@@ -206,6 +206,7 @@ function StepView() {
                     state={{
                         username: username,
                         userId: userId,
+                        likedRecipes: likedRecipes,
                         recipe: recipe
                     }}
                     variant="contained"
@@ -238,6 +239,7 @@ function StepView() {
                     state={{
                         username: username,
                         userId: userId,
+                        likedRecipes: likedRecipes, 
                         recipe: recipe
                     }}
                     variant="contained"
@@ -252,6 +254,7 @@ function StepView() {
                     state={{
                         username: username,
                         userId: userId,
+                        likedRecipes: likedRecipes,
                     }}
                     variant="contained"
                     color="primary"
@@ -265,6 +268,7 @@ function StepView() {
                         state={{
                             username: username,
                             userId: userId,
+                            likedRecipes: likedRecipes,
                             recipe: recipe
                         }}
                         variant="contained"
@@ -274,10 +278,7 @@ function StepView() {
                     >Back to Prev Step</Button>
                 :  
                     <Button component={Link} to={`/view/${recipeId}`} 
-                        state={{
-                            username: username,
-                            userId: userId
-                        }}
+                        state={{ userId, username, likedRecipes }}
                         variant="contained"
                         color="primary"
                         className="stepButtons"

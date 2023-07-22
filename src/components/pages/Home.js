@@ -19,7 +19,7 @@ function Home (){
     const location = useLocation()
     const userId = location.state.userId
     const [username, setUsername] = useState(location.state.username)
-    const [likedRecipes, setLikedRecipes] = useState({})
+    const [likedRecipes, setLikedRecipes] = useState(location.state.likedRecipes)
 
     const [recipeList, setRecipeList] = useState([])
     const [searchInput, setSearchInput] = useState("")
@@ -117,18 +117,18 @@ function Home (){
                     onChange={handleChange}
                     value={searchInput} 
                 />
-                <Button component={Link} to="/profile" state={{userId: userId, username: username}}>
+                <Button component={Link} to="/profile" state={{userId, username, likedRecipes}}>
                         <img src={profilepic} style={{ width: 50, height: 50, marginLeft:10 }}   />
                 </Button>
 
-                <IconButton component={Link} to="/create" state={{userId: userId, username: username}}>
+                <IconButton component={Link} to="/create" state={{userId, username, likedRecipes}}>
                         <AddIcon style={{ width: 50, height: 50}}   />
                 </IconButton>
             </div>
             
             {/* Takes recipe list and filters it according to current search input, is not case sensitive*/}
             {recipeList
-                .filter(recipe => recipe.title.toLowerCase().includes(searchInput))
+                .filter(recipe => recipe.title.toLowerCase().includes(searchInput.toLowerCase()))
                 .map((value, key) => {
                     return  <div key={value._id}>
                                 <div 
@@ -136,12 +136,14 @@ function Home (){
                                     <br></br>
                                     <div
                                         className="recipeTitle">
-                                        <Link to={`/view/${value._id}`} state={{userId: userId, username: username}}>{value.title}</Link>
+                                        <Link to={`/view/${value._id}`} state={{userId, username, likedRecipes}}>{value.title}</Link>
                                     </div>
                                     <p className="fifty-chars">{value.description} </p>
                                     <p> Creator: {value.creator} </p>
                                     <p> Likes: {value.likeCount} </p>
-                                    { likedRecipes != undefined && !likedRecipes[value._id]
+                                    { likedRecipes == undefined 
+                                        ? <></>
+                                        : !likedRecipes[value._id]
                                         ? <StyledThumbUpOutlinedIcon onClick={() => likeRecipe(value._id)}></StyledThumbUpOutlinedIcon>
                                         : <StyledThumbUpIcon onClick={() => unlikeRecipe(value._id)}></StyledThumbUpIcon>
                                     }   

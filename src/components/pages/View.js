@@ -28,7 +28,7 @@ function View (){
     const location = useLocation()
     const userId = location.state.userId
     const [username, setUsername] = useState(location.state.username)
-    const [likedRecipes, setLikedRecipes] = useState({})
+    const [likedRecipes, setLikedRecipes] = useState(location.state.likedRecipes)
 
     const history = useNavigate()
     
@@ -62,7 +62,7 @@ function View (){
                         .then(res => {
                             if (res.data == "deleteSuccess") {
                                 sessionStorage.setItem("itemStatus", "deleted")
-                                history("/home", {state:{userId:userId, username:username}})
+                                history("/home", {state:{userId, username, likedRecipes}})
                             } else {
                                 toast.error("Unknown error, try again later", toastStyling)
                             }
