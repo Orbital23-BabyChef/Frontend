@@ -4,13 +4,13 @@ import { useEffect, useState } from 'react'
 import axios from "axios"
 import '../RecipePreview.css'
 
-import { styled } from '@mui/material/styles';
 import { Button } from "@mui/material"
 import profilepic from '../ProfilePicPlaceholder.png'
 import IconButton from '@mui/material/IconButton';
 import AddIcon from '@mui/icons-material/Add';
 import ThumbUpIcon from '@mui/icons-material/ThumbUp';
 import ThumbUpOutlinedIcon from '@mui/icons-material/ThumbUpOutlined';
+import { styled } from '@mui/material/styles';
 
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';

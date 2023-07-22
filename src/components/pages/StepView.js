@@ -7,6 +7,9 @@ import { iconButton, Button, createTheme, ThemeProvider } from "@mui/material";
 import PauseIcon from '@mui/icons-material/Pause';
 import PlayArrowIcon from '@mui/icons-material/PlayArrow';
 import RestartAltIcon from '@mui/icons-material/RestartAlt';
+import ThumbUpIcon from '@mui/icons-material/ThumbUp';
+import ThumbUpOutlinedIcon from '@mui/icons-material/ThumbUpOutlined';
+import { styled } from '@mui/material/styles';
 
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
@@ -84,6 +87,7 @@ function StepView() {
 
     const [ username, setUsername ] = useState(location.state.username)
     const [ recipe, setRecipe ] = useState(location.state.recipe)
+    const [ likedRecipes, setLikedRecipes ] = useState({})
      
     //step to be shown for the given recipeID and stepnum
     const currStep = recipe.steps[stepNum]
@@ -107,6 +111,14 @@ function StepView() {
         autoClose: 3000
     }
 
+    const StyledThumbUpIcon = styled(ThumbUpIcon)(({ theme }) => ({
+        cursor: 'pointer',
+    }));
+
+    const StyledThumbUpOutlinedIcon = styled(ThumbUpOutlinedIcon)(({ theme }) => ({
+        cursor: 'pointer',
+    }));
+
     // converts time stored in seconds to string format:
     // MM minutes and SS Seconds
     const secsToMMSS = (timeInSecs) => {
@@ -125,10 +137,39 @@ function StepView() {
         setCurrProcess(recipe.steps[stepNum - 1].stepType);
     }
 
+    const likeRecipe = (recipeId) => {
+        axios.post(`https://baby-chef-backend-031f48e42090.herokuapp.com/like`, {userId, recipeId})
+        .then(res => {
+            setLikedRecipes(prevLikedPosts => ({
+                ...prevLikedPosts,
+                [recipeId]: true,
+            }));
+            setRecipe(prevRecipe => ({
+                likeCount: prevRecipe.likeCount + 1,
+                ...prevRecipe
+            }))
+        })
+    }
+
+    const unlikeRecipe = (recipeId) => {
+        axios.post(`https://baby-chef-backend-031f48e42090.herokuapp.com/unlike`, {userId, recipeId})
+        .then(res => {
+            setLikedRecipes(prevLikedPosts => ({
+                ...prevLikedPosts,
+                [recipeId]: false,
+            }));
+            setRecipe(prevRecipe => ({
+                likeCount: prevRecipe.likeCount - 1,
+                ...prevRecipe
+            }))
+        })
+    }
+    
     useEffect(() => {
         axios.get(`https://baby-chef-backend-031f48e42090.herokuapp.com/username/?id=${userId}`)
         .then(res => {
             setUsername(res.data.username);
+            setLikedRecipes(res.data.likedPosts);
         })
     })
 
@@ -182,7 +223,14 @@ function StepView() {
                 />
                 <p className="durationConcurrentSteps">{currStep.stepConcurrentSteps}</p>
             </div>
-            : <p className="endingStepDetails">That's the end of the recipe, enjoy your dish!</p>
+            : <div> 
+                <p className="endingStepDetails">That's the end of the recipe :)<br></br>
+                Please leave a like if you enjoyed it!</p>
+                { likedRecipes != undefined && !likedRecipes[recipe._id]
+                    ? <StyledThumbUpOutlinedIcon onClick={() => likeRecipe(recipe._id)}></StyledThumbUpOutlinedIcon>
+                    : <StyledThumbUpIcon onClick={() => unlikeRecipe(recipe._id)}></StyledThumbUpIcon>
+                }  
+            </div>
         }
         <div>
             { currProcess != "Duration" && currProcess != "end"
