@@ -108,7 +108,7 @@ function Create (){
             <div className="createTitle">
             <label>Name of Dish</label>
             <br></br>
-            <input type="text" 
+            <textarea className="nameOfDish"
                 onChange={(event) => {
                     setTitle(event.target.value)
                 }}
@@ -118,7 +118,7 @@ function Create (){
             <div>
             <label>Description</label>
             <br></br>
-            <textarea 
+            <textarea className="descriptionText"
                 onChange={(event) => {
                     setDescription(event.target.value)
                 }}
@@ -128,20 +128,23 @@ function Create (){
             <div>
             <label>Ingredients</label>
             <br></br>
-            <textarea 
+            <textarea className="ingredientsText"
                 onChange={(event) => {
                     setIngredients(event.target.value)
                 }}
             />
             </div>
+            <br></br>
             <div>
                 <label>Upload Image</label>
-                <input type="file" 
+                <br></br><br></br>
+                <input type="file" className="imageUpload"
                     onChange={(event) => {
                         setImage(event.target.files[0])
                     }}>
                 </input>
             </div>
+            <br></br>
             <Button 
                 variant="outlined"
                 color="primary"

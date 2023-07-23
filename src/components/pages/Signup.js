@@ -18,32 +18,32 @@ function Signup() {
         autoClose: 3000
     }
 
-    async function submit(e){
+    async function submit(e) {
         e.preventDefault();
 
-        try{
+        try {
 
-            await axios.post("https://baby-chef-backend-031f48e42090.herokuapp.com/signup",{
+            await axios.post("https://baby-chef-backend-031f48e42090.herokuapp.com/signup", {
                 username, password, confirmPassword
             })
-            .then(res => {
-                if (res.data == "exist") {
-                    toast.error("Username already exists!", toastStyling)
-                }
-                else if(res.data == "mismatch"){
-                    toast.error("Passswords do not match!", toastStyling)
-                }
-                else {
-                    history("/home", {state: {userId: res.data._id, username: username, likedRecipes: res.data.likedPosts}})
-                }
-            })
-            .catch(e => {
-                toast.error("Unknown error, try again later", toastStyling)
-                console.log(e);
-            })
+                .then(res => {
+                    if (res.data == "exist") {
+                        toast.error("Username already exists!", toastStyling)
+                    }
+                    else if (res.data == "mismatch") {
+                        toast.error("Passswords do not match!", toastStyling)
+                    }
+                    else {
+                        history("/home", { state: { userId: res.data._id, username: username, likedRecipes: res.data.likedPosts } })
+                    }
+                })
+                .catch(e => {
+                    toast.error("Unknown error, try again later", toastStyling)
+                    console.log(e);
+                })
 
         }
-        catch(e){
+        catch (e) {
             console.log(e);
 
         }
@@ -57,10 +57,10 @@ function Signup() {
                 <img className="logo" src={logo} alt="Logo" />
             </div>
 
-            <h1>Create an account now!</h1>
+            <h1>Sign up now!</h1>
 
             <form action="POST">
-                <input type="username" onChange={(e) => { setUsername(e.target.value) }} placeholder="Username"  />
+                <input type="username" onChange={(e) => { setUsername(e.target.value) }} placeholder="Username" />
                 <br></br>
                 <input type="password" onChange={(e) => { setPassword(e.target.value) }} placeholder="Password" />
                 <br></br>

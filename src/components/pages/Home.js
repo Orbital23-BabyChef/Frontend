@@ -15,13 +15,13 @@ import { styled } from '@mui/material/styles';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
-function Home (){
+function Home() {
     const location = useLocation()
     const userId = location.state.userId
     const [username, setUsername] = useState(location.state.username)
     const [likedRecipes, setLikedRecipes] = useState(location.state.likedRecipes
-                                                      ? location.state.likedRecipes
-                                                      : {})
+        ? location.state.likedRecipes
+        : {})
 
     const [recipeList, setRecipeList] = useState([])
     const [searchInput, setSearchInput] = useState("")
@@ -46,35 +46,35 @@ function Home (){
     }));
 
     const likeRecipe = (recipeId) => {
-        axios.post(`https://baby-chef-backend-031f48e42090.herokuapp.com/like`, {userId, recipeId})
-        .then(res => {
-            setLikedRecipes(prevLikedPosts => ({
-                ...prevLikedPosts,
-                [recipeId]: true,
-            }));
-            setRecipeList(prevRecipeList => prevRecipeList.map(recipe => {
-                if (recipe._id === recipeId) {
-                  return { ...recipe, likeCount: recipe.likeCount + 1 };
-                }
-                return recipe;
-            }));
-        })
+        axios.post(`https://baby-chef-backend-031f48e42090.herokuapp.com/like`, { userId, recipeId })
+            .then(res => {
+                setLikedRecipes(prevLikedPosts => ({
+                    ...prevLikedPosts,
+                    [recipeId]: true,
+                }));
+                setRecipeList(prevRecipeList => prevRecipeList.map(recipe => {
+                    if (recipe._id === recipeId) {
+                        return { ...recipe, likeCount: recipe.likeCount + 1 };
+                    }
+                    return recipe;
+                }));
+            })
     }
 
     const unlikeRecipe = (recipeId) => {
-        axios.post(`https://baby-chef-backend-031f48e42090.herokuapp.com/unlike`, {userId, recipeId})
-        .then(res => {
-            setLikedRecipes(prevLikedPosts => ({
-                ...prevLikedPosts,
-                [recipeId]: false,
-            }));
-            setRecipeList(prevRecipeList => prevRecipeList.map(recipe => {
-                if (recipe._id === recipeId) {
-                  return { ...recipe, likeCount: recipe.likeCount - 1 };
-                }
-                return recipe;
-            }));
-        })
+        axios.post(`https://baby-chef-backend-031f48e42090.herokuapp.com/unlike`, { userId, recipeId })
+            .then(res => {
+                setLikedRecipes(prevLikedPosts => ({
+                    ...prevLikedPosts,
+                    [recipeId]: false,
+                }));
+                setRecipeList(prevRecipeList => prevRecipeList.map(recipe => {
+                    if (recipe._id === recipeId) {
+                        return { ...recipe, likeCount: recipe.likeCount - 1 };
+                    }
+                    return recipe;
+                }));
+            })
     }
 
     useEffect(() => {
@@ -92,23 +92,23 @@ function Home (){
     //Sets username 
     useEffect(() => {
         axios.get(`https://baby-chef-backend-031f48e42090.herokuapp.com/username/?id=${userId}`)
-        .then(res => {
-            setUsername(res.data.username);
-            setLikedRecipes(res.data.likedPosts
-                             ? res.data.likedPosts
-                             : {});
-        })
+            .then(res => {
+                setUsername(res.data.username);
+                setLikedRecipes(res.data.likedPosts
+                    ? res.data.likedPosts
+                    : {});
+            })
     }, [])
 
     //Runs only on first render to retrieve entire list of recipes
     useEffect(() => {
         axios.get("https://baby-chef-backend-031f48e42090.herokuapp.com/fullRecipeList")
-        .then(response => {
-            setRecipeList(response.data);
-        })
-        .catch(res => {
-            setRecipeList([])
-        })
+            .then(response => {
+                setRecipeList(response.data);
+            })
+            .catch(res => {
+                setRecipeList([])
+            })
     }, [])
 
     return (
@@ -116,42 +116,52 @@ function Home (){
             <div className="searchBar">
                 <input
                     type="text"
-                    placeholder="Search for your next recipe"
+                    placeholder="Search Recipes"
                     onChange={handleChange}
-                    value={searchInput} 
+                    value={searchInput}
                 />
-                <Button component={Link} to="/profile" state={{userId, username, likedRecipes}}>
-                        <img src={profilepic} style={{ width: 50, height: 50, marginLeft:10 }}   />
+                <Button component={Link} to="/profile" state={{ userId, username, likedRecipes }}>
+                    <img src={profilepic} style={{ width: 50, height: 50, marginLeft: 10 }} />
                 </Button>
 
-                <IconButton component={Link} to="/create" state={{userId, username, likedRecipes}}>
-                        <AddIcon style={{ width: 50, height: 50}}   />
+                <IconButton component={Link} to="/create" state={{ userId, username, likedRecipes }}>
+                    <AddIcon style={{ width: 50, height: 50 }} />
                 </IconButton>
             </div>
-            
+
             {/* Takes recipe list and filters it according to current search input, is not case sensitive*/}
             {recipeList
                 .filter(recipe => recipe.title.toLowerCase().includes(searchInput.toLowerCase()))
                 .map((value, key) => {
-                    return  <div key={value._id}>
-                                <div 
-                                    className="recipePreview">
-                                    <br></br>
-                                    <div
-                                        className="recipeTitle">
-                                        <Link to={`/view/${value._id}`} state={{userId, username, likedRecipes}}>{value.title}</Link>
-                                    </div>
-                                    <p className="fifty-chars">{value.description} </p>
-                                    <p> Creator: {value.creator} </p>
-                                    <p> Likes: {value.likeCount} </p>
-                                    { likedRecipes == undefined 
+                    return <div key={value._id}>
+                        <div
+                            className="recipePreview">
+                            <br></br>
+                            <div
+                                className="recipeTitle">
+                                <Link to={`/view/${value._id}`} state={{ userId, username, likedRecipes }}>{value.title}</Link>
+                            </div>
+                            <p className="fifty-chars">{value.description} </p>
+                            <div className="authorAndLikes">
+                                <div className="recipeAuthor">
+                                    By {value.creator}
+                                </div>
+                                <div className="likes" style={{
+                                    display: 'flex',
+                                    alignItems: 'center',
+                                    flexWrap: 'wrap',
+                                }}>
+                                    {value.likeCount.toString()}&nbsp;
+                                    {likedRecipes == undefined
                                         ? <></>
                                         : !likedRecipes[value._id]
-                                        ? <StyledThumbUpOutlinedIcon onClick={() => likeRecipe(value._id)}></StyledThumbUpOutlinedIcon>
-                                        : <StyledThumbUpIcon onClick={() => unlikeRecipe(value._id)}></StyledThumbUpIcon>
-                                    }   
+                                            ? <StyledThumbUpOutlinedIcon onClick={() => likeRecipe(value._id)}></StyledThumbUpOutlinedIcon>
+                                            : <StyledThumbUpIcon onClick={() => unlikeRecipe(value._id)}></StyledThumbUpIcon>
+                                    }
                                 </div>
                             </div>
+                        </div>
+                    </div>
                 })}
             <ToastContainer />
         </div>

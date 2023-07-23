@@ -134,8 +134,6 @@ function View (){
         }
     }, [recipeId])
 
-    console.log(recipe.image)
-
     return (
         <ThemeProvider theme={theme}>
         <div className="view">
@@ -185,13 +183,21 @@ function View (){
                         </div>
                     })}
                     <hr />
-                    <p>Creator: {recipe.creator}</p>
-                    <p>Likes: {recipe.likeCount} </p>
-                    { likedRecipes != undefined && !likedRecipes[recipe._id]
-                        ? <StyledThumbUpOutlinedIcon onClick={() => likeRecipe(recipe._id)}></StyledThumbUpOutlinedIcon>
-                        : <StyledThumbUpIcon onClick={() => unlikeRecipe(recipe._id)}></StyledThumbUpIcon>
-                    }  
-                    <br></br>
+                    <div className="authorAndLikes">
+                                        <div className="recipeAuthor">
+                                            By {recipe.creator}
+                                        </div>
+                                        <div className="likes" style={{
+                                                display: 'flex',
+                                                alignItems: 'center',
+                                                flexWrap: 'wrap',}}>
+                                            { recipe.likeCount.toString() }&nbsp;
+                                            { likedRecipes != undefined && !likedRecipes[recipe._id]
+                                                ? <StyledThumbUpOutlinedIcon onClick={() => likeRecipe(recipe._id)}></StyledThumbUpOutlinedIcon>
+                                                : <StyledThumbUpIcon onClick={() => unlikeRecipe(recipe._id)}></StyledThumbUpIcon>
+                                            }  
+                                        </div>
+                    </div>
                     <Button component={Link} to={`/stepview/${recipeId}/0`} 
                         state={{
                             username: username,

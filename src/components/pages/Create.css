@@ -2,7 +2,8 @@
     width: 90%;
     text-align: center;
     margin: auto;
-    margin-top: 50px;
+    margin-top: 1em;
+    margin-bottom: 1em;
     border-style: solid;
     border-color: rgb(0, 161, 67);
     border-width: 3px;
@@ -15,12 +16,24 @@ label {
 }
 
 textarea{
-    width: 50%;
-    padding: 12px 20px;
-    margin: 8px 0;
+    width: 80%;
+    font-family: Tahoma, Geneva, sans-serif;
+    padding: 10px 10px;
+    margin-top: 0.5em;
+    border-style: solid;
+    border-color: rgb(0, 161, 67);
+    border-width: 2px;
     box-sizing: border-box;
   }
 
 .createTitle {
     margin-top: 20px;
+}
+
+.descriptionText {
+    height: 10em;
+}
+
+.ingredientsText {
+    height: 10em;
 }
