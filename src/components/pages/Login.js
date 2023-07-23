@@ -29,7 +29,7 @@ function Login() {
             })
             .then(res => {
                 if (res.data){
-                    history("/home", {state: {userId: res.data._id, username: username}})
+                    history("/home", {state: {userId: res.data._id, username: username, likedRecipes: res.data.likedPosts}})
                 } else {
                     toast.error("Username/password not found!", toastStyling)
                 }

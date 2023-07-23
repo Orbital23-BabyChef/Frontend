@@ -6,6 +6,9 @@ import { confirmAlert } from 'react-confirm-alert'
 import 'react-confirm-alert/src/react-confirm-alert.css';
 import axios from "axios"
 import './View.css'
+import ThumbUpIcon from '@mui/icons-material/ThumbUp';
+import ThumbUpOutlinedIcon from '@mui/icons-material/ThumbUpOutlined';
+import { styled } from '@mui/material/styles';
 
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
@@ -25,6 +28,7 @@ function View (){
     const location = useLocation()
     const userId = location.state.userId
     const [username, setUsername] = useState(location.state.username)
+    const [likedRecipes, setLikedRecipes] = useState(location.state.likedRecipes)
 
     const history = useNavigate()
     
@@ -36,6 +40,14 @@ function View (){
         hideProgressBar: true,
         autoClose: 3000
     }
+
+    const StyledThumbUpIcon = styled(ThumbUpIcon)(({ theme }) => ({
+        cursor: 'pointer',
+    }));
+
+    const StyledThumbUpOutlinedIcon = styled(ThumbUpOutlinedIcon)(({ theme }) => ({
+        cursor: 'pointer',
+    }));
 
     const submit = () => {
         confirmAlert({
@@ -50,7 +62,7 @@ function View (){
                         .then(res => {
                             if (res.data == "deleteSuccess") {
                                 sessionStorage.setItem("itemStatus", "deleted")
-                                history("/home", {state:{userId:userId, username:username}})
+                                history("/home", {state:{userId, username, likedRecipes}})
                             } else {
                                 toast.error("Unknown error, try again later", toastStyling)
                             }
@@ -69,6 +81,34 @@ function View (){
               }
             ]
         });
+    }
+
+    const likeRecipe = (recipeId) => {
+        axios.post(`https://baby-chef-backend-031f48e42090.herokuapp.com/like`, {userId, recipeId})
+        .then(res => {
+            setLikedRecipes(prevLikedPosts => ({
+                ...prevLikedPosts,
+                [recipeId]: true,
+            }));
+            setRecipe(prevRecipe => ({
+                likeCount: prevRecipe.likeCount + 1,
+                ...prevRecipe
+            }))
+        })
+    }
+
+    const unlikeRecipe = (recipeId) => {
+        axios.post(`https://baby-chef-backend-031f48e42090.herokuapp.com/unlike`, {userId, recipeId})
+        .then(res => {
+            setLikedRecipes(prevLikedPosts => ({
+                ...prevLikedPosts,
+                [recipeId]: false,
+            }));
+            setRecipe(prevRecipe => ({
+                likeCount: prevRecipe.likeCount - 1,
+                ...prevRecipe
+            }))
+        })
     }
 
     useEffect(() => {
@@ -146,7 +186,12 @@ function View (){
                     })}
                     <hr />
                     <p>Creator: {recipe.creator}</p>
-
+                    <p>Likes: {recipe.likeCount} </p>
+                    { likedRecipes != undefined && !likedRecipes[recipe._id]
+                        ? <StyledThumbUpOutlinedIcon onClick={() => likeRecipe(recipe._id)}></StyledThumbUpOutlinedIcon>
+                        : <StyledThumbUpIcon onClick={() => unlikeRecipe(recipe._id)}></StyledThumbUpIcon>
+                    }  
+                    <br></br>
                     <Button component={Link} to={`/stepview/${recipeId}/0`} 
                         state={{
                             username: username,

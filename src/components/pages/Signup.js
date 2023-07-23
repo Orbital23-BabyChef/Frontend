@@ -34,7 +34,7 @@ function Signup() {
                     toast.error("Passswords do not match!", toastStyling)
                 }
                 else {
-                    history("/home", {state: {userId: res.data, username: username}})
+                    history("/home", {state: {userId: res.data._id, username: username, likedRecipes: res.data.likedPosts}})
                 }
             })
             .catch(e => {
