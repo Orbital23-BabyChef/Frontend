@@ -35,3 +35,12 @@
     text-align: justify;
     color: #000000;
 }
+
+.imagebox {
+    width: 100%;
+}
+
+.image {
+    width: 100%;
+    height: auto;
+}

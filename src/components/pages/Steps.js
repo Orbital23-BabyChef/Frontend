@@ -187,6 +187,7 @@ function Steps() {
                 title: location.state.title,
                 description: location.state.description,
                 ingredients: location.state.ingredients,
+                image: location.state.image,
                 creator: userId,
                 steps: currSteps
             })
@@ -206,6 +207,7 @@ function Steps() {
                 title: location.state.title,
                 description: location.state.description,
                 ingredients: location.state.ingredients,
+                image: location.state.image,
                 creator: userId,
                 steps: currSteps
             })

@@ -26,6 +26,7 @@ function Create (){
     const [title, setTitle] = useState("")
     const [description, setDescription] = useState("")
     const [ingredients, setIngredients] = useState("")
+    const [image, setImage] = useState(null)
     
     const history = useNavigate();
 
@@ -63,14 +64,39 @@ function Create (){
                 } else if (res.data == "recipefail") {
                     toast.error("Unknown error, try again later", toastStyling)
                 } else {
-                    history("/steps/create", {state: {
-                        userId: userId, 
-                        title: title,
-                        description: description,
-                        ingredients: ingredients,
-                        username: username,
-                        steps:[]
-                    }})
+                    
+                    //If no image uploaded
+                    if (!image) {
+                        history("/steps/create", {state:{
+                            userId: userId,
+                            title: title,
+                            description: description,
+                            ingredients: ingredients,
+                            image: image, // Pass the null image
+                            username: username,
+                            steps: []
+                        }});
+                        return;
+                    }
+
+                    const reader = new FileReader();
+                    reader.onloadend = () => {
+                        const base64Image = reader.result;
+                        
+                        // Pass the Base64 image data using history.push()
+                        history("/steps/create", {state:{
+                            userId: userId,
+                            title: title,
+                            description: description,
+                            ingredients: ingredients,
+                            image: base64Image, // Pass the Base64 data URI
+                            username: username,
+                            steps: []
+                        }});
+                    };
+
+                    // Read the selected image as Data URL (Base64)
+                    reader.readAsDataURL(image);
                 }
             });
         }
@@ -107,6 +133,14 @@ function Create (){
                     setIngredients(event.target.value)
                 }}
             />
+            </div>
+            <div>
+                <label>Upload Image</label>
+                <input type="file" 
+                    onChange={(event) => {
+                        setImage(event.target.files[0])
+                    }}>
+                </input>
             </div>
             <Button 
                 variant="outlined"

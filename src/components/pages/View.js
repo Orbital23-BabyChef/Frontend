@@ -76,7 +76,7 @@ function View (){
         .then(res => {
             setUsername(res.data.username);
         })
-    })
+    }, [])
 
     useEffect(() => {
         try {
@@ -92,8 +92,9 @@ function View (){
             toast.error("Unknown error, try again later", toastStyling)
             console.log(e)
         }
-    })
+    }, [recipeId])
 
+    console.log(recipe.image)
 
     return (
         <ThemeProvider theme={theme}>
@@ -110,6 +111,9 @@ function View (){
                     
                     <div className='title'>
                         <h3>{recipe.title}</h3>
+                    </div>
+                    <div className='imagebox'>
+                        {recipe.image && <img className="image" src={recipe.image}/>}
                     </div>
                     <div className='description'>
                         <p>{recipe.description}</p>
