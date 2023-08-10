@@ -6,6 +6,7 @@ import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import './Create.css'
 import { Button, createTheme, ThemeProvider } from "@mui/material"
+import imageCompression from 'browser-image-compression';
 
 const theme = createTheme({
     palette: {
@@ -43,6 +44,31 @@ function Create (){
             setUsername(res.data.username);
         })
     })
+
+    const compressImage = async (file) => {
+        try {
+          const options = {
+            maxSizeMB: 9, // Set the maximum file size in megabytes
+            useWebWorker: true,
+          };
+    
+          const compressedFile = await imageCompression(file, options);
+          return compressedFile;
+        } catch (error) {
+          console.error('Error compressing image:', error);
+          return null;
+        }
+      };
+
+    const handleImageChange = async (event) => {
+        const file = event.target.files[0];
+        setImage(file);
+    
+        // Compress the image and handle it as needed
+        const compressedImage = await compressImage(file);
+        setImage(compressedImage)
+      };
+    
 
     const addToList = () => {
         if (title.length < 3) {
@@ -139,9 +165,7 @@ function Create (){
                 <label>Upload Image</label>
                 <br></br><br></br>
                 <input type="file" className="imageUpload"
-                    onChange={(event) => {
-                        setImage(event.target.files[0])
-                    }}>
+                    onChange={handleImageChange}>
                 </input>
             </div>
             <br></br>
