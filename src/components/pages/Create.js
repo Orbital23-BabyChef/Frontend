@@ -6,6 +6,7 @@ import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import './Create.css'
 import { Button, createTheme, ThemeProvider } from "@mui/material"
+import imageCompression from 'browser-image-compression';
 
 const theme = createTheme({
     palette: {
@@ -26,6 +27,7 @@ function Create (){
     const [title, setTitle] = useState("")
     const [description, setDescription] = useState("")
     const [ingredients, setIngredients] = useState("")
+    const [image, setImage] = useState(null)
     
     const history = useNavigate();
 
@@ -42,6 +44,31 @@ function Create (){
             setUsername(res.data.username);
         })
     })
+
+    const compressImage = async (file) => {
+        try {
+          const options = {
+            maxSizeMB: 9, // Set the maximum file size in megabytes
+            useWebWorker: true,
+          };
+    
+          const compressedFile = await imageCompression(file, options);
+          return compressedFile;
+        } catch (error) {
+          console.error('Error compressing image:', error);
+          return null;
+        }
+      };
+
+    const handleImageChange = async (event) => {
+        const file = event.target.files[0];
+        setImage(file);
+    
+        // Compress the image and handle it as needed
+        const compressedImage = await compressImage(file);
+        setImage(compressedImage)
+      };
+    
 
     const addToList = () => {
         if (title.length < 3) {
@@ -63,14 +90,39 @@ function Create (){
                 } else if (res.data == "recipefail") {
                     toast.error("Unknown error, try again later", toastStyling)
                 } else {
-                    history("/steps/create", {state: {
-                        userId: userId, 
-                        title: title,
-                        description: description,
-                        ingredients: ingredients,
-                        username: username,
-                        steps:[]
-                    }})
+                    
+                    //If no image uploaded
+                    if (!image) {
+                        history("/steps/create", {state:{
+                            userId: userId,
+                            title: title,
+                            description: description,
+                            ingredients: ingredients,
+                            image: image, // Pass the null image
+                            username: username,
+                            steps: []
+                        }});
+                        return;
+                    }
+
+                    const reader = new FileReader();
+                    reader.onloadend = () => {
+                        const base64Image = reader.result;
+                        
+                        // Pass the Base64 image data using history.push()
+                        history("/steps/create", {state:{
+                            userId: userId,
+                            title: title,
+                            description: description,
+                            ingredients: ingredients,
+                            image: base64Image, // Pass the Base64 data URI
+                            username: username,
+                            steps: []
+                        }});
+                    };
+
+                    // Read the selected image as Data URL (Base64)
+                    reader.readAsDataURL(image);
                 }
             });
         }
@@ -82,7 +134,7 @@ function Create (){
             <div className="createTitle">
             <label>Name of Dish</label>
             <br></br>
-            <input type="text" 
+            <textarea className="nameOfDish"
                 onChange={(event) => {
                     setTitle(event.target.value)
                 }}
@@ -92,7 +144,7 @@ function Create (){
             <div>
             <label>Description</label>
             <br></br>
-            <textarea 
+            <textarea className="descriptionText"
                 onChange={(event) => {
                     setDescription(event.target.value)
                 }}
@@ -102,12 +154,21 @@ function Create (){
             <div>
             <label>Ingredients</label>
             <br></br>
-            <textarea 
+            <textarea className="ingredientsText"
                 onChange={(event) => {
                     setIngredients(event.target.value)
                 }}
             />
             </div>
+            <br></br>
+            <div>
+                <label>Upload Image</label>
+                <br></br><br></br>
+                <input type="file" className="imageUpload"
+                    onChange={handleImageChange}>
+                </input>
+            </div>
+            <br></br>
             <Button 
                 variant="outlined"
                 color="primary"

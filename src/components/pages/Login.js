@@ -20,27 +20,27 @@ function Login() {
         autoClose: 3000
     }
 
-    async function submit(e){
+    async function submit(e) {
         e.preventDefault();
 
-        try{
-            await axios.post("https://baby-chef-backend-031f48e42090.herokuapp.com/login",{
+        try {
+            await axios.post("https://baby-chef-backend-031f48e42090.herokuapp.com/login", {
                 username, password
             })
-            .then(res => {
-                if (res.data){
-                    history("/home", {state: {userId: res.data._id, username: username, likedRecipes: res.data.likedPosts}})
-                } else {
-                    toast.error("Username/password not found!", toastStyling)
-                }
-            })
-            .catch(e => {
-                toast.error("Unknown error, try again later", toastStyling)
-                console.log(e)
-            })
+                .then(res => {
+                    if (res.data) {
+                        history("/home", { state: { userId: res.data._id, username: username, likedRecipes: res.data.likedPosts } })
+                    } else {
+                        toast.error("Incorrect Username or Password!", toastStyling)
+                    }
+                })
+                .catch(e => {
+                    toast.error("Unknown error, try again later", toastStyling)
+                    console.log(e)
+                })
 
         }
-        catch(e){
+        catch (e) {
             console.log(e);
 
         }
@@ -49,17 +49,17 @@ function Login() {
 
 
     return (
-        <div 
+        <div
             className="centered-div">
-                <div className="logo">
-                <img src={logo} alt="Logo" style={{ width: 200, height: 200 }}/>
-                </div>
-            
+            <div className="logo">
+                <img src={logo} alt="Logo" style={{ width: 200, height: 200 }} />
+            </div>
+
             <h1>Login</h1>
 
             <form action="POST">
-                <input type="username" onChange={(e) => { setUsername(e.target.value) }} placeholder="Username"  />
-                <input type="password" onChange={(e) => { setPassword(e.target.value) }} placeholder="Password"  />
+                <input type="username" onChange={(e) => { setUsername(e.target.value) }} placeholder="Username" />
+                <input type="password" onChange={(e) => { setPassword(e.target.value) }} placeholder="Password" />
                 <br></br>
                 <br></br>
                 <input type="submit" onClick={submit} />

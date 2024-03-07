@@ -116,7 +116,7 @@ function View (){
         .then(res => {
             setUsername(res.data.username);
         })
-    })
+    }, [])
 
     useEffect(() => {
         try {
@@ -132,8 +132,7 @@ function View (){
             toast.error("Unknown error, try again later", toastStyling)
             console.log(e)
         }
-    })
-
+    }, [recipeId])
 
     return (
         <ThemeProvider theme={theme}>
@@ -150,6 +149,9 @@ function View (){
                     
                     <div className='title'>
                         <h3>{recipe.title}</h3>
+                    </div>
+                    <div className='imagebox'>
+                        {recipe.image && <img className="image" src={recipe.image}/>}
                     </div>
                     <div className='description'>
                         <p>{recipe.description}</p>
@@ -181,13 +183,21 @@ function View (){
                         </div>
                     })}
                     <hr />
-                    <p>Creator: {recipe.creator}</p>
-                    <p>Likes: {recipe.likeCount} </p>
-                    { likedRecipes != undefined && !likedRecipes[recipe._id]
-                        ? <StyledThumbUpOutlinedIcon onClick={() => likeRecipe(recipe._id)}></StyledThumbUpOutlinedIcon>
-                        : <StyledThumbUpIcon onClick={() => unlikeRecipe(recipe._id)}></StyledThumbUpIcon>
-                    }  
-                    <br></br>
+                    <div className="authorAndLikes">
+                                        <div className="recipeAuthor">
+                                            By {recipe.creator}
+                                        </div>
+                                        <div className="likes" style={{
+                                                display: 'flex',
+                                                alignItems: 'center',
+                                                flexWrap: 'wrap',}}>
+                                            { recipe.likeCount.toString() }&nbsp;
+                                            { likedRecipes != undefined && !likedRecipes[recipe._id]
+                                                ? <StyledThumbUpOutlinedIcon onClick={() => likeRecipe(recipe._id)}></StyledThumbUpOutlinedIcon>
+                                                : <StyledThumbUpIcon onClick={() => unlikeRecipe(recipe._id)}></StyledThumbUpIcon>
+                                            }  
+                                        </div>
+                    </div>
                     <Button component={Link} to={`/stepview/${recipeId}/0`} 
                         state={{
                             username: username,
